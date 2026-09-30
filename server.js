@@ -128,8 +128,9 @@ app.post('/api/contact', rateLimit, (req, res) => {
     return res.status(400).json({ error: 'Please include your name.' });
   if (typeof message !== 'string' || message.trim().length < 5 || message.trim().length > 2000)
     return res.status(400).json({ error: 'Tell us a little about what you need.' });
-  if (email && (typeof email !== 'string' || email.length > 120 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)))
-    return res.status(400).json({ error: 'That email doesn\'t look right.' });
+  if (typeof email !== 'string' || email.trim().length > 120 ||
+      !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim()))
+    return res.status(400).json({ error: 'Please include a valid email so we can reply.' });
 
   let leads = [];
   try {
@@ -139,10 +140,13 @@ app.post('/api/contact', rateLimit, (req, res) => {
   leads.push({
     at: new Date().toISOString(),
     name: name.trim(),
-    email: (email || '').trim(),
+    email: email.trim(),
     business: typeof business === 'string' ? business.trim().slice(0, 120) : '',
     message: message.trim(),
   });
+  /* Render's free-tier disk is wiped on every deploy, so leads.json alone is
+     not durable — also emit the lead to stdout so it survives in the logs. */
+  console.log('[flowline-ai] new lead:', JSON.stringify(leads[leads.length - 1]));
   fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
   res.json({ ok: true });
 });
