@@ -25,7 +25,9 @@ function rateLimit(req, res, next) {
 }
 
 /* ---------------- demo bot: Bella's Pizzeria (fictional demo) ---------------- */
+const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
 const DEMO_SYSTEM = `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what Flowline AI builds for local businesses. Stay in character as the restaurant's assistant.
+Today's date is ${TODAY}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
 
 Facts about Bella's Pizzeria (fictional demo business):
 - Address: 245 Peachtree St NE, Atlanta, GA 30303
@@ -149,6 +151,22 @@ app.post('/api/contact', rateLimit, (req, res) => {
   console.log('[flowline-ai] new lead:', JSON.stringify(leads[leads.length - 1]));
   fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
   res.json({ ok: true });
+});
+
+/* Read-only lead feed for the owner's alert watcher. Guarded by a bearer
+   token (LEADS_TOKEN env var) so lead contact details are never public. */
+const LEADS_TOKEN = process.env.LEADS_TOKEN || '';
+app.get('/api/leads', rateLimit, (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (!LEADS_TOKEN || auth !== `Bearer ${LEADS_TOKEN}`) {
+    return res.status(404).json({ error: 'Not found.' });
+  }
+  let leads = [];
+  try {
+    leads = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8'));
+    if (!Array.isArray(leads)) leads = [];
+  } catch { /* file may not exist yet */ }
+  res.json({ leads });
 });
 
 const PORT = process.env.PORT || 3000;
