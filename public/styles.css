@@ -27,7 +27,8 @@ section{border-top:1px solid var(--line);position:relative}
 .nav-inner{max-width:1080px;margin:0 auto;padding:.8rem 1.5rem;display:flex;align-items:center;gap:2rem}
 .logo{font-weight:800;letter-spacing:.12em;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.6rem}
 .logo span{color:var(--gold)}
-.logo img{display:block}
+.logo img{display:block;animation:flow-spin 16s linear infinite}
+@keyframes flow-spin{to{transform:rotate(360deg)}}
 .nav-links{display:flex;gap:1.4rem;margin-left:auto}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem;transition:color .15s}
 .nav-links a:hover{color:var(--gold)}
@@ -150,4 +151,4 @@ footer{border-top:1px solid var(--line)}
 .fine{font-size:.78rem!important}
 
 @media(max-width:640px){.nav-links{display:none}.chat-messages{height:320px}.steps::before{display:none}.price.featured{transform:none}}
-@media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.reveal{opacity:1;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.reveal{opacity:1;transform:none;transition:none}.logo img{animation:none}}
