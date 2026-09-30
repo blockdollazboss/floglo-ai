@@ -103,9 +103,8 @@
     if (reduce) return; /* static first frame only */
 
     var flow = 0, vel = 0;
-    var IDLE = 8 / 60; /* idle drift: 8 frames per second */
+    var IDLE = 2.5 / 60; /* slow idle drift */
     var tx = 0, ty = 0, cx = 0, cy = 0;
-    var sx = 50, sy = 50, csx = 50, csy = 50;
     var lastX = null, lastY = null;
     var visible = true, raf = null;
 
@@ -113,11 +112,8 @@
       vel += (IDLE - vel) * 0.03;              /* ease back to idle drift */
       flow = (flow + vel + N) % N;
       cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
-      csx += (sx - csx) * 0.14; csy += (sy - csy) * 0.14;
       inner.style.transform = 'translate3d(' + (cx * 20).toFixed(2) + 'px,' + (cy * 14).toFixed(2) + 'px,0)' +
         ' rotateY(' + (cx * 6).toFixed(2) + 'deg) rotateX(' + (-cy * 6).toFixed(2) + 'deg)';
-      wrap.style.setProperty('--sx', csx.toFixed(1) + '%');
-      wrap.style.setProperty('--sy', csy.toFixed(1) + '%');
       drawFrame(Math.floor(flow) % N);
       raf = requestAnimationFrame(loop);
     }
@@ -132,23 +128,17 @@
       ty = Math.max(-1, Math.min(1, ny));
       if (lastX !== null) {
         var dx = x - lastX, dy = y - lastY;
-        vel += (dx * 0.9 + dy * 0.35) * 0.03;  /* cursor stirs the flow */
-        vel = Math.max(-1.6, Math.min(1.6, vel));
+        vel += (dx * 0.9 + dy * 0.35) * 0.02;  /* cursor stirs the flow, gently */
+        vel = Math.max(-0.9, Math.min(0.9, vel));
       }
       lastX = x; lastY = y;
-      var wr = wrap.getBoundingClientRect();
-      if (wr.width > 0) {
-        sx = Math.max(0, Math.min(100, (x - wr.left) / wr.width * 100));
-        sy = Math.max(0, Math.min(100, (y - wr.top) / wr.height * 100));
-      }
-      wrap.classList.add('lit');
       start();
     }
     hero.addEventListener('mousemove', function (e) { trackPoint(e.clientX, e.clientY); });
     hero.addEventListener('touchmove', function (e) {
       if (e.touches.length) trackPoint(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
-    function release() { tx = 0; ty = 0; lastX = null; lastY = null; wrap.classList.remove('lit'); }
+    function release() { tx = 0; ty = 0; lastX = null; lastY = null; }
     hero.addEventListener('mouseleave', release);
     hero.addEventListener('touchend', release);
     if ('IntersectionObserver' in window) {
