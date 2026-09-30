@@ -80,7 +80,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
   );
   scene.add(loopMesh);
 
-  /* Soft golden aura that hangs behind the loop. */
   function radialTexture(inner, outer) {
     var c = document.createElement('canvas');
     c.width = c.height = 128;
@@ -94,13 +93,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     tex.colorSpace = THREE.SRGBColorSpace;
     return tex;
   }
-  var aura = new THREE.Sprite(new THREE.SpriteMaterial({
-    map: radialTexture('rgba(224,169,62,0.55)', 'rgba(224,169,62,0)'),
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.8
-  }));
-  aura.scale.set(11, 11, 1);
-  scene.add(aura);
-
   /* ---------------- particle fields ---------------- */
   var dustTex = radialTexture('rgba(255,225,160,1)', 'rgba(255,225,160,0)');
 
@@ -242,7 +234,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     );
     loopMesh.rotation.y += dt * 0.28;
     loopMesh.rotation.x = Math.sin(t * 0.3) * 0.14;
-    aura.position.copy(loopMesh.position);
 
     /* Gold dust: slow rise + swirl, plus scroll-rush streaming past. */
     var dp = dust.geometry.attributes.position;
