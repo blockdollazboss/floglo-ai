@@ -58,45 +58,99 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) running = false;
   })();
 
-  /* ---------- hero logo: mouse-tracked tilt + sheen ---------- */
+  /* ---------- hero logo: mouse-driven liquid flow ---------- */
   (function () {
     var wrap = document.querySelector('.hero-logo');
     var inner = document.getElementById('logoTrack');
     var hero = document.querySelector('.hero');
-    var video = document.getElementById('logoAnim');
-    if (!wrap || !inner || !hero) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { if (video) video.pause(); return; }
+    var canvas = document.getElementById('logoFlow');
+    if (!wrap || !inner || !hero || !canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    var COLS = 8, ROWS = 6, N = 48, CELL = 440;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var sprite = new Image();
+    var spriteReady = false;
+    var place = new Image();
+    var placeReady = false;
+
+    function sizeCanvas() {
+      var r = wrap.getBoundingClientRect();
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var s = Math.max(1, Math.round(r.width * dpr));
+      if (canvas.width !== s) { canvas.width = s; canvas.height = s; }
+    }
+    function drawFrame(i) {
+      var s = canvas.width;
+      if (!s) return;
+      ctx.clearRect(0, 0, s, s);
+      if (spriteReady) {
+        var c = i % COLS, r = Math.floor(i / COLS) % ROWS;
+        ctx.drawImage(sprite, c * CELL, r * CELL, CELL, CELL, 0, 0, s, s);
+      } else if (placeReady) {
+        ctx.drawImage(place, 0, 0, s, s);
+      }
+    }
+
+    sizeCanvas();
+    window.addEventListener('resize', sizeCanvas);
+    place.onload = function () { placeReady = true; drawFrame(0); };
+    place.src = 'logo.png';
+    sprite.onload = function () { spriteReady = true; drawFrame(0); };
+    sprite.src = 'flow-sprite.webp';
+
+    if (reduce) return; /* static first frame only */
+
+    var flow = 0, vel = 0;
+    var IDLE = 8 / 60; /* idle drift: 8 frames per second */
     var tx = 0, ty = 0, cx = 0, cy = 0;
     var sx = 50, sy = 50, csx = 50, csy = 50;
+    var lastX = null, lastY = null;
     var visible = true, raf = null;
+
     function loop() {
+      vel += (IDLE - vel) * 0.03;              /* ease back to idle drift */
+      flow = (flow + vel + N) % N;
       cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
       csx += (sx - csx) * 0.14; csy += (sy - csy) * 0.14;
-      inner.style.transform = 'translate3d(' + (cx * 24).toFixed(2) + 'px,' + (cy * 18).toFixed(2) + 'px,0)' +
-        ' rotateY(' + (cx * 9).toFixed(2) + 'deg) rotateX(' + (-cy * 9).toFixed(2) + 'deg)';
+      inner.style.transform = 'translate3d(' + (cx * 20).toFixed(2) + 'px,' + (cy * 14).toFixed(2) + 'px,0)' +
+        ' rotateY(' + (cx * 6).toFixed(2) + 'deg) rotateX(' + (-cy * 6).toFixed(2) + 'deg)';
       wrap.style.setProperty('--sx', csx.toFixed(1) + '%');
       wrap.style.setProperty('--sy', csy.toFixed(1) + '%');
+      drawFrame(Math.floor(flow) % N);
       raf = requestAnimationFrame(loop);
     }
     function start() { if (!raf && visible) loop(); }
     function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
-    hero.addEventListener('mousemove', function (e) {
+
+    function trackPoint(x, y) {
       var r = hero.getBoundingClientRect();
-      var nx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
-      var ny = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+      var nx = (x - r.left - r.width / 2) / (r.width / 2);
+      var ny = (y - r.top - r.height / 2) / (r.height / 2);
       tx = Math.max(-1, Math.min(1, nx));
       ty = Math.max(-1, Math.min(1, ny));
+      if (lastX !== null) {
+        var dx = x - lastX, dy = y - lastY;
+        vel += (dx * 0.9 + dy * 0.35) * 0.03;  /* cursor stirs the flow */
+        vel = Math.max(-1.6, Math.min(1.6, vel));
+      }
+      lastX = x; lastY = y;
       var wr = wrap.getBoundingClientRect();
       if (wr.width > 0) {
-        sx = Math.max(0, Math.min(100, (e.clientX - wr.left) / wr.width * 100));
-        sy = Math.max(0, Math.min(100, (e.clientY - wr.top) / wr.height * 100));
+        sx = Math.max(0, Math.min(100, (x - wr.left) / wr.width * 100));
+        sy = Math.max(0, Math.min(100, (y - wr.top) / wr.height * 100));
       }
       wrap.classList.add('lit');
       start();
-    });
-    hero.addEventListener('mouseleave', function () {
-      tx = 0; ty = 0; wrap.classList.remove('lit');
-    });
+    }
+    hero.addEventListener('mousemove', function (e) { trackPoint(e.clientX, e.clientY); });
+    hero.addEventListener('touchmove', function (e) {
+      if (e.touches.length) trackPoint(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    function release() { tx = 0; ty = 0; lastX = null; lastY = null; wrap.classList.remove('lit'); }
+    hero.addEventListener('mouseleave', release);
+    hero.addEventListener('touchend', release);
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (en) {
         visible = en[0].isIntersecting;
