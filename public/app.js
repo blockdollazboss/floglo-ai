@@ -81,13 +81,26 @@
       var s = Math.max(1, Math.round(r.width * dpr));
       if (canvas.width !== s) { canvas.width = s; canvas.height = s; }
     }
-    function drawFrame(i) {
+    function blit(i, a) {
+      var s = canvas.width;
+      var c = i % COLS, r = Math.floor(i / COLS) % ROWS;
+      ctx.globalAlpha = a;
+      ctx.drawImage(sprite, c * CELL, r * CELL, CELL, CELL, 0, 0, s, s);
+      ctx.globalAlpha = 1;
+    }
+
+    /* Crossfade between neighbouring frames so the liquid melts smoothly
+       instead of stepping, even at a slow frame rate. */
+    function drawFrame(f) {
       var s = canvas.width;
       if (!s) return;
       ctx.clearRect(0, 0, s, s);
       if (spriteReady) {
-        var c = i % COLS, r = Math.floor(i / COLS) % ROWS;
-        ctx.drawImage(sprite, c * CELL, r * CELL, CELL, CELL, 0, 0, s, s);
+        var i = Math.floor(f) % N;
+        var frac = f - Math.floor(f);
+        if (frac < 0.02 || frac > 0.98) { blit(i, 1); return; }
+        blit(i, 1 - frac);
+        blit((i + 1) % N, frac);
       } else if (placeReady) {
         ctx.drawImage(place, 0, 0, s, s);
       }
@@ -103,7 +116,7 @@
     if (reduce) return; /* static first frame only */
 
     var flow = 0, vel = 0;
-    var IDLE = 2.5 / 60; /* slow idle drift */
+    var IDLE = 1.5 / 60; /* slow, smooth idle drift */
     var tx = 0, ty = 0, cx = 0, cy = 0;
     var lastX = null, lastY = null;
     var visible = true, raf = null;
@@ -114,7 +127,7 @@
       cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
       inner.style.transform = 'translate3d(' + (cx * 20).toFixed(2) + 'px,' + (cy * 14).toFixed(2) + 'px,0)' +
         ' rotateY(' + (cx * 6).toFixed(2) + 'deg) rotateX(' + (-cy * 6).toFixed(2) + 'deg)';
-      drawFrame(Math.floor(flow) % N);
+      drawFrame(flow);
       raf = requestAnimationFrame(loop);
     }
     function start() { if (!raf && visible) loop(); }
