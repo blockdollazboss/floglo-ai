@@ -1,6 +1,6 @@
 /* Flowline AI — immersive 3D world.
    A real-time Three.js scene behind the site: the Flowline mark rebuilt as a
-   true 3D liquid-gold loop, drifting gold-dust particle fields, and a camera
+   true 3D liquid-platinum loop, drifting cyan-dust particle fields, and a camera
    that flies through the world as you scroll. The DOM content scrolls above it.
    Fails safe: if WebGL, the CDN, or motion preferences block it, the page
    falls back to the flat 2D logo with zero breakage. */
@@ -31,29 +31,29 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
   renderer.toneMappingExposure = 1.06;
 
   var scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0a0c, 0.03);
+  scene.fog = new THREE.FogExp2(0x050914, 0.03);
 
   var camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 120);
   camera.position.set(0, 0.6, 8.2);
 
-  /* Studio reflections for the gold — generated locally, no HDR download. */
+  /* Studio reflections for the platinum — generated locally, no HDR download. */
   var pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-  var key = new THREE.DirectionalLight(0xffe2b0, 1.4);
+  var key = new THREE.DirectionalLight(0xd8f4ff, 1.4);
   key.position.set(5, 7, 6);
   scene.add(key);
-  var rim = new THREE.DirectionalLight(0x6a7bd6, 0.55);
+  var rim = new THREE.DirectionalLight(0x3ee2ff, 0.75);
   rim.position.set(-6, -2, -4);
   scene.add(rim);
-  var glowLight = new THREE.PointLight(0xe0a93e, 24, 20, 1.8);
+  var glowLight = new THREE.PointLight(0x3ee2ff, 24, 20, 1.8);
   glowLight.position.set(0, 1, 2.5);
   scene.add(glowLight);
-  scene.add(new THREE.AmbientLight(0x2a2a35, 0.7));
+  scene.add(new THREE.AmbientLight(0x1a2438, 0.7));
 
   /* ---------------- the logo as a true 3D object ----------------
      A flowing closed loop (the Flowline mark's silhouette) swept into a tube
-     and cast in liquid gold: full metal, clearcoat, studio reflections. */
+     and cast in liquid platinum: full metal, clearcoat, studio reflections. */
   function loopCurve() {
     var pts = [], SEG = 180;
     for (var i = 0; i < SEG; i++) {
@@ -70,7 +70,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
   var loopMesh = new THREE.Mesh(
     new THREE.TubeGeometry(loopCurve(), 320, 0.34, 32, true),
     new THREE.MeshPhysicalMaterial({
-      color: 0xd8a24a,
+      color: 0xd7dee8,
       metalness: 1.0,
       roughness: 0.27,
       clearcoat: 1.0,
@@ -94,7 +94,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     return tex;
   }
   /* ---------------- particle fields ---------------- */
-  var dustTex = radialTexture('rgba(255,225,160,1)', 'rgba(255,225,160,0)');
+  var dustTex = radialTexture('rgba(160,235,255,1)', 'rgba(160,235,255,0)');
 
   function makeDust(count) {
     var pos = new Float32Array(count * 3);
@@ -110,7 +110,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     var mat = new THREE.PointsMaterial({
       size: 0.09, map: dustTex, transparent: true, opacity: 0.7,
-      color: 0xf5c86a, depthWrite: false, blending: THREE.AdditiveBlending,
+      color: 0x9beaff, depthWrite: false, blending: THREE.AdditiveBlending,
       sizeAttenuation: true
     });
     var points = new THREE.Points(geo, mat);
@@ -131,7 +131,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     starGeo.setAttribute('position', new THREE.BufferAttribute(p, 3));
   })();
   var stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
-    size: 0.06, color: 0x9aa0c0, transparent: true, opacity: 0.55,
+    size: 0.06, color: 0x8fb4e8, transparent: true, opacity: 0.55,
     depthWrite: false, blending: THREE.AdditiveBlending
   }));
   scene.add(stars);
@@ -235,7 +235,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     loopMesh.rotation.y += dt * 0.28;
     loopMesh.rotation.x = Math.sin(t * 0.3) * 0.14;
 
-    /* Gold dust: slow rise + swirl, plus scroll-rush streaming past. */
+    /* Cyan dust: slow rise + swirl, plus scroll-rush streaming past. */
     var dp = dust.geometry.attributes.position;
     var sd = dust.userData.seed, n = dust.userData.count;
     var arr = dp.array;
