@@ -58,6 +58,54 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) running = false;
   })();
 
+  /* ---------- hero logo: mouse-tracked tilt + sheen ---------- */
+  (function () {
+    var wrap = document.querySelector('.hero-logo');
+    var inner = document.getElementById('logoTrack');
+    var hero = document.querySelector('.hero');
+    var video = document.getElementById('logoAnim');
+    if (!wrap || !inner || !hero) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { if (video) video.pause(); return; }
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    var sx = 50, sy = 50, csx = 50, csy = 50;
+    var visible = true, raf = null;
+    function loop() {
+      cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+      csx += (sx - csx) * 0.14; csy += (sy - csy) * 0.14;
+      inner.style.transform = 'translate3d(' + (cx * 24).toFixed(2) + 'px,' + (cy * 18).toFixed(2) + 'px,0)' +
+        ' rotateY(' + (cx * 9).toFixed(2) + 'deg) rotateX(' + (-cy * 9).toFixed(2) + 'deg)';
+      wrap.style.setProperty('--sx', csx.toFixed(1) + '%');
+      wrap.style.setProperty('--sy', csy.toFixed(1) + '%');
+      raf = requestAnimationFrame(loop);
+    }
+    function start() { if (!raf && visible) loop(); }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+    hero.addEventListener('mousemove', function (e) {
+      var r = hero.getBoundingClientRect();
+      var nx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
+      var ny = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+      tx = Math.max(-1, Math.min(1, nx));
+      ty = Math.max(-1, Math.min(1, ny));
+      var wr = wrap.getBoundingClientRect();
+      if (wr.width > 0) {
+        sx = Math.max(0, Math.min(100, (e.clientX - wr.left) / wr.width * 100));
+        sy = Math.max(0, Math.min(100, (e.clientY - wr.top) / wr.height * 100));
+      }
+      wrap.classList.add('lit');
+      start();
+    });
+    hero.addEventListener('mouseleave', function () {
+      tx = 0; ty = 0; wrap.classList.remove('lit');
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        visible = en[0].isIntersecting;
+        if (visible) start(); else stop();
+      }).observe(hero);
+    }
+    start();
+  })();
+
   /* ---------- scroll reveals ---------- */
   (function () {
     var els = document.querySelectorAll('.reveal');
