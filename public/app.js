@@ -141,8 +141,8 @@
       ty = Math.max(-1, Math.min(1, ny));
       if (lastX !== null) {
         var dx = x - lastX, dy = y - lastY;
-        vel += (dx * 0.9 + dy * 0.35) * 0.02;  /* cursor stirs the flow, gently */
-        vel = Math.max(-0.9, Math.min(0.9, vel));
+        vel += (dx * 0.9 + dy * 0.35) * 0.008; /* cursor stirs the flow, softly */
+        vel = Math.max(-0.35, Math.min(0.35, vel));
       }
       lastX = x; lastY = y;
       start();
