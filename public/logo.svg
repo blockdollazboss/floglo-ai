@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Flowline AI logo">
+  <defs>
+    <linearGradient id="flGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5c86a"/>
+      <stop offset="1" stop-color="#d98f1f"/>
+    </linearGradient>
+    <radialGradient id="flBg" cx="0.5" cy="0.35" r="0.9">
+      <stop offset="0" stop-color="#1c1a14"/>
+      <stop offset="1" stop-color="#0a0a0c"/>
+    </radialGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#flBg)" stroke="#2b2417" stroke-width="2"/>
+  <!-- flowing F: vertical stem + two flow bars -->
+  <g fill="none" stroke="url(#flGold)" stroke-linecap="round">
+    <path d="M22 14 C 21 28, 23 40, 22 52" stroke-width="7"/>
+    <path d="M22 18 C 34 17, 42 17, 50 18" stroke-width="7"/>
+    <path d="M22 34 C 30 33.5, 36 33.5, 43 34" stroke-width="6"/>
+  </g>
+  <!-- pulse node: the signal at the end of the flow -->
+  <circle cx="50" cy="18" r="4.5" fill="#f5c86a"/>
+  <circle cx="50" cy="18" r="7.5" fill="none" stroke="#f5c86a" stroke-width="1.5" opacity="0.45"/>
+</svg>
