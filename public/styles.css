@@ -5,6 +5,7 @@
   --text:#edf3ff; --muted:#93a3c4;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
 html{scroll-behavior:smooth}
 body{background:radial-gradient(1200px 800px at 50% -10%, #0b1526 0%, var(--bg) 60%) fixed,var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;line-height:1.6;overflow-x:hidden}
 /* immersive 3D world canvas: fixed behind everything */
@@ -132,6 +133,7 @@ h2{text-shadow:0 2px 26px rgba(0,0,0,.8)}
 .pricing-cards{align-items:stretch}
 .price{display:flex;flex-direction:column}
 .price.featured{border-color:rgba(62,226,255,.7);box-shadow:0 0 50px rgba(62,226,255,.14);transform:scale(1.04)}
+.price.featured:hover{transform:scale(1.04) translateY(-6px)}
 .flag{position:absolute;top:1.1rem;right:-2.6rem;transform:rotate(38deg);background:linear-gradient(135deg,var(--gold2),var(--gold));color:#04121a;font-size:.68rem;font-weight:800;letter-spacing:.12em;padding:.3rem 3rem}
 .amount{font-size:3rem;font-weight:900;margin:.6rem 0 0;background:linear-gradient(120deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
 .mo{font-size:1.1rem;color:var(--muted);-webkit-text-fill-color:var(--muted)}
@@ -147,7 +149,7 @@ details:hover{border-color:rgba(62,226,255,.4)}
 summary{cursor:pointer;font-weight:700;font-size:1.02rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
 summary::after{content:"+";color:var(--gold);font-size:1.3rem;font-weight:400}
 details[open] summary::after{content:"–"}
-summary::marker,.summary::marker{content:""}
+summary::marker{content:""}
 details p{color:var(--muted);margin-top:.7rem;font-size:.95rem}
 
 /* contact */
