@@ -7,11 +7,20 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+app.set('trust proxy', 1); // Render terminates TLS at its proxy — read the real client IP for rate limiting
+app.disable('x-powered-by');
 app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* ---------- simple in-memory rate limiter (20 req/min per IP) ---------- */
 const hits = new Map();
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, times] of hits) {
+    const recent = times.filter((t) => now - t < 60_000);
+    if (recent.length) hits.set(ip, recent); else hits.delete(ip);
+  }
+}, 60_000).unref();
 function rateLimit(req, res, next) {
   const ip = req.ip || 'unknown';
   const now = Date.now();
@@ -25,9 +34,11 @@ function rateLimit(req, res, next) {
 }
 
 /* ---------------- demo bot: Bella's Pizzeria (fictional demo) ---------------- */
-const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
-const DEMO_SYSTEM = `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what Flowline AI builds for local businesses. Stay in character as the restaurant's assistant.
-Today's date is ${TODAY}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
+/* TODAY is resolved per request — a long-running server must never serve a stale date. */
+function demoSystem() {
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
+  return `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what Flowline AI builds for local businesses. Stay in character as the restaurant's assistant.
+Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
 
 Facts about Bella's Pizzeria (fictional demo business):
 - Address: 245 Peachtree St NE, Atlanta, GA 30303
@@ -43,6 +54,7 @@ Booking rules:
 - When you have all four, confirm like this: "You're booked, {name}! Table for {size} on {date} at {time}. Confirmation code: BELLA-{4 random digits}. See you soon!"
 - Never invent a confirmation for incomplete bookings.
 - Keep replies short and warm (under 60 words). No emojis.`;
+}
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -105,7 +117,7 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
   const parsed = validChat(req.body);
   if (!parsed) return res.status(400).json({ error: 'Invalid chat request.' });
   const messages = [
-    { role: 'system', content: DEMO_SYSTEM },
+    { role: 'system', content: demoSystem() },
     ...parsed.history.map((h) => ({ role: h.role, content: h.content })),
     { role: 'user', content: parsed.message },
   ];
