@@ -1,4 +1,5 @@
-/* Flowline AI — demo chat, contact form, 3D tilt, reveals, counters */
+/* Flowline AI — demo chat, contact form, 3D tilt, reveals, counters,
+   floating site assistant, sticky mobile CTA */
 (function () {
   'use strict';
 
@@ -144,4 +145,86 @@
       })
       .catch(function () { cMsg.textContent = 'Something went wrong — try again.'; });
   });
+
+  /* ---------- floating site-assistant widget ---------- */
+  (function () {
+    var fab = document.getElementById('chatFab');
+    var widget = document.getElementById('chatWidget');
+    var closeBtn = document.getElementById('chatClose');
+    if (!fab || !widget) return;
+    fab.addEventListener('click', function () {
+      var opening = widget.hidden;
+      widget.hidden = !opening;
+      fab.setAttribute('aria-expanded', String(opening));
+      if (opening) {
+        var wInput = document.getElementById('siteChatText');
+        if (wInput) wInput.focus();
+      }
+    });
+    if (closeBtn) closeBtn.addEventListener('click', function () {
+      widget.hidden = true;
+      fab.setAttribute('aria-expanded', 'false');
+    });
+  })();
+
+  /* ---------- site-assistant chat (talks about Flowline AI itself) ---------- */
+  (function () {
+    var sForm = document.getElementById('siteChatForm');
+    var sInput = document.getElementById('siteChatText');
+    var sBox = document.getElementById('siteChatMessages');
+    if (!sForm || !sInput || !sBox) return;
+    var sHistory = [];
+    var sBusy = false;
+    function sScroll() { sBox.scrollTop = sBox.scrollHeight; }
+    function sAddMsg(text, who) {
+      var d = document.createElement('div');
+      d.className = 'msg ' + who;
+      d.textContent = text;
+      sBox.appendChild(d);
+      sScroll();
+      return d;
+    }
+    sForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (sBusy) return;
+      var msg = (sInput.value || '').trim();
+      if (!msg) return;
+      sBusy = true;
+      sAddMsg(msg, 'user');
+      sInput.value = '';
+      var typing = sAddMsg('Flowline Assistant is typing…', 'bot typing');
+      fetch('/api/site-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, history: sHistory })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          typing.remove();
+          var reply = data.reply || "I can help with pricing, the free pilot, or what we automate — what's on your mind?";
+          sAddMsg(reply, 'bot');
+          sHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: reply });
+          if (sHistory.length > 12) sHistory = sHistory.slice(-12);
+        })
+        .catch(function () {
+          typing.remove();
+          sAddMsg("I'm having a little trouble right now — email us at aiflowline@gmail.com and a human will reply within one business day.", 'bot');
+        })
+        .finally(function () { sBusy = false; sInput.focus(); });
+    });
+  })();
+
+  /* ---------- sticky mobile CTA: appears after the hero ---------- */
+  (function () {
+    var bar = document.getElementById('stickyCta');
+    if (!bar || !window.matchMedia('(max-width: 640px)').matches) return;
+    var hero = document.querySelector('.hero');
+    function onScroll() {
+      var past = window.scrollY > (hero ? hero.offsetHeight * 0.7 : 600);
+      bar.classList.toggle('show', past);
+      document.body.classList.toggle('has-sticky', past);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
 })();

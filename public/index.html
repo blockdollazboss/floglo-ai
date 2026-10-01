@@ -130,6 +130,18 @@
   </div>
 </section>
 
+<section class="compare" id="compare">
+  <div class="wrap">
+    <p class="kicker reveal">THE MATH</p>
+    <h2 class="reveal">What standing still <span class="gold-grad">costs.</span></h2>
+    <div class="cards">
+      <div class="card reveal"><div class="card-icon">✕</div><h3>Doing nothing</h3><p>Every missed call is a customer dialing your competitor next. Thin reviews keep you buried on Google. Old quotes sit in a spreadsheet, dying quietly.</p></div>
+      <div class="card reveal"><div class="card-icon">✕</div><h3>Hiring help</h3><p>A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
+      <div class="card reveal"><div class="card-icon">✓</div><h3>Flowline</h3><p>Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
+    </div>
+  </div>
+</section>
+
 <section class="pricing" id="pricing">
   <div class="wrap">
     <p class="kicker reveal">PRICING</p>
@@ -197,6 +209,36 @@
     <p class="legal-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a></p>
   </div>
 </footer>
+
+<!-- floating site assistant: the product selling itself -->
+<button id="chatFab" class="chat-fab" aria-label="Chat with our AI assistant" aria-expanded="false">
+  <img src="logo.png" alt="" width="30" height="30">
+</button>
+<div class="chat-widget" id="chatWidget" hidden>
+  <div class="chat-shell">
+    <div class="chat-head">
+      <div class="chat-avatar">F</div>
+      <div>
+        <p class="chat-name">Flowline Assistant</p>
+        <p class="chat-status"><span class="dot"></span> Online · replies instantly</p>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-messages" id="siteChatMessages" aria-live="polite">
+      <div class="msg bot">Hey, I'm the Flowline assistant — ask me anything about our services, pricing, or the free 7-day pilot.</div>
+    </div>
+    <form class="chat-input" id="siteChatForm">
+      <input id="siteChatText" type="text" placeholder="Ask about pricing, the pilot…" autocomplete="off" maxlength="1000">
+      <button type="submit" class="btn btn-gold btn-sm">Send</button>
+    </form>
+  </div>
+</div>
+
+<!-- sticky mobile CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <span>Your business, on autopilot.</span>
+  <a class="btn btn-gold btn-sm" href="#contact">Free 7-day pilot</a>
+</div>
 
 <script src="app.js"></script>
 <script type="module" src="world.js"></script>
