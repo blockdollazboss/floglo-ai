@@ -174,9 +174,10 @@ footer{border-top:1px solid var(--line)}
 .compare{text-align:center;background:transparent}
 
 /* floating site-assistant widget */
-.chat-fab{position:fixed;right:1.2rem;bottom:1.2rem;z-index:120;width:60px;height:60px;border-radius:50%;border:1px solid rgba(62,226,255,.5);background:rgba(10,17,34,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 24px rgba(62,226,255,.25);animation:fab-glow 3.2s ease-in-out infinite;transition:transform .15s ease}
+.chat-fab{position:fixed;right:1.2rem;bottom:1.2rem;z-index:120;width:60px;height:60px;border-radius:50%;border:1px solid rgba(62,226,255,.5);background:rgba(10,17,34,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 24px rgba(62,226,255,.25);animation:fab-glow 3.2s ease-in-out infinite;transition:transform .15s ease}
 .chat-fab:hover{transform:translateY(-2px)}
-.chat-fab img{display:block;border-radius:50%}
+.chat-fab img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.chat-avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
 @keyframes fab-glow{0%,100%{box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 18px rgba(62,226,255,.18)}50%{box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 34px rgba(62,226,255,.45)}}
 .chat-widget{position:fixed;right:1.2rem;bottom:calc(1.2rem + 60px + .8rem);z-index:120;width:min(380px,calc(100vw - 2rem))}
 .chat-widget .chat-shell{box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 40px rgba(62,226,255,.12)}

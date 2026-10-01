@@ -192,7 +192,7 @@
       sBusy = true;
       sAddMsg(msg, 'user');
       sInput.value = '';
-      var typing = sAddMsg('Flowline Assistant is typing…', 'bot typing');
+      var typing = sAddMsg('Flo is typing…', 'bot typing');
       fetch('/api/site-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -201,7 +201,7 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           typing.remove();
-          var reply = data.reply || "I can help with pricing, the free pilot, or what we automate — what's on your mind?";
+          var reply = data.reply || "Great question — I can walk you through pricing, the free pilot, or what we'd automate for your business. What's on your mind?";
           sAddMsg(reply, 'bot');
           sHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: reply });
           if (sHistory.length > 12) sHistory = sHistory.slice(-12);
