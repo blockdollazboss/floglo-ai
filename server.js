@@ -133,6 +133,59 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
   }
 });
 
+/* ---------------- site assistant chat (the product selling itself) ----------------
+   A floating assistant that answers visitor questions about Flowline AI itself —
+   services, pricing, the free pilot — and captures pilot signups. Same
+   Groq-with-local-fallback pattern as the Bella demo. */
+function siteSystem() {
+  return `You are the AI assistant on Flowline AI's website — a live demo of the kind of assistant Flowline AI builds for local businesses. Be warm, concise (under 60 words), helpful. No emojis.
+About Flowline AI (AI automation agency for local businesses):
+- Services: 24/7 AI receptionist (answers calls, texts, and website chat; books appointments straight into the calendar), missed-call text-back, review engine (asks happy customers for Google reviews), lead follow-up automation.
+- Pricing: Pilot — $0. Free 7-day trial of one automation on the visitor's business. No charge, ends automatically, includes a results report. Launch — $750 one-time: AI receptionist on their website, missed-call text-back, review engine, 30 days of tuning. Growth — $297/month: everything in Launch plus lead follow-up automation, monthly performance reports, priority support; cancel anytime.
+- Guarantees: Launch carries a 14-day money-back guarantee. The pilot is free, so there is nothing to refund.
+- Contact: aiflowline@gmail.com — a human replies within one business day.
+- To claim the free pilot, collect: name, email, business name, and what they want automated. Ask for missing pieces one at a time, then confirm: "You're in! We'll reply within one business day with your pilot plan."
+Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features.`;
+}
+
+/* Local FAQ fallback for the site assistant — works with zero external APIs. */
+function siteFaqReply(msg) {
+  const m = msg.toLowerCase();
+  if (/price|cost|how much|pricing|plan/.test(m))
+    return "Simple: the 7-day pilot is free. Launch is $750 one-time, Growth is $297/month with cancel-anytime. Launch carries a 14-day money-back guarantee. Want me to get your free pilot started?";
+  if (/pilot|free|trial|try|start|sign/.test(m))
+    return "The free pilot installs one automation on your business for 7 days — free, no charge, no obligation, and you get a results report at the end. Want in? I just need your name, email, and business name.";
+  if (/service|what.*do|offer|automat/.test(m))
+    return "We build four things: a 24/7 AI receptionist, missed-call text-back, a review engine, and lead follow-up automation. Which one hurts most in your business right now?";
+  if (/guarantee|refund/.test(m))
+    return "Launch comes with a 14-day money-back guarantee — email us within 14 days and we refund the full $750. The pilot is free, so there's nothing to refund there.";
+  if (/human|person|call me|phone|email|contact|support/.test(m))
+    return "You can reach a human at aiflowline@gmail.com — we reply within one business day.";
+  if (/who|about|company|flowline/.test(m))
+    return "Flowline AI is an AI automation agency for local businesses. We install AI assistants that answer customers, book appointments, and chase leads — 24/7.";
+  return null;
+}
+
+app.post('/api/site-chat', rateLimit, async (req, res) => {
+  const parsed = validChat(req.body);
+  if (!parsed) return res.status(400).json({ error: 'Invalid chat request.' });
+  const messages = [
+    { role: 'system', content: siteSystem() },
+    ...parsed.history.map((h) => ({ role: h.role, content: h.content })),
+    { role: 'user', content: parsed.message },
+  ];
+  try {
+    const reply = await callGroq(messages);
+    return res.json({ reply, provider: 'groq' });
+  } catch (e) {
+    const fb = siteFaqReply(parsed.message);
+    return res.json({
+      reply: fb || "I can help with pricing, the free pilot, or what we automate — what's on your mind?",
+      provider: 'local-faq',
+    });
+  }
+});
+
 /* ---------------- contact / pilot requests ---------------- */
 const LEADS_FILE = path.join(__dirname, 'leads.json');
 
