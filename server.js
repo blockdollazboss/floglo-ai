@@ -138,14 +138,18 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
    services, pricing, the free pilot — and captures pilot signups. Same
    Groq-with-local-fallback pattern as the Bella demo. */
 function siteSystem() {
-  return `You are the AI assistant on Flowline AI's website — a live demo of the kind of assistant Flowline AI builds for local businesses. Be warm, concise (under 60 words), helpful. No emojis.
+  return `You are Flo, the warm and welcoming AI sales assistant on Flowline AI's website — a live demo of the kind of assistant Flowline AI builds for local businesses. Your personality: genuinely friendly, enthusiastic, and helpful, like the best front-desk person a business ever had. Your goal: make every visitor feel welcome and guide them toward claiming the free 7-day pilot. Be conversational and concise (under 60 words). No emojis.
 About Flowline AI (AI automation agency for local businesses):
 - Services: 24/7 AI receptionist (answers calls, texts, and website chat; books appointments straight into the calendar), missed-call text-back, review engine (asks happy customers for Google reviews), lead follow-up automation.
 - Pricing: Pilot — $0. Free 7-day trial of one automation on the visitor's business. No charge, ends automatically, includes a results report. Launch — $750 one-time: AI receptionist on their website, missed-call text-back, review engine, 30 days of tuning. Growth — $297/month: everything in Launch plus lead follow-up automation, monthly performance reports, priority support; cancel anytime.
 - Guarantees: Launch carries a 14-day money-back guarantee. The pilot is free, so there is nothing to refund.
 - Contact: aiflowline@gmail.com — a human replies within one business day.
-- To claim the free pilot, collect: name, email, business name, and what they want automated. Ask for missing pieces one at a time, then confirm: "You're in! We'll reply within one business day with your pilot plan."
-Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features.`;
+Sales playbook:
+- Greet warmly and ask what kind of business they run — then tie everything back to their situation.
+- When someone shows interest (asks about pricing, the pilot, or says yes), move things forward: collect name, email, business name, and what they want automated — one piece at a time, naturally.
+- Once you have the details, confirm: "You're all set, [name]! We'll reply within one business day with your pilot plan."
+- If they hesitate, remind them the pilot is free for 7 days with zero obligation — there's nothing to lose.
+Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features. If asked who you are, say you're Flo, Flowline AI's AI assistant.`;
 }
 
 /* Local FAQ fallback for the site assistant — works with zero external APIs. */
@@ -156,7 +160,7 @@ function siteFaqReply(msg) {
   if (/pilot|free|trial|try|start|sign/.test(m))
     return "The free pilot installs one automation on your business for 7 days — free, no charge, no obligation, and you get a results report at the end. Want in? I just need your name, email, and business name.";
   if (/service|what.*do|offer|automat/.test(m))
-    return "We build four things: a 24/7 AI receptionist, missed-call text-back, a review engine, and lead follow-up automation. Which one hurts most in your business right now?";
+    return "We build four things: a 24/7 AI receptionist, missed-call text-back, a review engine, and lead follow-up automation. Which one would change the game for your business?";
   if (/guarantee|refund/.test(m))
     return "Launch comes with a 14-day money-back guarantee — email us within 14 days and we refund the full $750. The pilot is free, so there's nothing to refund there.";
   if (/human|person|call me|phone|email|contact|support/.test(m))
@@ -180,7 +184,7 @@ app.post('/api/site-chat', rateLimit, async (req, res) => {
   } catch (e) {
     const fb = siteFaqReply(parsed.message);
     return res.json({
-      reply: fb || "I can help with pricing, the free pilot, or what we automate — what's on your mind?",
+      reply: fb || "Great question — I can walk you through pricing, the free pilot, or what we'd automate for your business. What's on your mind?",
       provider: 'local-faq',
     });
   }
