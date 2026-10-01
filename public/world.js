@@ -1,5 +1,5 @@
-/* Flowline AI — immersive 3D world.
-   A real-time Three.js scene behind the site: the Flowline mark rebuilt as a
+/* FloGlo AI — immersive 3D world.
+   A real-time Three.js scene behind the site: the FloGlo mark rebuilt as a
    true 3D liquid-platinum loop, drifting cyan-dust particle fields, and a camera
    that flies through the world as you scroll. The DOM content scrolls above it.
    Fails safe: if WebGL, the CDN, or motion preferences block it, the page
@@ -52,7 +52,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
   scene.add(new THREE.AmbientLight(0x1a2438, 0.7));
 
   /* ---------------- the logo as a true 3D object ----------------
-     A flowing closed loop (the Flowline mark's silhouette) swept into a tube
+     A flowing closed loop (the FloGlo mark's silhouette) swept into a tube
      and cast in liquid platinum: full metal, clearcoat, studio reflections. */
   function loopCurve() {
     var pts = [], SEG = 180;

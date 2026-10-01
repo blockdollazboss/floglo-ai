@@ -1,4 +1,4 @@
-/* Flowline AI — demo chat, contact form, 3D tilt, reveals, counters,
+/* FloGlo AI — demo chat, contact form, 3D tilt, reveals, counters,
    floating site assistant, sticky mobile CTA */
 (function () {
   'use strict';
@@ -167,7 +167,7 @@
     });
   })();
 
-  /* ---------- site-assistant chat (talks about Flowline AI itself) ---------- */
+  /* ---------- site-assistant chat (talks about FloGlo AI itself) ---------- */
   (function () {
     var sForm = document.getElementById('siteChatForm');
     var sInput = document.getElementById('siteChatText');
