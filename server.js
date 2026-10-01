@@ -1,4 +1,4 @@
-/* Flowline AI — agency site server.
+/* FloGlo AI — agency site server.
    $0 stack: Express serves the static site; /api/demo-chat powers the live
    restaurant-bot demo (Groq free tier if GROQ_API_KEY is set, local FAQ fallback
    otherwise); /api/contact saves pilot requests to leads.json. */
@@ -37,7 +37,7 @@ function rateLimit(req, res, next) {
 /* TODAY is resolved per request — a long-running server must never serve a stale date. */
 function demoSystem() {
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
-  return `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what Flowline AI builds for local businesses. Stay in character as the restaurant's assistant.
+  return `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what FloGlo AI builds for local businesses. Stay in character as the restaurant's assistant.
 Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
 
 Facts about Bella's Pizzeria (fictional demo business):
@@ -134,12 +134,12 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
 });
 
 /* ---------------- site assistant chat (the product selling itself) ----------------
-   A floating assistant that answers visitor questions about Flowline AI itself —
+   A floating assistant that answers visitor questions about FloGlo AI itself —
    services, pricing, the free pilot — and captures pilot signups. Same
    Groq-with-local-fallback pattern as the Bella demo. */
 function siteSystem() {
-  return `You are Flo, the warm and welcoming AI sales assistant on Flowline AI's website — a live demo of the kind of assistant Flowline AI builds for local businesses. Your personality: genuinely friendly, enthusiastic, and helpful, like the best front-desk person a business ever had. Your goal: make every visitor feel welcome and guide them toward claiming the free 7-day pilot. Be conversational and concise (under 60 words). No emojis.
-About Flowline AI (AI automation agency for local businesses):
+  return `You are Flo, the warm and welcoming AI sales assistant on FloGlo AI's website — a live demo of the kind of assistant FloGlo AI builds for local businesses. Your personality: genuinely friendly, enthusiastic, and helpful, like the best front-desk person a business ever had. Your goal: make every visitor feel welcome and guide them toward claiming the free 7-day pilot. Be conversational and concise (under 60 words). No emojis.
+About FloGlo AI (AI automation agency for local businesses):
 - Services: 24/7 AI receptionist (answers calls, texts, and website chat; books appointments straight into the calendar), missed-call text-back, review engine (asks happy customers for Google reviews), lead follow-up automation.
 - Pricing: Pilot — $0. Free 7-day trial of one automation on the visitor's business. No charge, ends automatically, includes a results report. Launch — $750 one-time: AI receptionist on their website, missed-call text-back, review engine, 30 days of tuning. Growth — $297/month: everything in Launch plus lead follow-up automation, monthly performance reports, priority support; cancel anytime.
 - Guarantees: Launch carries a 14-day money-back guarantee. The pilot is free, so there is nothing to refund.
@@ -149,7 +149,7 @@ Sales playbook:
 - When someone shows interest (asks about pricing, the pilot, or says yes), move things forward: collect name, email, business name, and what they want automated — one piece at a time, naturally.
 - Once you have the details, confirm: "You're all set, [name]! We'll reply within one business day with your pilot plan."
 - If they hesitate, remind them the pilot is free for 7 days with zero obligation — there's nothing to lose.
-Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features. If asked who you are, say you're Flo, Flowline AI's AI assistant.`;
+Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features. If asked who you are, say you're Flo, FloGlo AI's AI assistant.`;
 }
 
 /* Local FAQ fallback for the site assistant — works with zero external APIs. */
@@ -165,8 +165,8 @@ function siteFaqReply(msg) {
     return "Launch comes with a 14-day money-back guarantee — email us within 14 days and we refund the full $750. The pilot is free, so there's nothing to refund there.";
   if (/human|person|call me|phone|email|contact|support/.test(m))
     return "You can reach a human at aiflowline@gmail.com — we reply within one business day.";
-  if (/who|about|company|flowline/.test(m))
-    return "Flowline AI is an AI automation agency for local businesses. We install AI assistants that answer customers, book appointments, and chase leads — 24/7.";
+  if (/who|about|company|floglo/.test(m))
+    return "FloGlo AI is an AI automation agency for local businesses. We install AI assistants that answer customers, book appointments, and chase leads — 24/7.";
   return null;
 }
 
@@ -217,7 +217,7 @@ app.post('/api/contact', rateLimit, (req, res) => {
   });
   /* Render's free-tier disk is wiped on every deploy, so leads.json alone is
      not durable — also emit the lead to stdout so it survives in the logs. */
-  console.log('[flowline-ai] new lead:', JSON.stringify(leads[leads.length - 1]));
+  console.log('[floglo-ai] new lead:', JSON.stringify(leads[leads.length - 1]));
   fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
   res.json({ ok: true });
 });
@@ -239,4 +239,4 @@ app.get('/api/leads', rateLimit, (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`[flowline-ai] listening on :${PORT}`));
+app.listen(PORT, () => console.log(`[floglo-ai] listening on :${PORT}`));
