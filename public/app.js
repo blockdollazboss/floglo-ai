@@ -88,7 +88,7 @@
     if (!msg) return;
     busy = true;
     addMsg(msg, 'user');
-    var typing = addMsg('Bella is typing…', 'bot typing');
+    var typing = addMsg('Flo is typing…', 'bot typing');
     fetch('/api/demo-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
