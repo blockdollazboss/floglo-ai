@@ -158,6 +158,7 @@ details p{color:var(--muted);margin-top:.7rem;font-size:.95rem}
 .contact-form label{display:flex;flex-direction:column;gap:.4rem;font-weight:600;font-size:.92rem}
 .contact-form input,.contact-form textarea{background:#0a1122;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:.8rem 1rem;font-size:.95rem;font-family:inherit;transition:border-color .15s}
 .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(62,226,255,.12)}
+.contact-form input::placeholder,.contact-form textarea::placeholder,.chat-input input::placeholder{color:var(--muted);opacity:1}
 .form-msg{min-height:1.4rem;font-size:.92rem;color:var(--gold)}
 
 /* footer */
