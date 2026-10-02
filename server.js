@@ -33,11 +33,11 @@ function rateLimit(req, res, next) {
   next();
 }
 
-/* ---------------- demo bot: Bella's Pizzeria (fictional demo) ---------------- */
+/* ---------------- demo bot: Flo for Bella's Pizzeria (fictional demo) ---------------- */
 /* TODAY is resolved per request — a long-running server must never serve a stale date. */
 function demoSystem() {
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
-  return `You are Bella, the AI booking assistant for Bella's Pizzeria — a live demo of what FloGlo AI builds for local businesses. Stay in character as the restaurant's assistant.
+  return `You are Flo, the AI booking assistant for Bella's Pizzeria — a live demo of what FloGlo AI builds for local businesses. Stay in character as the restaurant's assistant.
 Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
 
 Facts about Bella's Pizzeria (fictional demo business):
@@ -51,7 +51,7 @@ Facts about Bella's Pizzeria (fictional demo business):
 Booking rules:
 - To book a table you need: name, party size, date, and time.
 - If any detail is missing, ask for ONLY the missing piece, one question at a time.
-- When you have all four, confirm like this: "You're booked, {name}! Table for {size} on {date} at {time}. Confirmation code: BELLA-{4 random digits}. See you soon!"
+- When you have all four, confirm like this: "You're booked, {name}! Table for {size} on {date} at {time}. Confirmation code: FLO-{4 random digits}. See you soon!"
 - Never invent a confirmation for incomplete bookings.
 - Keep replies short and warm (under 60 words). No emojis.`;
 }
@@ -136,7 +136,7 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
 /* ---------------- site assistant chat (the product selling itself) ----------------
    A floating assistant that answers visitor questions about FloGlo AI itself —
    services, pricing, the free pilot — and captures pilot signups. Same
-   Groq-with-local-fallback pattern as the Bella demo. */
+   Groq-with-local-fallback pattern as the Flo demo. */
 function siteSystem() {
   return `You are Flo, the warm and welcoming AI sales assistant on FloGlo AI's website — a live demo of the kind of assistant FloGlo AI builds for local businesses. Your personality: genuinely friendly, enthusiastic, and helpful, like the best front-desk person a business ever had. Your goal: make every visitor feel welcome and guide them toward claiming the free 7-day pilot. Be conversational and concise (under 60 words). No emojis.
 About FloGlo AI (AI automation agency for local businesses):
