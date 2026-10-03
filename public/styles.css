@@ -223,8 +223,8 @@ footer{border-top:1px solid var(--line)}
 .foot .social-links svg{width:22px;height:22px}
 @media(prefers-reduced-motion:reduce){.foot .social-links a{transition:none}.foot .social-links a:hover{transform:none}}
 
-/* ---- FloGlo logo cursor: 34px logo (nav-logo size), slow spin ~16s/rev,
-   breathing cyan glow baked into 24 frames ----
+/* ---- FloGlo logo cursor: 34px logo (nav-logo size), smooth slow spin ~16s/rev,
+   breathing cyan glow baked into 48 frames ----
    cursor.js adds .flo-cursor on fine pointers and drives --cur through the frames.
    The cursor is set once on <html> and inherited (cheap: no per-element
    re-resolution, no flicker). Links/buttons keep the pointer hand; text fields
@@ -238,9 +238,9 @@ html.flo-cursor input, html.flo-cursor textarea, html.flo-cursor select,
 html.flo-cursor-static input, html.flo-cursor-static textarea, html.flo-cursor-static select { cursor: text; }
 /* cursor effects: faint trail + click ripple (created by cursor.js) */
 .fx-trail {
-  position: fixed; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(62,226,255,.7) 0%, rgba(62,226,255,0) 70%);
-  pointer-events: none; z-index: 9998; animation: fx-trail-fade .55s ease-out forwards;
+  position: fixed; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(62,226,255,.85) 0%, rgba(62,226,255,0) 70%);
+  pointer-events: none; z-index: 9998; animation: fx-trail-fade .6s ease-out forwards;
 }
 @keyframes fx-trail-fade { to { transform: translateY(8px) scale(.2); opacity: 0; } }
 .fx-ripple {
