@@ -231,7 +231,7 @@ footer{border-top:1px solid var(--line)}
    keep the text cursor. Touch devices are left alone; reduced-motion and no-JS
    fall back to the static frame via .flo-cursor-static. */
 html.flo-cursor { cursor: var(--cur, auto); }
-html.flo-cursor-static { cursor: url("cursor-00.png") 32 32, auto; }
+html.flo-cursor-static { cursor: url("cursor-00.png?v=4") 32 32, auto; }
 html.flo-cursor a, html.flo-cursor button, html.flo-cursor summary,
 html.flo-cursor-static a, html.flo-cursor-static button, html.flo-cursor-static summary { cursor: pointer; }
 html.flo-cursor input, html.flo-cursor textarea, html.flo-cursor select,

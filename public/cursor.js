@@ -12,10 +12,10 @@
   var FRAMES = 48, SPEED = 333, frame = 0, i; /* 48 x 333ms ~= 16s per revolution */
   function pad(n) { return ('0' + n).slice(-2); }
   for (i = 0; i < FRAMES; i++) {
-    (new Image()).src = 'cursor-' + pad(i) + '.png';
+    (new Image()).src = 'cursor-' + pad(i) + '.png?v=4';
   }
   function apply() {
-    root.style.setProperty('--cur', 'url("cursor-' + pad(frame) + '.png") 32 32, auto');
+    root.style.setProperty('--cur', 'url("cursor-' + pad(frame) + '.png?v=4") 32 32, auto');
   }
   root.classList.add('flo-cursor');
   apply();
