@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FloGlo AI — Cursor demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.cursor-a, html.cursor-a * { cursor: url("/cursor-a.png") 16 16, auto; }
+  html.cursor-b, html.cursor-b * { cursor: url("/cursor-b.png") 24 24, auto; }
+  html.cursor-c, html.cursor-c * { cursor: url("/cursor-c.png") 46 46, auto; }
+  body {
+    background: #050914; color: #edf3ff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .stage { width: min(920px, 100%); }
+  .picker { display: flex; gap: .7rem; justify-content: center; margin-bottom: 1.4rem; flex-wrap: wrap; }
+  .picker button {
+    background: #0d1528; border: 1px solid #1e2a45; color: #edf3ff;
+    border-radius: 999px; padding: .6rem 1.3rem; font-size: .9rem; font-weight: 700;
+    letter-spacing: .08em; transition: border-color .15s, box-shadow .15s, color .15s;
+  }
+  .picker button:hover { border-color: #3ee2ff; }
+  .picker button.active { border-color: #3ee2ff; box-shadow: 0 0 16px rgba(62,226,255,.35); color: #3ee2ff; }
+  .box {
+    position: relative; background: #0b0b0e; border: 1px solid #23232a;
+    border-radius: 22px; height: 420px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .box .tag {
+    position: absolute; top: 26px; left: 34px;
+    color: #3ee2ff; font-size: .85rem; font-weight: 600; letter-spacing: .32em;
+  }
+  .box .tag .dim { color: #5b6b8c; }
+  .prompt { display: flex; align-items: center; gap: .9rem; user-select: none; -webkit-user-select: none; }
+  .prompt .dot {
+    width: 14px; height: 14px; border-radius: 50%; background: #3ee2ff;
+    box-shadow: 0 0 14px 4px rgba(62,226,255,.55);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.72); opacity: .65; } }
+  @media (prefers-reduced-motion: reduce) { .prompt .dot { animation: none; } }
+  .prompt span { color: #8a8f98; font-size: 1.05rem; font-weight: 500; letter-spacing: .3em; }
+  .box .opt-name {
+    position: absolute; bottom: 24px; left: 0; right: 0; text-align: center;
+    color: #5b6b8c; font-size: .8rem; letter-spacing: .24em;
+  }
+  .note { text-align: center; color: #5b6b8c; font-size: .85rem; margin-top: 1.2rem; letter-spacing: .06em; }
+  .back { display: block; text-align: center; margin-top: .8rem; color: #3ee2ff; font-size: .85rem; text-decoration: none; }
+  .back:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="picker">
+    <button data-c="cursor-a" class="active">A &middot; SMALL</button>
+    <button data-c="cursor-b">B &middot; LARGE</button>
+    <button data-c="cursor-c">C &middot; GLOW</button>
+  </div>
+  <div class="box" id="box">
+    <div class="tag">LOGO CURSOR <span class="dim">&mdash;</span> <span id="tagOpt">A</span></div>
+    <div class="prompt"><div class="dot"></div><span>MOVE &amp; CLICK</span></div>
+    <div class="opt-name" id="optName">A &mdash; SMALL &amp; CLEAN &middot; 32PX</div>
+  </div>
+  <p class="note">Your real cursor is the logo right now. Move it anywhere on this page &mdash; click the box to cycle A &rarr; B &rarr; C.</p>
+  <a class="back" href="/">Back to flogloai.com</a>
+</div>
+<script>
+  var order = ['cursor-a', 'cursor-b', 'cursor-c'];
+  var names = {
+    'cursor-a': ['A', 'A \u2014 SMALL & CLEAN \u00b7 32PX'],
+    'cursor-b': ['B', 'B \u2014 LARGE \u00b7 48PX'],
+    'cursor-c': ['C', 'C \u2014 GLOW \u00b7 40PX + CYAN GLOW']
+  };
+  var idx = 0;
+  function setCursor(i) {
+    idx = (i + order.length) % order.length;
+    var key = order[idx];
+    document.documentElement.className = key;
+    document.querySelectorAll('.picker button').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-c') === key);
+    });
+    document.getElementById('tagOpt').textContent = names[key][0];
+    document.getElementById('optName').textContent = names[key][1];
+  }
+  document.querySelectorAll('.picker button').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setCursor(order.indexOf(btn.getAttribute('data-c')));
+    });
+  });
+  document.getElementById('box').addEventListener('click', function () { setCursor(idx + 1); });
+  setCursor(0);
+</script>
+</body>
+</html>
