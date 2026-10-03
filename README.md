@@ -26,11 +26,11 @@ Without it, the demo bot answers from its built-in FAQ — still fully functiona
 ## Files
 
 - `server.js` — Express: static site, `POST /api/demo-chat`, `POST /api/contact`
-- `public/` — one-page site (dark/moody/gold), embedded Bella demo chat
+- `public/` — one-page site (dark/moody/gold), embedded Flo demo chat
 - `leads.json` — pilot requests saved here (created on first form submit)
 
 ## Demo bot
 
-"Bella" is the booking assistant for **Bella's Pizzeria — a fictional demo business**
+"Flo" is the booking assistant for **Bella's Pizzeria — a fictional demo business**
 (address/phone are 555-style placeholders). It demonstrates the agency's core
 product: an AI receptionist trained on a business's real facts.
