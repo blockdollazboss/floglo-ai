@@ -222,3 +222,15 @@ footer{border-top:1px solid var(--line)}
 .foot .social-links a:hover{color:var(--gold);transform:translateY(-2px)}
 .foot .social-links svg{width:22px;height:22px}
 @media(prefers-reduced-motion:reduce){.foot .social-links a{transition:none}.foot .social-links a:hover{transform:none}}
+
+/* ---- FloGlo logo cursor (B / Large): slow-spinning logo, ~3s per revolution ----
+   cursor.js adds .flo-cursor on fine pointers and drives --cur through 12 frames.
+   Links/buttons keep the pointer hand; text fields keep the text cursor.
+   Touch devices are left alone (no .flo-cursor class); reduced-motion and
+   no-JS fall back to the static frame via .flo-cursor-static. */
+html.flo-cursor, html.flo-cursor * { cursor: var(--cur, auto); }
+html.flo-cursor-static, html.flo-cursor-static * { cursor: url("cursor-b.png") 24 24, auto; }
+html.flo-cursor a, html.flo-cursor button, html.flo-cursor summary,
+html.flo-cursor-static a, html.flo-cursor-static button, html.flo-cursor-static summary { cursor: pointer; }
+html.flo-cursor input, html.flo-cursor textarea, html.flo-cursor select,
+html.flo-cursor-static input, html.flo-cursor-static textarea, html.flo-cursor-static select { cursor: text; }
