@@ -1,4 +1,4 @@
-# Flowline AI
+# FloGlo AI
 
 AI automation agency pitch site + live demo chatbot. **$0 stack**: Node/Express,
 Groq free tier (`openai/gpt-oss-120b`) with a local FAQ fallback so the demo works
