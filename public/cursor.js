@@ -1,4 +1,5 @@
-/* FloGlo AI — logo cursor (B / Large): slow-spinning logo, ~3s per revolution.
+/* FloGlo AI — logo cursor: 34px logo (nav-logo size), slow spin ~16s/rev,
+   breathing cyan glow, faint trail + click ripple.
    Fine pointers only. Reduced-motion and no-JS fall back to the static frame. */
 (function () {
   'use strict';
@@ -8,15 +9,39 @@
     root.classList.add('flo-cursor-static');
     return;
   }
-  var FRAMES = 12, SPEED = 250, frame = 0, i;
+  var FRAMES = 24, SPEED = 667, frame = 0, i; /* 24 x 667ms ~= 16s per revolution */
+  function pad(n) { return ('0' + n).slice(-2); }
   for (i = 0; i < FRAMES; i++) {
-    (new Image()).src = 'cursor-b-' + ('0' + i).slice(-2) + '.png';
+    (new Image()).src = 'cursor-' + pad(i) + '.png';
   }
   function apply() {
-    root.style.setProperty('--cur',
-      'url("cursor-b-' + ('0' + frame).slice(-2) + '.png") 24 24, auto');
+    root.style.setProperty('--cur', 'url("cursor-' + pad(frame) + '.png") 32 32, auto');
   }
   root.classList.add('flo-cursor');
   apply();
   setInterval(function () { frame = (frame + 1) % FRAMES; apply(); }, SPEED);
+
+  /* faint glow trail */
+  var last = 0;
+  document.addEventListener('mousemove', function (e) {
+    var now = performance.now();
+    if (now - last < 50) return;
+    last = now;
+    var d = document.createElement('div');
+    d.className = 'fx-trail';
+    d.style.left = e.clientX + 'px';
+    d.style.top = e.clientY + 'px';
+    document.body.appendChild(d);
+    d.addEventListener('animationend', function () { d.remove(); });
+  });
+
+  /* click ripple */
+  document.addEventListener('click', function (e) {
+    var r = document.createElement('div');
+    r.className = 'fx-ripple';
+    r.style.left = e.clientX + 'px';
+    r.style.top = e.clientY + 'px';
+    document.body.appendChild(r);
+    r.addEventListener('animationend', function () { r.remove(); });
+  });
 })();
