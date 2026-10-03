@@ -7,9 +7,12 @@
 <title>FloGlo AI — Cursor demo</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* static fallback (no-JS / reduced motion) */
   html.cursor-a, html.cursor-a * { cursor: url("/cursor-a.png") 16 16, auto; }
   html.cursor-b, html.cursor-b * { cursor: url("/cursor-b.png") 24 24, auto; }
   html.cursor-c, html.cursor-c * { cursor: url("/cursor-c.png") 46 46, auto; }
+  /* animated mode: cursor comes from the --cur variable, cycled by JS */
+  html.anim, html.anim * { cursor: var(--cur, auto); }
   body {
     background: #050914; color: #edf3ff;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
@@ -65,9 +68,7 @@
     border: 2px solid rgba(62,226,255,.85); transform: translate(-50%,-50%);
     animation: rippleOut .55s ease-out forwards;
   }
-  @keyframes rippleOut {
-    to { width: 130px; height: 130px; opacity: 0; border-width: 1px; }
-  }
+  @keyframes rippleOut { to { width: 130px; height: 130px; opacity: 0; border-width: 1px; } }
   .burst-bit {
     position: absolute; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%;
     background: #9beaff; box-shadow: 0 0 8px rgba(62,226,255,.9);
@@ -99,23 +100,40 @@
   <div class="box" id="box">
     <div class="tag">LOGO CURSOR <span class="dim">&mdash;</span> <span id="tagOpt">A</span></div>
     <div class="prompt"><div class="dot"></div><span>MOVE &amp; CLICK</span></div>
-    <div class="opt-name" id="optName">A &mdash; SMALL &amp; CLEAN &middot; 32PX</div>
+    <div class="opt-name" id="optName">A &mdash; SMALL &middot; SPINNING 32PX</div>
   </div>
-  <p class="note">Your real cursor is the logo. Move it around, then click anywhere to switch &mdash; watch what happens.</p>
+  <p class="note">Your cursor is alive now &mdash; slow spin, and C breathes a pulsing glow. Click anywhere to switch.</p>
   <a class="back" href="/">Back to flogloai.com</a>
 </div>
 <script>
-  var order = ['cursor-a', 'cursor-b', 'cursor-c'];
-  var names = {
-    'cursor-a': ['A', 'A \u2014 SMALL & CLEAN \u00b7 32PX'],
-    'cursor-b': ['B', 'B \u2014 LARGE \u00b7 48PX'],
-    'cursor-c': ['C', 'C \u2014 GLOW \u00b7 40PX + CYAN GLOW']
+  var FRAMES = 12, SPEED = 160; /* ms per frame: ~2s per revolution */
+  var OPTS = {
+    'cursor-a': { prefix: '/cursor-a-', hot: [16,16], size: 32,
+                  name: 'A', label: 'A \u2014 SMALL \u00b7 SPINNING 32PX' },
+    'cursor-b': { prefix: '/cursor-b-', hot: [24,24], size: 48,
+                  name: 'B', label: 'B \u2014 LARGE \u00b7 SPINNING 48PX' },
+    'cursor-c': { prefix: '/cursor-c-', hot: [46,46], size: 92,
+                  name: 'C', label: 'C \u2014 GLOW \u00b7 SPIN + PULSING GLOW' }
   };
-  var srcs = { 'cursor-a': '/cursor-a.png', 'cursor-b': '/cursor-b.png', 'cursor-c': '/cursor-c.png' };
-  var sizes = { 'cursor-a': 32, 'cursor-b': 48, 'cursor-c': 92 };
-  var idx = 0;
+  var order = ['cursor-a', 'cursor-b', 'cursor-c'];
+  var idx = 0, frame = 0, timer = null;
   var fx = document.getElementById('fx');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function frameUrl(key, f) {
+    return OPTS[key].prefix + ('0' + f).slice(-2) + '.png';
+  }
+  /* preload every frame so the spin never stutters */
+  order.forEach(function (key) {
+    for (var f = 0; f < FRAMES; f++) { (new Image()).src = frameUrl(key, f); }
+  });
+
+  function applyCursor() {
+    var key = order[idx], o = OPTS[key];
+    document.documentElement.style.setProperty('--cur',
+      'url("' + frameUrl(key, frame) + '") ' + o.hot[0] + ' ' + o.hot[1] + ', auto');
+  }
+  function tick() { frame = (frame + 1) % FRAMES; applyCursor(); }
 
   function spawn(el) {
     fx.appendChild(el);
@@ -129,8 +147,7 @@
   }
   function burst(x, y) {
     for (var i = 0; i < 10; i++) {
-      var a = Math.random() * Math.PI * 2;
-      var d = 34 + Math.random() * 44;
+      var a = Math.random() * Math.PI * 2, d = 34 + Math.random() * 44;
       var s = document.createElement('div');
       s.className = 'burst-bit';
       s.style.left = x + 'px'; s.style.top = y + 'px';
@@ -139,28 +156,31 @@
       spawn(s);
     }
   }
-  function pop(x, y, key) {
+  function pop(x, y) {
+    var key = order[idx], o = OPTS[key];
     var img = document.createElement('img');
-    img.className = 'pop';
-    img.src = srcs[key];
-    img.alt = '';
-    var sz = sizes[key];
-    img.style.width = sz + 'px'; img.style.height = sz + 'px';
+    img.className = 'pop'; img.alt = '';
+    img.src = frameUrl(key, frame);
+    img.style.width = o.size + 'px'; img.style.height = o.size + 'px';
     img.style.left = x + 'px'; img.style.top = y + 'px';
     spawn(img);
   }
   function setCursor(i, x, y) {
     idx = (i + order.length) % order.length;
     var key = order[idx];
-    document.documentElement.className = key;
+    frame = 0;
+    if (!reduceMotion) {
+      document.documentElement.classList.add('anim');
+      applyCursor();
+    } else {
+      document.documentElement.className = key;
+    }
     document.querySelectorAll('.picker button').forEach(function (b) {
       b.classList.toggle('active', b.getAttribute('data-c') === key);
     });
-    document.getElementById('tagOpt').textContent = names[key][0];
-    document.getElementById('optName').textContent = names[key][1];
-    if (!reduceMotion && typeof x === 'number') {
-      ripple(x, y); burst(x, y); pop(x, y, key);
-    }
+    document.getElementById('tagOpt').textContent = OPTS[key].name;
+    document.getElementById('optName').textContent = OPTS[key].label;
+    if (!reduceMotion && typeof x === 'number') { ripple(x, y); burst(x, y); pop(x, y); }
   }
   document.querySelectorAll('.picker button').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
@@ -185,7 +205,17 @@
     spawn(d);
   });
 
-  setCursor(0);
+  /* boot */
+  if (!reduceMotion) {
+    document.documentElement.classList.add('anim');
+    applyCursor();
+    timer = setInterval(tick, SPEED);
+  } else {
+    setCursor(0);
+  }
+  /* keep the labels in sync on first paint */
+  document.getElementById('tagOpt').textContent = OPTS[order[0]].name;
+  document.getElementById('optName').textContent = OPTS[order[0]].label;
 </script>
 </body>
 </html>
