@@ -225,9 +225,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
       loopTarget.y + Math.sin(t * 0.7) * 0.14,
       loopTarget.z
     );
-    /* Slow clockwise spin like the nav logo (~16s per revolution), gentle 3D tilt,
+    /* Slow clockwise spin like the nav logo (~32s per revolution), gentle 3D tilt,
        breathing halo — liquid, alive, never still. */
-    logoGroup.rotation.z -= dt * 0.39;
+    logoGroup.rotation.z -= dt * 0.196;
     logoGroup.rotation.x = Math.sin(t * 0.3) * 0.12;
     logoGroup.rotation.y = Math.sin(t * 0.23) * 0.12;
     var breathe = 0.5 + 0.5 * Math.sin(t * 1.4);
