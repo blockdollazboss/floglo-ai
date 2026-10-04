@@ -26,7 +26,7 @@
     '#floCursor.fc-text .fc-spin{display:none;}',
     '#floCursor.fc-text .fc-ibeam{display:block;}',
     '.fc-trail{position:fixed;left:0;top:0;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:radial-gradient(circle,rgba(155,234,255,.85) 0%,rgba(62,226,255,.25) 60%,rgba(62,226,255,0) 70%);pointer-events:none;z-index:2147483646;transition:transform .32s ease-out,opacity .32s ease-out;}',
-    '.fc-ripple{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid rgba(62,226,255,.8);pointer-events:none;z-index:2147483646;transition:transform .45s ease-out,opacity .45s ease-out;}'
+    '.fc-ripple{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid rgba(62,226,255,.7);pointer-events:none;z-index:2147483646;transition:transform .5s ease-out,opacity .5s ease-out,border-width .5s ease-out;}'
   ].join('');
   var st = document.createElement('style');
   st.textContent = css;
@@ -103,17 +103,19 @@
     setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 380);
   }, { passive: true });
 
-  /* Click ripple. */
+  /* Click ripple — the original effect: expands to ~110px and fades. */
   window.addEventListener('pointerdown', function (e) {
     var r = document.createElement('div');
     r.className = 'fc-ripple';
-    r.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) scale(.4)';
+    r.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) scale(1)';
     r.style.opacity = '1';
+    r.style.borderWidth = '2px';
     document.body.appendChild(r);
     requestAnimationFrame(function () { requestAnimationFrame(function () {
-      r.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) scale(2.6)';
+      r.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) scale(7.9)';
       r.style.opacity = '0';
+      r.style.borderWidth = '1px';
     }); });
-    setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 500);
+    setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 550);
   }, { passive: true });
 })();
