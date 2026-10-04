@@ -41,7 +41,7 @@ h2{text-shadow:0 2px 26px rgba(0,0,0,.8)}
 .nav-inner{max-width:1080px;margin:0 auto;padding:.8rem 1.5rem;display:flex;align-items:center;gap:2rem}
 .logo{font-weight:800;letter-spacing:.12em;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.6rem}
 .logo span{color:var(--gold)}
-.logo img{display:block;animation:flow-spin 16s linear infinite}
+.logo img{display:block;animation:flow-spin 32s linear infinite}
 @keyframes flow-spin{to{transform:rotate(360deg)}}
 .nav-links{display:flex;gap:1.4rem;margin-left:auto}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem;transition:color .15s}

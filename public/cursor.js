@@ -18,7 +18,7 @@
     '#floCursor .fc-pos{will-change:transform;}',
     '#floCursor .fc-center{position:relative;width:64px;height:64px;transform:translate(-50%,-50%) scale(1);transition:transform .18s ease;}',
     '#floCursor.fc-hover .fc-center{transform:translate(-50%,-50%) scale(1.35);}',
-    '#floCursor .fc-spin{display:block;width:34px;height:34px;margin:15px;animation:fcSpin 16s linear infinite,fcGlow 3.2s ease-in-out infinite;}',
+    '#floCursor .fc-spin{display:block;width:34px;height:34px;margin:15px;animation:fcSpin 32s linear infinite,fcGlow 3.2s ease-in-out infinite;}',
     '@keyframes fcSpin{to{transform:rotate(360deg);}}',
     '@keyframes fcGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(62,226,255,.5));}50%{filter:drop-shadow(0 0 14px rgba(62,226,255,.9));}}',
     '#floCursor .fc-ibeam{display:none;position:absolute;left:50%;top:50%;width:3px;height:26px;margin:-13px 0 0 -1.5px;border-radius:2px;background:#9beaff;box-shadow:0 0 8px rgba(62,226,255,.9),0 0 20px rgba(62,226,255,.4);animation:fcBlink 1.1s steps(2,start) infinite;}',
