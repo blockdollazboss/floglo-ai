@@ -238,45 +238,58 @@ app.get('/api/leads', rateLimit, (req, res) => {
   res.json({ leads });
 });
 
-/* Latest YouTube videos for the homepage "Daily Videos" section. Reads the
-   channel's public RSS feed (no API key needed) and returns the 3 most recent
-   videos. Cached in memory for 30 minutes so every page view doesn't hit
-   YouTube; serves the stale cache rather than failing if the feed is down. */
+/* Featured videos for the homepage "Daily Videos" section: one native player per
+   platform (Instagram, TikTok, YouTube), in that order. YouTube resolves
+   automatically from the channel's public RSS feed (no API key needed), cached
+   30 minutes in memory. TikTok and Instagram offer no reliable keyless feed,
+   so their post IDs are curated below — update the constants when new posts
+   go up and the site picks them up on the next deploy (or immediately — the
+   endpoint reads them live). */
 const YT_CHANNEL_ID = 'UCxjC3_a60-jjUlVuiI__v5g';
-let videoCache = { at: 0, videos: [] };
+const FEATURED_INSTAGRAM_ID = 'DeKGcAmBLdw';       // latest IG reel 2026-10-06 (reels only, never carousels)
+const FEATURED_TIKTOK_ID = '7693582005618953503';  // latest TikTok 2026-10-06
+let ytCache = { at: 0, video: null };
 function decodeEntities(s) {
   return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 }
-app.get('/api/latest-videos', rateLimit, async (req, res) => {
+async function latestYouTube() {
+  if (Date.now() - ytCache.at < 30 * 60_000 && ytCache.video) return ytCache.video;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 25000);
   try {
-    if (Date.now() - videoCache.at < 30 * 60_000 && videoCache.videos.length) {
-      return res.json({ videos: videoCache.videos });
-    }
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25000);
     const r = await fetch(
       `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`,
       { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0' } }
     );
-    clearTimeout(timer);
     if (!r.ok) throw new Error(`feed HTTP ${r.status}`);
     const xml = await r.text();
-    const videos = [];
-    for (const m of xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
-      const id = /<yt:videoId>([^<]+)<\/yt:videoId>/.exec(m[1]);
-      const title = /<title>([^<]*)<\/title>/.exec(m[1]);
-      if (id) videos.push({ id: id[1], title: title ? decodeEntities(title[1]) : 'FloGlo AI video' });
-      if (videos.length >= 3) break;
-    }
-    if (!videos.length) throw new Error('no videos in feed');
-    videoCache = { at: Date.now(), videos };
-    res.json({ videos });
+    const m = /<entry>([\s\S]*?)<\/entry>/.exec(xml);
+    const id = m && /<yt:videoId>([^<]+)<\/yt:videoId>/.exec(m[1]);
+    if (!id) throw new Error('no videos in feed');
+    const title = /<title>([^<]*)<\/title>/.exec(m[1]);
+    ytCache = { at: Date.now(), video: { id: id[1], title: title ? decodeEntities(title[1]) : 'FloGlo AI video' } };
+    return ytCache.video;
   } catch (err) {
-    console.error('[latest-videos] failed:', err && err.message);
-    if (videoCache.videos.length) return res.json({ videos: videoCache.videos });
-    res.status(502).json({ error: 'Video feed unavailable right now.' });
+    if (ytCache.video) return ytCache.video; // serve stale cache rather than fail
+    throw err;
+  } finally {
+    clearTimeout(timer);
   }
+}
+app.get('/api/latest-videos', rateLimit, async (req, res) => {
+  const videos = [
+    { platform: 'instagram', id: FEATURED_INSTAGRAM_ID },
+    { platform: 'tiktok', id: FEATURED_TIKTOK_ID },
+  ];
+  try {
+    const yt = await latestYouTube();
+    videos.push({ platform: 'youtube', id: yt.id, title: yt.title });
+  } catch (err) {
+    console.error('[latest-videos] youtube feed failed:', err && err.message);
+    videos.push({ platform: 'youtube-playlist' });
+  }
+  res.json({ videos });
 });
 
 const PORT = process.env.PORT || 3000;
