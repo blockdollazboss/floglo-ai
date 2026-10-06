@@ -223,51 +223,77 @@
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
     var YT_ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    function slot(label, inner) {
-      return '<div class="video-slot"><div class="video-cell">' + inner +
-        '</div><div class="video-platform">' + label + '</div></div>';
+    var ICONS = {
+      instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>',
+      tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>',
+      youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>'
+    };
+    var PROFILE_URLS = {
+      instagram: 'https://instagram.com/flogloai',
+      tiktok: 'https://www.tiktok.com/@flogloai',
+      youtube: 'https://www.youtube.com/@flogloai'
+    };
+    var PLATFORM_NAMES = { instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube' };
+    function slot(platform, inner) {
+      var name = PLATFORM_NAMES[platform] || platform;
+      return '<div class="video-slot"><div class="video-cell">' + inner + '</div>' +
+        '<a class="video-icon-link" href="' + PROFILE_URLS[platform] + '" target="_blank" rel="noopener" aria-label="FloGlo AI on ' + name + '">' +
+        ICONS[platform] + '</a></div>';
     }
     function render(v) {
       if (v.platform === 'instagram') {
-        return slot('Instagram',
+        return slot('instagram',
           '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/' +
           encodeURIComponent(v.id) + '/" data-instgrm-version="14" style="margin:0"></blockquote>');
       }
       if (v.platform === 'tiktok') {
-        return slot('TikTok',
-          '<iframe src="https://www.tiktok.com/embed/v2/' + encodeURIComponent(v.id) +
-          '" title="FloGlo AI on TikTok" loading="lazy" allowfullscreen></iframe>');
+        return slot('tiktok',
+          '<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@flogloai/video/' +
+          encodeURIComponent(v.id) + '" data-video-id="' + encodeURIComponent(v.id) +
+          '" style="max-width:605px;min-width:325px;margin:0"><section></section></blockquote>');
       }
       if (v.platform === 'youtube-playlist') {
-        return slot('YouTube',
+        return slot('youtube',
           '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
           YT_ALLOW + '" allowfullscreen></iframe>');
       }
-      return slot('YouTube',
+      return slot('youtube',
         '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(v.id) +
         '" title="' + esc(v.title || 'FloGlo AI video') + '" loading="lazy" allow="' +
         YT_ALLOW + '" allowfullscreen></iframe>');
     }
     function fallback() {
-      row.innerHTML = slot('YouTube',
+      row.innerHTML = slot('youtube',
         '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
         YT_ALLOW + '" allowfullscreen></iframe>');
     }
-    function processInstagram() {
-      if (!row.querySelector('.instagram-media')) return;
-      if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); return; }
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.instagram.com/embed.js';
-      s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
-      document.body.appendChild(s);
+    function processEmbeds() {
+      if (row.querySelector('.instagram-media')) {
+        if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); }
+        else {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.instagram.com/embed.js';
+          s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+          document.body.appendChild(s);
+        }
+      }
+      if (row.querySelector('.tiktok-embed')) {
+        if (window.tiktokEmbed) { window.tiktokEmbed.lib.render(); }
+        else {
+          var t = document.createElement('script');
+          t.async = true;
+          t.src = 'https://www.tiktok.com/embed.js';
+          document.body.appendChild(t);
+        }
+      }
     }
     fetch('/api/latest-videos', { headers: { 'Accept': 'application/json' } })
       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
       .then(function (d) {
         if (!d.videos || !d.videos.length) throw new Error('empty');
         row.innerHTML = d.videos.map(render).join('');
-        processInstagram();
+        processEmbeds();
       })
       .catch(fallback);
   })();
