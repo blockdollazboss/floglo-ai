@@ -163,6 +163,15 @@ details p{color:var(--muted);margin-top:.7rem;font-size:.95rem}
 .video-slot{display:flex;flex-direction:column;align-items:center;min-width:0}
 .video-cell{position:relative;width:100%;padding-bottom:177.78%;height:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#0a1120;box-shadow:0 18px 44px rgba(0,0,0,.5)}
 .video-cell iframe,.video-cell blockquote{position:absolute;inset:0;width:100%;height:100%;border:0;margin:0}
+/* TikTok slot: native embeds won't play this account's videos, so the slot is a
+   branded card linking out to the TikTok video instead of a broken player. */
+.tiktok-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1.6rem 1.2rem;text-decoration:none;text-align:center;background:radial-gradient(120% 90% at 50% 0%,#101b33 0%,#0a1120 65%)}
+.tiktok-card-logo{display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:1px solid rgba(62,226,255,.4);background:rgba(62,226,255,.07);color:var(--gold);box-shadow:0 0 28px rgba(62,226,255,.18)}
+.tiktok-card-logo svg{width:34px;height:34px}
+.tiktok-card-title{color:var(--text);font-size:.92rem;font-weight:600;line-height:1.45;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tiktok-card-cta{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.55rem 1.4rem;color:var(--gold);font-size:.85rem;font-weight:600;letter-spacing:.04em;background:rgba(255,255,255,.03);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.tiktok-card:hover .tiktok-card-cta{transform:translateY(-2px);border-color:rgba(62,226,255,.6);box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 18px rgba(62,226,255,.15)}
+@media(prefers-reduced-motion:reduce){.tiktok-card-cta{transition:none}.tiktok-card:hover .tiktok-card-cta{transform:none}}
 .video-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem;padding:0 1rem;text-align:center}
 @media(max-width:760px){.video-row{grid-template-columns:1fr;max-width:320px;margin:0 auto}}
 .video-note{color:var(--muted);font-size:.85rem;margin-top:.8rem}
