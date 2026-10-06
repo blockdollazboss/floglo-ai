@@ -214,7 +214,7 @@
     });
   })();
 
-  /* ---------- Daily Videos: 3 latest YouTube uploads, 9:16 in a row ---------- */
+  /* ---------- Daily Videos: one native player per platform ---------- */
   (function () {
     var row = document.getElementById('videoRow');
     if (!row) return;
@@ -222,22 +222,52 @@
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
-    function player(id, title) {
-      return '<div class="video-cell"><iframe src="https://www.youtube-nocookie.com/embed/' +
-        encodeURIComponent(id) + '" title="' + esc(title) +
-        '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+    var YT_ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    function slot(label, inner) {
+      return '<div class="video-slot"><div class="video-cell">' + inner +
+        '</div><div class="video-platform">' + label + '</div></div>';
     }
-    /* Fallback: if the feed is unreachable, show the uploads playlist player. */
+    function render(v) {
+      if (v.platform === 'instagram') {
+        return slot('Instagram',
+          '<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/' +
+          encodeURIComponent(v.id) + '/" data-instgrm-version="14" style="margin:0"></blockquote>');
+      }
+      if (v.platform === 'tiktok') {
+        return slot('TikTok',
+          '<iframe src="https://www.tiktok.com/embed/v2/' + encodeURIComponent(v.id) +
+          '" title="FloGlo AI on TikTok" loading="lazy" allowfullscreen></iframe>');
+      }
+      if (v.platform === 'youtube-playlist') {
+        return slot('YouTube',
+          '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
+          YT_ALLOW + '" allowfullscreen></iframe>');
+      }
+      return slot('YouTube',
+        '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(v.id) +
+        '" title="' + esc(v.title || 'FloGlo AI video') + '" loading="lazy" allow="' +
+        YT_ALLOW + '" allowfullscreen></iframe>');
+    }
     function fallback() {
-      row.innerHTML = '<div class="video-cell video-cell-single"><iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+      row.innerHTML = slot('YouTube',
+        '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
+        YT_ALLOW + '" allowfullscreen></iframe>');
+    }
+    function processInstagram() {
+      if (!row.querySelector('.instagram-media')) return;
+      if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); return; }
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.instagram.com/embed.js';
+      s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+      document.body.appendChild(s);
     }
     fetch('/api/latest-videos', { headers: { 'Accept': 'application/json' } })
       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
       .then(function (d) {
         if (!d.videos || !d.videos.length) throw new Error('empty');
-        row.innerHTML = d.videos.slice(0, 3).map(function (v) {
-          return player(v.id, v.title || 'FloGlo AI video');
-        }).join('');
+        row.innerHTML = d.videos.map(render).join('');
+        processInstagram();
       })
       .catch(fallback);
   })();
