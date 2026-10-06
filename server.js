@@ -251,6 +251,29 @@ const FEATURED_INSTAGRAM_TITLE = '5 signs your website is losing customers'; // 
 const FEATURED_TIKTOK_ID = '7693582005618953503';  // latest TikTok 2026-10-06
 const FEATURED_TIKTOK_TITLE = '5 signs your website is losing customers';
 const TIKTOK_USERNAME = 'flogloai';
+/* videos.json (repo root) holds the live Instagram/TikTok picks so a scheduled
+   job can refresh them without a code redeploy. Fetched at runtime with a
+   1-hour cache; hardcoded constants below are the fallback. */
+const VIDEOS_JSON_URL = 'https://raw.githubusercontent.com/blockdollazboss/floglo-ai/main/videos.json';
+let videosConfig = { at: 0, data: null };
+async function getVideosConfig() {
+  if (Date.now() - videosConfig.at < 60 * 60_000 && videosConfig.data) return videosConfig.data;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const r = await fetch(VIDEOS_JSON_URL, { signal: ctrl.signal, headers: { 'User-Agent': 'Mozilla/5.0' } });
+    if (!r.ok) throw new Error('videos.json HTTP ' + r.status);
+    const d = await r.json();
+    if (!d.instagram_id || !d.tiktok_id) throw new Error('videos.json missing IDs');
+    videosConfig = { at: Date.now(), data: d };
+    return d;
+  } catch (err) {
+    console.error('[videos-config] using fallback IDs:', err && err.message);
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 let ytCache = { at: 0, video: null };
 function decodeEntities(s) {
   return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -302,17 +325,22 @@ async function latestYouTube(blockedTitles) {
   }
 }
 app.get('/api/latest-videos', rateLimit, async (req, res) => {
-  const tiktokUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}/video/${FEATURED_TIKTOK_ID}`;
+  const cfg = await getVideosConfig();
+  const igId = (cfg && cfg.instagram_id) || FEATURED_INSTAGRAM_ID;
+  const igTitle = (cfg && cfg.instagram_title) || FEATURED_INSTAGRAM_TITLE;
+  const ttId = (cfg && cfg.tiktok_id) || FEATURED_TIKTOK_ID;
+  const ttTitle = (cfg && cfg.tiktok_title) || FEATURED_TIKTOK_TITLE;
+  const tiktokUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}/video/${ttId}`;
   const videos = [
-    { platform: 'instagram', id: FEATURED_INSTAGRAM_ID },
+    { platform: 'instagram', id: igId },
     // TikTok: native embeds refuse to play this account's videos ("Unable to play
     // media"), so the slot renders a branded card linking out instead.
-    { platform: 'tiktok', id: FEATURED_TIKTOK_ID, url: tiktokUrl, title: FEATURED_TIKTOK_TITLE },
+    { platform: 'tiktok', id: ttId, url: tiktokUrl, title: ttTitle },
   ];
   try {
     // Standing rule: never show the same video twice — skip any YouTube upload
     // whose title matches the Instagram reel or TikTok video already in the row.
-    const yt = await latestYouTube([FEATURED_INSTAGRAM_TITLE, FEATURED_TIKTOK_TITLE]);
+    const yt = await latestYouTube([igTitle, ttTitle]);
     videos.push({ platform: 'youtube', id: yt.id, title: yt.title });
   } catch (err) {
     console.error('[latest-videos] youtube feed failed:', err && err.message);
