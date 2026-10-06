@@ -233,11 +233,17 @@
           encodeURIComponent(v.id) + '/" data-instgrm-version="14" style="margin:0"></blockquote>');
       }
       if (v.platform === 'tiktok') {
+        // Self-hosted TikTok video — plays inline in our dark player (TikTok's
+        // own embed refuses to play this account's videos).
         return slot('tiktok',
-          '<a class="tiktok-card" href="' + esc(v.url || 'https://www.tiktok.com/@flogloai') + '" target="_blank" rel="noopener" aria-label="Watch on TikTok">' +
-          '<span class="tiktok-card-logo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>' +
-          '<span class="tiktok-card-title">' + esc(v.title || '@flogloai') + '</span>' +
-          '<span class="tiktok-card-cta">Watch on TikTok</span></a>');
+          '<div class="tiktok-player">' +
+          '<a class="tiktok-profile-link" href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>' +
+          '<video class="tiktok-video" src="videos/tiktok-latest.mp4?v=1" poster="videos/tiktok-latest.jpg?v=1" playsinline preload="metadata" aria-label="Latest FloGlo AI TikTok video — tap to play"></video>' +
+          '<button class="tiktok-play-btn" type="button" aria-label="Play video">' +
+          '<svg class="icon-play" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>' +
+          '<svg class="icon-replay" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>' +
+          '</button></div>');
       }
       if (v.platform === 'youtube-playlist') {
         return slot('youtube',
@@ -263,12 +269,40 @@
       s.onload = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
       document.body.appendChild(s);
     }
+    function initTikTokPlayer() {
+      var player = row.querySelector('.tiktok-player');
+      if (!player) return;
+      var v = player.querySelector('.tiktok-video');
+      var btn = player.querySelector('.tiktok-play-btn');
+      if (!v || !btn) return;
+      function sync() {
+        player.classList.toggle('playing', !v.paused && !v.ended);
+        player.classList.toggle('ended', v.ended);
+        btn.setAttribute('aria-label', v.ended ? 'Replay video' : (v.paused ? 'Play video' : 'Pause video'));
+      }
+      function toggle() {
+        if (v.ended) v.currentTime = 0;
+        if (v.paused) { v.play().catch(function () {}); } else { v.pause(); }
+      }
+      btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+      v.addEventListener('click', toggle);
+      v.addEventListener('play', sync);
+      v.addEventListener('pause', sync);
+      v.addEventListener('ended', sync);
+      sync();
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (!e.isIntersecting) v.pause(); });
+        }, { threshold: 0.25 }).observe(v);
+      }
+    }
     fetch('/api/latest-videos', { headers: { 'Accept': 'application/json' } })
       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
       .then(function (d) {
         if (!d.videos || !d.videos.length) throw new Error('empty');
         row.innerHTML = d.videos.map(render).join('');
         processEmbeds();
+        initTikTokPlayer();
       })
       .catch(fallback);
   })();
