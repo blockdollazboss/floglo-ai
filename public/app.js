@@ -214,6 +214,34 @@
     });
   })();
 
+  /* ---------- Daily Videos: 3 latest YouTube uploads, 9:16 in a row ---------- */
+  (function () {
+    var row = document.getElementById('videoRow');
+    if (!row) return;
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function player(id, title) {
+      return '<div class="video-cell"><iframe src="https://www.youtube-nocookie.com/embed/' +
+        encodeURIComponent(id) + '" title="' + esc(title) +
+        '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+    }
+    /* Fallback: if the feed is unreachable, show the uploads playlist player. */
+    function fallback() {
+      row.innerHTML = '<div class="video-cell video-cell-single"><iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>';
+    }
+    fetch('/api/latest-videos', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
+      .then(function (d) {
+        if (!d.videos || !d.videos.length) throw new Error('empty');
+        row.innerHTML = d.videos.slice(0, 3).map(function (v) {
+          return player(v.id, v.title || 'FloGlo AI video');
+        }).join('');
+      })
+      .catch(fallback);
+  })();
+
   /* ---------- sticky mobile CTA: appears after the hero ---------- */
   (function () {
     var bar = document.getElementById('stickyCta');
