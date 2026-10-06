@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -94,7 +94,14 @@
   <div class="wrap">
     <p class="kicker reveal">LIVE DEMO</p>
     <h2 class="reveal">Don't take our word for it.<br><span class="gold-grad">Talk to the product.</span></h2>
-    <p class="section-sub reveal">This is "Flo" — an AI booking assistant we built for a fictional pizzeria. It answers questions, quotes the menu, and books tables — right from a customer's phone. Imagine this working <em>your</em> business while you sleep. Go ahead, text her.</p>
+    <p class="section-sub reveal">This is "Flo" — an AI assistant we built for fictional local businesses. Pick an industry, then text her. Imagine this working <em>your</em> business while you sleep.</p>
+    <div class="demo-industries reveal" id="demoIndustries">
+      <button class="chip industry-chip active" data-industry="pizzeria">Pizzeria</button>
+      <button class="chip industry-chip" data-industry="salon">Hair Salon</button>
+      <button class="chip industry-chip" data-industry="plumber">Plumber</button>
+      <button class="chip industry-chip" data-industry="dental">Dental</button>
+      <button class="chip industry-chip" data-industry="autorepair">Auto Repair</button>
+    </div>
     <div class="phone reveal">
       <div class="phone-notch"></div>
       <div class="chat-shell">
@@ -157,6 +164,51 @@
       <div class="card reveal"><div class="card-icon">✕</div><h3>Hiring help</h3><p>A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
       <div class="card reveal"><div class="card-icon">✓</div><h3>FloGlo</h3><p>Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
     </div>
+    <div class="cost-table-wrap reveal">
+      <h3>Monthly cost, side by side</h3>
+      <table class="cost-table">
+        <thead><tr><th></th><th>Receptionist</th><th class="highlight-col">FloGlo Growth</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly cost</td><td>$3,000+</td><td class="highlight-col">$297</td></tr>
+          <tr><td>Answers after hours</td><td>✕</td><td class="highlight-col">✓ 24/7</td></tr>
+          <tr><td>Answers on weekends</td><td>✕</td><td class="highlight-col">✓ 24/7</td></tr>
+          <tr><td>Texts back missed calls</td><td>✕</td><td class="highlight-col">✓ instantly</td></tr>
+          <tr><td>Follows up with cold leads</td><td>Rarely</td><td class="highlight-col">✓ automatically</td></tr>
+          <tr><td>Asks for Google reviews</td><td>Sometimes</td><td class="highlight-col">✓ every happy customer</td></tr>
+          <tr><td>Sick days / turnover</td><td>Yes</td><td class="highlight-col">Never</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="roi" id="roi">
+  <div class="wrap narrow">
+    <p class="kicker reveal">THE MATH</p>
+    <h2 class="reveal">What are missed calls <span class="gold-grad">costing you?</span></h2>
+    <p class="section-sub reveal">Drag the sliders. This is what a missed call really costs a local business.</p>
+    <div class="roi-box reveal">
+      <div class="roi-inputs">
+        <label>Missed calls per week
+          <input type="range" id="roiCalls" min="1" max="50" value="10">
+          <span class="roi-val" id="roiCallsVal">10</span>
+        </label>
+        <label>Average job value
+          <input type="range" id="roiValue" min="50" max="2000" step="50" value="300">
+          <span class="roi-val" id="roiValueVal">$300</span>
+        </label>
+        <label>How many callers would book if someone answered?
+          <input type="range" id="roiRate" min="10" max="90" step="5" value="40">
+          <span class="roi-val" id="roiRateVal">40%</span>
+        </label>
+      </div>
+      <div class="roi-result">
+        <p class="roi-lost-label">You're losing about</p>
+        <p class="roi-lost" id="roiLost">$4,800<span>/mo</span></p>
+        <p class="roi-flo">Flo Growth costs $297/mo and answers every call, 24/7.</p>
+        <a class="btn btn-gold" href="#contact">Stop losing it</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -200,10 +252,26 @@
     <details class="reveal"><summary>Do I need new software or hardware?</summary><p>No. It plugs into the website, phone number, and calendar you already have. Nothing to install, nothing to learn.</p></details>
     <details class="reveal"><summary>What happens after the free pilot?</summary><p>You get a report: calls answered, bookings made, reviews collected. If the numbers don't impress you, we remove everything. No charge, no hard feelings.</p></details>
     <details class="reveal"><summary>Why local businesses?</summary><p>Because that's where the pain is worst — missed calls, no-shows, dead lead lists — and where automation pays for itself fastest.</p></details>
+    <details class="reveal"><summary>How long does setup take?</summary><p>Most pilots go live in 3–5 days. We handle everything — training, phone setup, calendar connection. You just approve the wording.</p></details>
+    <details class="reveal"><summary>Am I locked into a contract?</summary><p>No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime — though nobody has yet.</p></details>
+    <details class="reveal"><summary>Which industries does this work for?</summary><p>Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry.</p></details>
+    <details class="reveal"><summary>I already have front-desk staff. Why do I need this?</summary><p>Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps.</p></details>
   </div>
 </section>
 
 
+
+<section class="results" id="results">
+  <div class="wrap narrow">
+    <p class="kicker reveal">RESULTS</p>
+    <h2 class="reveal">Real numbers, <span class="gold-grad">coming soon.</span></h2>
+    <div class="results-box reveal">
+      <p>We're running free 7-day pilots with local businesses right now. Every pilot ends with a full report — calls answered, bookings made, revenue recovered.</p>
+      <p>Those real numbers go here. No made-up testimonials, no stock photos — just the math.</p>
+      <a class="btn btn-ghost" href="#contact">Be our next pilot</a>
+    </div>
+  </div>
+</section>
 
 <section class="contact" id="contact">
   <div class="wrap narrow">
@@ -266,7 +334,7 @@
   <a class="btn btn-gold btn-sm" href="#contact">Free 7-day pilot</a>
 </div>
 
-<script src="app.js?v=9"></script>
+<script src="app.js?v=10"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>

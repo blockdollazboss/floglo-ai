@@ -72,6 +72,34 @@
   var box = document.getElementById('chatMessages');
   var history = [];
   var busy = false;
+  var currentIndustry = 'pizzeria';
+  var industryData = {
+    pizzeria: {
+      name: "Bella's Pizzeria",
+      greeting: "Hey, welcome to Bella's Pizzeria! I'm Flo — I can book you a table, share our hours, or run through the menu. What sounds good?",
+      prompts: ["What are your hours?", "Book a table for 4 this Friday at 7pm", "What's good on the menu?", "Where are you located?"]
+    },
+    salon: {
+      name: "Luxe Locks Salon",
+      greeting: "Hi, welcome to Luxe Locks Salon! I'm Flo — I can book your appointment, share our services and prices, or answer anything else. What can I do for you?",
+      prompts: ["What are your hours?", "Book a balayage this Saturday", "How much is a women's cut?", "Where are you located?"]
+    },
+    plumber: {
+      name: "Rapid Rooter Plumbing",
+      greeting: "Hey, this is Flo with Rapid Rooter Plumbing! I can schedule a service visit, give you a ballpark on pricing, or help with an urgent issue. What's going on?",
+      prompts: ["My drain is clogged, what do I do?", "How much for a water heater install?", "Do you do emergency calls?", "What areas do you serve?"]
+    },
+    dental: {
+      name: "Bright Smile Dental",
+      greeting: "Hi, welcome to Bright Smile Dental! I'm Flo — I can book your visit, explain our services, or check what to expect. How can I help?",
+      prompts: ["Do you take my insurance?", "I have tooth pain, can I come today?", "How much is whitening?", "Where are you located?"]
+    },
+    autorepair: {
+      name: "Precision Auto Care",
+      greeting: "Hey, welcome to Precision Auto Care! I'm Flo — I can schedule your service, give you an estimate, or answer questions about your car. What's up?",
+      prompts: ["How much for an oil change?", "My brakes are squeaking", "Do you offer a shuttle?", "What are your hours?"]
+    }
+  };
 
   function scroll() { box.scrollTop = box.scrollHeight; }
   function addMsg(text, who) {
@@ -92,7 +120,7 @@
     fetch('/api/demo-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: history })
+      body: JSON.stringify({ message: msg, history: history, industry: currentIndustry })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -114,8 +142,30 @@
     input.value = '';
     input.focus();
   });
-  document.querySelectorAll('.chip').forEach(function (chip) {
+  document.querySelectorAll('.demo-prompts .chip').forEach(function (chip) {
     chip.addEventListener('click', function () { send(chip.dataset.prompt); });
+  });
+  /* industry switcher */
+  var promptRow = document.querySelector('.demo-prompts');
+  document.querySelectorAll('.industry-chip').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var ind = btn.dataset.industry;
+      if (!industryData[ind] || ind === currentIndustry) return;
+      document.querySelectorAll('.industry-chip').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentIndustry = ind;
+      history = [];
+      box.innerHTML = '';
+      addMsg(industryData[ind].greeting, 'bot');
+      if (promptRow) {
+        promptRow.innerHTML = industryData[ind].prompts.map(function (p) {
+          return '<button class="chip" data-prompt="' + p.replace(/"/g, '&quot;') + '">' + p + '</button>';
+        }).join('');
+        promptRow.querySelectorAll('.chip').forEach(function (chip) {
+          chip.addEventListener('click', function () { send(chip.dataset.prompt); });
+        });
+      }
+    });
   });
 
   /* ---------- contact form ---------- */
@@ -319,5 +369,28 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+  })();
+
+  /* ---------- ROI calculator ---------- */
+  (function () {
+    var calls = document.getElementById('roiCalls');
+    if (!calls) return;
+    var value = document.getElementById('roiValue');
+    var rate = document.getElementById('roiRate');
+    var callsVal = document.getElementById('roiCallsVal');
+    var valueVal = document.getElementById('roiValueVal');
+    var rateVal = document.getElementById('roiRateVal');
+    var lost = document.getElementById('roiLost');
+    function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+    function update() {
+      var c = +calls.value, v = +value.value, r = +rate.value;
+      callsVal.textContent = c;
+      valueVal.textContent = fmt(v);
+      rateVal.textContent = r + '%';
+      var monthly = c * 4.33 * v * (r / 100);
+      lost.innerHTML = fmt(monthly) + '<span>/mo</span>';
+    }
+    [calls, value, rate].forEach(function (el) { el.addEventListener('input', update); });
+    update();
   })();
 })();

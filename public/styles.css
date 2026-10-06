@@ -109,6 +109,8 @@ h2{text-shadow:0 2px 26px rgba(0,0,0,.8)}
 .demo-prompts{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1.6rem}
 .chip{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:.55rem 1.2rem;cursor:pointer;font-size:.88rem;transition:all .15s}
 .chip:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+.demo-industries{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin:1.4rem 0 .4rem}
+.industry-chip.active{border-color:#3ee2ff;color:#3ee2ff;background:rgba(62,226,255,.08)}
 
 /* cards */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-top:2.6rem}
@@ -206,6 +208,32 @@ footer{border-top:1px solid var(--line)}
 
 /* compare-the-math strip */
 .compare{text-align:center;background:transparent}
+.cost-table-wrap{margin-top:2.5rem;max-width:640px;margin-left:auto;margin-right:auto}
+.cost-table-wrap h3{margin-bottom:1rem;font-size:1.1rem}
+.cost-table{width:100%;border-collapse:collapse;font-size:.92rem}
+.cost-table th,.cost-table td{padding:.7rem .8rem;border-bottom:1px solid var(--line);text-align:left}
+.cost-table th{color:var(--muted);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.cost-table td:first-child{color:var(--muted)}
+.cost-table .highlight-col{color:#3ee2ff;font-weight:700}
+.cost-table thead .highlight-col{color:#3ee2ff}
+
+/* ROI calculator */
+.roi{text-align:center}
+.roi-box{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;padding:2rem;border:1px solid var(--line);border-radius:16px;background:rgba(10,17,32,.6);text-align:left}
+.roi-inputs label{display:block;margin-bottom:1.4rem;font-size:.9rem;color:var(--muted)}
+.roi-inputs input[type=range]{display:block;width:100%;margin:.6rem 0 .3rem;accent-color:#3ee2ff}
+.roi-val{font-weight:700;color:var(--text);font-size:1rem}
+.roi-result{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:.6rem;border-left:1px solid var(--line);padding-left:2rem}
+.roi-lost-label{color:var(--muted);font-size:.9rem;margin:0}
+.roi-lost{font-size:2.6rem;font-weight:800;color:#ff6b6b;margin:0;line-height:1}
+.roi-lost span{font-size:1rem;font-weight:600;color:var(--muted)}
+.roi-flo{color:var(--text);font-size:.95rem;margin:.4rem 0 1rem}
+@media(max-width:700px){.roi-box{grid-template-columns:1fr}.roi-result{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:1.5rem}}
+
+/* Results section */
+.results{text-align:center}
+.results-box{margin-top:2rem;padding:2.5rem 2rem;border:1px dashed var(--line);border-radius:16px;background:rgba(10,17,32,.4)}
+.results-box p{color:var(--muted);max-width:520px;margin:0 auto 1.2rem;line-height:1.6}
 
 /* floating site-assistant widget */
 .chat-fab{position:fixed;right:1.2rem;bottom:1.2rem;z-index:120;width:60px;height:60px;border-radius:50%;border:1px solid rgba(62,226,255,.5);background:rgba(10,17,34,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 24px rgba(62,226,255,.25);animation:fab-glow 3.2s ease-in-out infinite;transition:transform .15s ease}
