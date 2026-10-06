@@ -237,8 +237,9 @@
     function slot(platform, inner) {
       var name = PLATFORM_NAMES[platform] || platform;
       return '<div class="video-slot"><div class="video-cell">' + inner + '</div>' +
-        '<a class="video-icon-link" href="' + PROFILE_URLS[platform] + '" target="_blank" rel="noopener" aria-label="FloGlo AI on ' + name + '">' +
-        ICONS[platform] + '</a></div>';
+        '<a class="video-profile-link" href="' + PROFILE_URLS[platform] + '" target="_blank" rel="noopener" aria-label="FloGlo AI on ' + name + '">' +
+        '<span class="video-icon">' + ICONS[platform] + '</span>' +
+        '<span class="video-username">@FloGloAI</span></a></div>';
     }
     function render(v) {
       if (v.platform === 'instagram') {
