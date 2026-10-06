@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20">
+<link rel="stylesheet" href="styles.css?v=21">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -46,6 +46,18 @@
 </nav>
 
 <header class="hero" id="top">
+  <div class="hero-house" id="heroHouse" aria-hidden="true">
+    <img class="hero-house-img" id="heroHouseImg" src="house-night.jpg" alt="">
+    <div class="hero-house-glows" id="heroHouseGlows">
+      <span class="house-glow" style="left:24%;top:38%;width:16%;height:34%"></span>
+      <span class="house-glow" style="left:46%;top:36%;width:8%;height:16%"></span>
+      <span class="house-glow" style="left:46%;top:55%;width:8%;height:15%"></span>
+      <span class="house-glow" style="left:55%;top:57%;width:7%;height:13%"></span>
+      <span class="house-glow" style="left:66%;top:54%;width:18%;height:10%"></span>
+    </div>
+    <div class="hero-house-dim" id="heroHouseDim"></div>
+    <div class="hero-house-shade"></div>
+  </div>
   <div class="hero-inner">
     <div class="loop-space">
       <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" hidden>
@@ -334,7 +346,7 @@
   <a class="btn btn-gold btn-sm" href="#contact">Free 7-day pilot</a>
 </div>
 
-<script src="app.js?v=10"></script>
+<script src="app.js?v=11"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>
