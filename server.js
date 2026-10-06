@@ -33,26 +33,110 @@ function rateLimit(req, res, next) {
   next();
 }
 
-/* ---------------- demo bot: Flo for Bella's Pizzeria (fictional demo) ---------------- */
+/* ---------------- demo bot: Flo for fictional demo businesses ---------------- */
 /* TODAY is resolved per request — a long-running server must never serve a stale date. */
-function demoSystem() {
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
-  return `You are Flo, the AI booking assistant for Bella's Pizzeria — a live demo of what FloGlo AI builds for local businesses. Stay in character as the restaurant's assistant.
-Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
-
-Facts about Bella's Pizzeria (fictional demo business):
+const DEMO_BUSINESSES = {
+  pizzeria: {
+    label: "Pizzeria",
+    name: "Bella's Pizzeria",
+    greeting: "Hey, welcome to Bella's Pizzeria! I'm Flo — I can book you a table, share our hours, or run through the menu. What sounds good?",
+    facts: `Facts about Bella's Pizzeria (fictional demo business):
 - Address: 245 Peachtree St NE, Atlanta, GA 30303
 - Phone: (404) 555-0134
 - Hours: Tuesday–Sunday, 11:00 AM – 10:00 PM. Closed Mondays.
 - Menu highlights: Margherita ($14), Pepperoni Classic ($16), Truffle Funghi ($21), Calzones ($13), Tiramisu ($8). Full menu on request.
 - Dine-in, takeout, and delivery within 5 miles.
-- Large parties (8+): call ahead and we'll reserve the back room.
-
-Booking rules:
+- Large parties (8+): call ahead and we'll reserve the back room.`,
+    booking: `Booking rules:
 - To book a table you need: name, party size, date, and time.
 - If any detail is missing, ask for ONLY the missing piece, one question at a time.
 - When you have all four, confirm like this: "You're booked, {name}! Table for {size} on {date} at {time}. Confirmation code: FLO-{4 random digits}. See you soon!"
-- Never invent a confirmation for incomplete bookings.
+- Never invent a confirmation for incomplete bookings.`,
+    prompts: ["What are your hours?", "Book a table for 4 this Friday at 7pm", "What's good on the menu?", "Where are you located?"],
+  },
+  salon: {
+    label: "Hair Salon",
+    name: "Luxe Locks Salon",
+    greeting: "Hi, welcome to Luxe Locks Salon! I'm Flo — I can book your appointment, share our services and prices, or answer anything else. What can I do for you?",
+    facts: `Facts about Luxe Locks Salon (fictional demo business):
+- Address: 88 Magnolia Ave, Charlotte, NC 28202
+- Phone: (704) 555-0182
+- Hours: Monday–Saturday, 9:00 AM – 7:00 PM. Closed Sundays.
+- Services: Women's cut ($65+), Men's cut ($35), Color ($120+), Balayage ($180+), Blowout ($45), Deep conditioning treatment ($30).
+- Book online or by phone; 24-hour cancellation policy.
+- First-time clients get 15% off color services.`,
+    booking: `Booking rules:
+- To book an appointment you need: name, service, date, and time.
+- If any detail is missing, ask for ONLY the missing piece, one question at a time.
+- When you have all four, confirm like this: "You're booked, {name}! {service} on {date} at {time}. Confirmation code: FLO-{4 random digits}. See you soon!"
+- Never invent a confirmation for incomplete bookings.`,
+    prompts: ["What are your hours?", "Book a balayage this Saturday", "How much is a women's cut?", "Where are you located?"],
+  },
+  plumber: {
+    label: "Plumber",
+    name: "Rapid Rooter Plumbing",
+    greeting: "Hey, this is Flo with Rapid Rooter Plumbing! I can schedule a service visit, give you a ballpark on pricing, or help with an urgent issue. What's going on?",
+    facts: `Facts about Rapid Rooter Plumbing (fictional demo business):
+- Service area: Greater Raleigh-Durham, NC
+- Phone: (919) 555-0147 — 24/7 emergency line
+- Hours: Emergency service 24/7. Standard appointments Monday–Friday, 8:00 AM – 6:00 PM.
+- Common pricing: Drain clearing ($149), Water heater install ($1,200+), Leak repair ($199+), Fixture install ($129+). Free estimates on big jobs.
+- Licensed & insured. 90-day workmanship warranty.`,
+    booking: `Booking rules:
+- To schedule a visit you need: name, address, a description of the issue, and a preferred date/time window.
+- If any detail is missing, ask for ONLY the missing piece, one question at a time.
+- For emergencies (burst pipe, major leak, sewage backup), tell them to call (919) 555-0147 immediately AND offer to book the soonest slot.
+- When you have the details, confirm like this: "Got it, {name}! We'll be out to {address} on {date} ({time} window) for: {issue}. Confirmation code: FLO-{4 random digits}."
+- Never invent a confirmation for incomplete bookings.`,
+    prompts: ["My drain is clogged, what do I do?", "How much for a water heater install?", "Do you do emergency calls?", "What areas do you serve?"],
+  },
+  dental: {
+    label: "Dental",
+    name: "Bright Smile Dental",
+    greeting: "Hi, welcome to Bright Smile Dental! I'm Flo — I can book your visit, explain our services, or check what to expect. How can I help?",
+    facts: `Facts about Bright Smile Dental (fictional demo business):
+- Address: 1200 Medical Plaza Dr, Suite 200, Houston, TX 77030
+- Phone: (713) 555-0163
+- Hours: Monday–Friday, 8:00 AM – 5:00 PM. Select Saturdays 9 AM – 1 PM.
+- Services: Cleaning & exam ($129 new patients), Fillings ($180+), Whitening ($299), Invisalign consult (free), Emergency tooth pain (same-day slots).
+- We accept most PPO insurance. Payment plans available.`,
+    booking: `Booking rules:
+- To book a visit you need: name, reason for visit, date, and time.
+- If any detail is missing, ask for ONLY the missing piece, one question at a time.
+- For tooth pain/emergencies, offer the soonest available slot and note "we'll prioritize you."
+- When you have all four, confirm like this: "You're booked, {name}! {reason} on {date} at {time}. Confirmation code: FLO-{4 random digits}. See you soon!"
+- Never invent a confirmation for incomplete bookings.`,
+    prompts: ["Do you take my insurance?", "I have tooth pain, can I come today?", "How much is whitening?", "Where are you located?"],
+  },
+  autorepair: {
+    label: "Auto Repair",
+    name: "Precision Auto Care",
+    greeting: "Hey, welcome to Precision Auto Care! I'm Flo — I can schedule your service, give you an estimate, or answer questions about your car. What's up?",
+    facts: `Facts about Precision Auto Care (fictional demo business):
+- Address: 4500 Industrial Pkwy, Columbus, OH 43228
+- Phone: (614) 555-0191
+- Hours: Monday–Friday, 7:30 AM – 6:00 PM. Saturday 8 AM – 2 PM. Closed Sundays.
+- Common pricing: Oil change ($59 synthetic), Brake pads ($249/axle), Diagnostics ($99, waived with repair), Tires (call for quote), State inspection ($35).
+- Free shuttle within 5 miles. 24-month/24k-mile warranty on repairs.`,
+    booking: `Booking rules:
+- To schedule service you need: name, vehicle (year/make/model), service needed, and preferred date/time.
+- If any detail is missing, ask for ONLY the missing piece, one question at a time.
+- When you have all four, confirm like this: "Got it, {name}! {vehicle} in on {date} at {time} for: {service}. Confirmation code: FLO-{4 random digits}. See you then!"
+- Never invent a confirmation for incomplete bookings.`,
+    prompts: ["How much for an oil change?", "My brakes are squeaking", "Do you offer a shuttle?", "What are your hours?"],
+  },
+};
+const DEMO_DEFAULT = 'pizzeria';
+
+function demoSystem(industry) {
+  const b = DEMO_BUSINESSES[industry] || DEMO_BUSINESSES[DEMO_DEFAULT];
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
+  return `You are Flo, the AI assistant for ${b.name} — a live demo of what FloGlo AI builds for local businesses. Stay in character as the business's assistant.
+Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" against it and always state the weekday and month/day together so they match.
+
+${b.facts}
+
+${b.booking}
 - Keep replies short and warm (under 60 words). No emojis.`;
 }
 
@@ -81,24 +165,26 @@ async function callGroq(messages) {
 }
 
 /* Local FAQ fallback — demo works with zero external APIs. */
-function faqReply(msg) {
+function faqReply(msg, industry) {
+  const b = DEMO_BUSINESSES[industry] || DEMO_BUSINESSES[DEMO_DEFAULT];
   const m = msg.toLowerCase();
-  if (/^(hi|hey|hello|yo|sup)\b/.test(m) && m.length < 30)
-    return "Hey, welcome to Bella's Pizzeria! I can book you a table, share our hours, or run through the menu — what sounds good?";
-  if (/hour|open|close|when.*open/.test(m))
+  if (/^(hi|hey|hello|yo|sup)\b/.test(m) && m.length < 30) return b.greeting;
+  if (/hour|open|close|when.*open/.test(m)) {
+    if (industry === 'salon') return "We're open Monday through Saturday, 9 AM to 7 PM. Closed Sundays. Want me to book you in?";
+    if (industry === 'plumber') return "Emergency line is 24/7 at (919) 555-0147. Standard appointments run Monday–Friday, 8 AM to 6 PM.";
+    if (industry === 'dental') return "We're here Monday–Friday, 8 AM to 5 PM, plus select Saturdays 9 AM to 1 PM. Need a slot?";
+    if (industry === 'autorepair') return "Monday–Friday 7:30 AM to 6 PM, Saturdays 8 AM to 2 PM. Closed Sundays. Want to schedule?";
     return "We're open Tuesday through Sunday, 11 AM to 10 PM. Closed Mondays. Want me to grab you a table?";
-  if (/where|address|location|directions/.test(m))
+  }
+  if (/where|address|location|directions/.test(m)) {
+    if (industry === 'salon') return "You'll find us at 88 Magnolia Ave, Charlotte, NC 28202.";
+    if (industry === 'plumber') return "We serve the greater Raleigh-Durham area — what's your address and I'll confirm you're in range?";
+    if (industry === 'dental') return "We're at 1200 Medical Plaza Dr, Suite 200, Houston, TX 77030.";
+    if (industry === 'autorepair') return "4500 Industrial Pkwy, Columbus, OH 43228 — free shuttle within 5 miles.";
     return "You'll find us at 245 Peachtree St NE, Atlanta, GA 30303. Free parking in the back lot after 5 PM.";
-  if (/menu|eat|food|pizza|dish|special/.test(m))
-    return "Crowd favorites: Margherita ($14), Pepperoni Classic ($16), Truffle Funghi ($21), Calzones ($13), and Tiramisu ($8) for dessert. Want to book a table and try them?";
-  if (/book|table|reserv|seat|party of|for (\d+)/.test(m))
-    return "Happy to book you in! I just need a name, party size, date, and time — let's start with your name?";
-  if (/deliver|takeout|take out|to go/.test(m))
-    return "We do takeout and delivery within 5 miles — call (404) 555-0134 and we'll have it ready in about 25 minutes.";
-  if (/price|cost|how much/.test(m))
-    return "Most pizzas run $14–$21, calzones $13, desserts $8. Great value for downtown Atlanta!";
-  if (/thank|thanks/.test(m)) return "Anytime! Enjoy Bella's — see you soon.";
-  if (/^(bye|goodbye|later)/.test(m)) return "Ciao! Come hungry next time.";
+  }
+  if (/thank|thanks/.test(m)) return `Anytime! See you at ${b.name} soon.`;
+  if (/^(bye|goodbye|later)/.test(m)) return "Take care — see you soon!";
   return null;
 }
 
@@ -110,14 +196,15 @@ function validChat(body) {
   for (const h of history) {
     if (!h || (h.role !== 'user' && h.role !== 'assistant') || typeof h.content !== 'string') return null;
   }
-  return { message, history };
+  const industry = DEMO_BUSINESSES[body.industry] ? body.industry : DEMO_DEFAULT;
+  return { message, history, industry };
 }
 
 app.post('/api/demo-chat', rateLimit, async (req, res) => {
   const parsed = validChat(req.body);
   if (!parsed) return res.status(400).json({ error: 'Invalid chat request.' });
   const messages = [
-    { role: 'system', content: demoSystem() },
+    { role: 'system', content: demoSystem(parsed.industry) },
     ...parsed.history.map((h) => ({ role: h.role, content: h.content })),
     { role: 'user', content: parsed.message },
   ];
@@ -125,7 +212,7 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
     const reply = await callGroq(messages);
     return res.json({ reply, provider: 'groq' });
   } catch (e) {
-    const fb = faqReply(parsed.message);
+    const fb = faqReply(parsed.message, parsed.industry);
     return res.json({
       reply: fb || "I can help with bookings, hours, the menu, or directions — what do you need?",
       provider: 'local-faq',
