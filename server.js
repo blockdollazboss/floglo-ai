@@ -247,14 +247,33 @@ app.get('/api/leads', rateLimit, (req, res) => {
    endpoint reads them live). */
 const YT_CHANNEL_ID = 'UCxjC3_a60-jjUlVuiI__v5g';
 const FEATURED_INSTAGRAM_ID = 'DeKGcAmBLdw';       // latest IG reel 2026-10-06 (reels only, never carousels)
-const FEATURED_TIKTOK_ID = '7693582005618953503';  // latest TikTok 2026-10-06
+const FEATURED_INSTAGRAM_TITLE = '5 signs your website is losing customers'; // update alongside the ID
+const FEATURED_TIKTOK_ID = '7693603601356197150';  // "On hold for 20 minutes" — must differ from IG reel
+const FEATURED_TIKTOK_TITLE = "On hold for 20 minutes? Your customers won't wait. Flo answers instantly.";
+const TIKTOK_USERNAME = 'flogloai';
 let ytCache = { at: 0, video: null };
 function decodeEntities(s) {
   return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 }
-async function latestYouTube() {
-  if (Date.now() - ytCache.at < 30 * 60_000 && ytCache.video) return ytCache.video;
+/* Standing rule: the 3 slots must never show the same video. Normalize titles
+   and treat two as the same video if one contains the other. */
+function normTitle(s) {
+  return String(s || '').toLowerCase()
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function sameVideo(a, b) {
+  const na = normTitle(a), nb = normTitle(b);
+  if (!na || !nb || na.length < 8 || nb.length < 8) return false;
+  return na === nb || na.includes(nb) || nb.includes(na);
+}
+async function latestYouTube(blockedTitles) {
+  if (Date.now() - ytCache.at < 30 * 60_000 && ytCache.video) {
+    if (!blockedTitles.some(t => sameVideo(t, ytCache.video.title))) return ytCache.video;
+  }
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 25000);
   try {
@@ -264,12 +283,17 @@ async function latestYouTube() {
     );
     if (!r.ok) throw new Error(`feed HTTP ${r.status}`);
     const xml = await r.text();
-    const m = /<entry>([\s\S]*?)<\/entry>/.exec(xml);
-    const id = m && /<yt:videoId>([^<]+)<\/yt:videoId>/.exec(m[1]);
-    if (!id) throw new Error('no videos in feed');
-    const title = /<title>([^<]*)<\/title>/.exec(m[1]);
-    ytCache = { at: Date.now(), video: { id: id[1], title: title ? decodeEntities(title[1]) : 'FloGlo AI video' } };
-    return ytCache.video;
+    const entries = [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].slice(0, 8);
+    for (const m of entries) {
+      const id = /<yt:videoId>([^<]+)<\/yt:videoId>/.exec(m[1]);
+      const title = /<title>([^<]*)<\/title>/.exec(m[1]);
+      if (!id) continue;
+      const cleanTitle = title ? decodeEntities(title[1]) : 'FloGlo AI video';
+      if (blockedTitles.some(t => sameVideo(t, cleanTitle))) continue; // never duplicate another slot
+      ytCache = { at: Date.now(), video: { id: id[1], title: cleanTitle } };
+      return ytCache.video;
+    }
+    throw new Error('no non-duplicate videos in feed');
   } catch (err) {
     if (ytCache.video) return ytCache.video; // serve stale cache rather than fail
     throw err;
@@ -278,12 +302,17 @@ async function latestYouTube() {
   }
 }
 app.get('/api/latest-videos', rateLimit, async (req, res) => {
+  const tiktokUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}/video/${FEATURED_TIKTOK_ID}`;
   const videos = [
     { platform: 'instagram', id: FEATURED_INSTAGRAM_ID },
-    { platform: 'tiktok', id: FEATURED_TIKTOK_ID },
+    // TikTok: native embeds refuse to play this account's videos ("Unable to play
+    // media"), so the slot renders a branded card linking out instead.
+    { platform: 'tiktok', id: FEATURED_TIKTOK_ID, url: tiktokUrl, title: FEATURED_TIKTOK_TITLE },
   ];
   try {
-    const yt = await latestYouTube();
+    // Standing rule: never show the same video twice — skip any YouTube upload
+    // whose title matches the Instagram reel or TikTok video already in the row.
+    const yt = await latestYouTube([FEATURED_INSTAGRAM_TITLE, FEATURED_TIKTOK_TITLE]);
     videos.push({ platform: 'youtube', id: yt.id, title: yt.title });
   } catch (err) {
     console.error('[latest-videos] youtube feed failed:', err && err.message);
