@@ -248,8 +248,8 @@ app.get('/api/leads', rateLimit, (req, res) => {
 const YT_CHANNEL_ID = 'UCxjC3_a60-jjUlVuiI__v5g';
 const FEATURED_INSTAGRAM_ID = 'DeKGcAmBLdw';       // latest IG reel 2026-10-06 (reels only, never carousels)
 const FEATURED_INSTAGRAM_TITLE = '5 signs your website is losing customers'; // update alongside the ID
-const FEATURED_TIKTOK_ID = '7693603601356197150';  // "On hold for 20 minutes" — must differ from IG reel
-const FEATURED_TIKTOK_TITLE = "On hold for 20 minutes? Your customers won't wait. Flo answers instantly.";
+const FEATURED_TIKTOK_ID = '7693582005618953503';  // latest TikTok 2026-10-06
+const FEATURED_TIKTOK_TITLE = '5 signs your website is losing customers';
 const TIKTOK_USERNAME = 'flogloai';
 let ytCache = { at: 0, video: null };
 function decodeEntities(s) {
