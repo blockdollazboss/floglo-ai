@@ -1,1 +1,15 @@
-{"dependencies":{"express":"^4.19.2"},"description":"FloGlo AI — AI automation agency pitch site with live demo chatbot. $0 stack: Node/Express + Groq free tier.","engines":{"node":">=18"},"main":"server.js","name":"floglo-ai","scripts":{"start":"node server.js"},"version":"1.0.0"}
+{
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "description": "Flowline AI \u2014 AI automation agency pitch site with live demo chatbot. $0 stack: Node/Express + Groq free tier.",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "server.js",
+  "name": "flowline-ai",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "1.0.0"
+}

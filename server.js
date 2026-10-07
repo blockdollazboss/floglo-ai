@@ -10,6 +10,31 @@ const app = express();
 app.set('trust proxy', 1); // Render terminates TLS at its proxy — read the real client IP for rate limiting
 app.disable('x-powered-by');
 app.use(express.json({ limit: '32kb' }));
+
+/* ---------- security headers ---------- */
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // CSP: scripts from self + CDNs we use (jsdelivr for three.js, youtube-nocookie, instagram embeds);
+  // frames for video embeds; images/data for avatars and inline SVGs.
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https:",
+    "media-src 'self' https:",
+    "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.instagram.com",
+    "connect-src 'self' https://api.groq.com https://raw.githubusercontent.com https://www.youtube.com",
+    "font-src 'self' data:",
+    "object-src 'none'",
+    "base-uri 'self'",
+  ].join('; '));
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* ---------- simple in-memory rate limiter (20 req/min per IP) ---------- */
@@ -316,7 +341,13 @@ app.post('/api/site-chat', rateLimit, async (req, res) => {
 const LEADS_FILE = path.join(__dirname, 'leads.json');
 
 app.post('/api/contact', rateLimit, (req, res) => {
-  const { name, email, business, message } = req.body || {};
+  const { name, email, business, message, website, ts } = req.body || {};
+  /* Honeypot + speed check: bots fill the hidden field or submit instantly. */
+  if (typeof website === 'string' && website.trim() !== '')
+    return res.status(400).json({ error: 'Invalid request.' });
+  const elapsed = Date.now() - parseInt(ts, 10);
+  if (!isNaN(elapsed) && elapsed < 3000)
+    return res.status(400).json({ error: 'Please take a moment to write your message.' });
   if (typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 80)
     return res.status(400).json({ error: 'Please include your name.' });
   if (typeof message !== 'string' || message.trim().length < 5 || message.trim().length > 2000)
