@@ -34,9 +34,13 @@
       if (HTML_KEYS[k]) { el.innerHTML = v; return; }
       var keep = el.getAttribute('data-i18n-keep');
       if (keep) {
-        var kept = el.querySelector(keep);
-        var keptHTML = kept ? kept.outerHTML : '';
-        el.innerHTML = keptHTML + escapeHtml(v);
+        // replace only text nodes, keep elements (inputs, pulse dots) in place
+        var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        var first = true, node;
+        while ((node = walker.nextNode())) {
+          if (first) { node.nodeValue = v; first = false; }
+          else if (node.nodeValue.trim() !== '') { node.nodeValue = ''; }
+        }
       } else {
         el.textContent = v;
       }
