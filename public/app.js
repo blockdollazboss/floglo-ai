@@ -228,13 +228,16 @@
   /* ---------- contact form ---------- */
   var cForm = document.getElementById('contactForm');
   var cMsg = document.getElementById('formMsg');
+  var cTs = document.getElementById('contactTs');
+  if (cTs) cTs.value = String(Date.now());
   cForm.addEventListener('submit', function (e) {
     e.preventDefault();
     cMsg.textContent = t('ct.sending');
     var fd = new FormData(cForm);
     var payload = {
       name: fd.get('name'), email: fd.get('email'),
-      business: fd.get('business'), message: fd.get('message')
+      business: fd.get('business'), message: fd.get('message'),
+      website: fd.get('website'), ts: fd.get('ts')
     };
     fetch('/api/contact', {
       method: 'POST',
