@@ -393,32 +393,4 @@
     [calls, value, rate].forEach(function (el) { el.addEventListener('input', update); });
     update();
   })();
-
-  /* ---------- hero house: mouse-tracked, lights dim on scroll ---------- */
-  (function () {
-    var house = document.getElementById('heroHouse');
-    if (!house) return;
-    var img = document.getElementById('heroHouseImg');
-    var glows = document.getElementById('heroHouseGlows');
-    var dim = document.getElementById('heroHouseDim');
-    var hero = document.querySelector('.hero');
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduceMotion && hero && img) {
-      hero.addEventListener('mousemove', function (e) {
-        var r = hero.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width - 0.5;
-        var y = (e.clientY - r.top) / r.height - 0.5;
-        img.style.transform = 'translate(' + (x * -28).toFixed(1) + 'px,' + (y * -18).toFixed(1) + 'px)';
-      });
-      hero.addEventListener('mouseleave', function () { img.style.transform = ''; });
-    }
-    function onScroll() {
-      var t = Math.min(1, window.scrollY / (window.innerHeight * 0.85));
-      if (glows) glows.style.opacity = (1 - t).toFixed(3);
-      if (dim) dim.style.opacity = (t * 0.6).toFixed(3);
-      if (img) img.style.filter = 'brightness(' + (1 - t * 0.7).toFixed(3) + ')';
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  })();
 })();

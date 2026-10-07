@@ -58,14 +58,7 @@ h2{text-shadow:0 2px 26px rgba(0,0,0,.8)}
 .btn-lg{padding:1rem 2.2rem;font-size:1.05rem}
 
 /* hero — the 3D loop lives in .loop-space; headline floats below it */
-.hero{background:transparent;text-align:center;overflow:hidden;min-height:100vh;position:relative}
-/* House at night — mouse-tracked, lights dim on scroll */
-.hero-house{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-.hero-house-img{position:absolute;left:-3%;top:-3%;width:106%;height:106%;object-fit:cover;will-change:transform,filter}
-.hero-house-glows{position:absolute;inset:0;will-change:opacity}
-.house-glow{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,190,100,.5),rgba(255,170,60,.12) 55%,transparent 72%);mix-blend-mode:screen}
-.hero-house-dim{position:absolute;inset:0;background:#020409;opacity:0;will-change:opacity}
-.hero-house-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,4,10,.55) 0%,rgba(2,4,10,.15) 30%,rgba(2,4,10,.15) 62%,rgba(2,4,10,.75) 100%)}
+.hero{background:transparent;text-align:center;overflow:hidden;min-height:100vh}
 .hero-inner{position:relative;max-width:880px;margin:0 auto;padding:2rem 1.5rem 5.5rem}
 .loop-space{height:38vh;min-height:280px;display:flex;align-items:center;justify-content:center;pointer-events:none}
 #logoFallback{width:min(240px,52vw);height:auto}
