@@ -128,7 +128,41 @@ const DEMO_BUSINESSES = {
 };
 const DEMO_DEFAULT = 'pizzeria';
 
-function demoSystem(industry) {
+/* Supported site languages (matches public/i18n.js). */
+const LANG_NAMES = {
+  en: 'English', es: 'Spanish', fr: 'French', pt: 'Portuguese', zh: 'Chinese',
+  hi: 'Hindi', ar: 'Arabic', bn: 'Bengali', ru: 'Russian', ur: 'Urdu',
+};
+function validLang(v) { return LANG_NAMES[v] ? v : 'en'; }
+function langInstruction(lang) {
+  return lang === 'en' ? '' : `\nRespond in ${LANG_NAMES[lang]}.`;
+}
+
+/* Translated generic fallbacks (match public/i18n.js). */
+const FALLBACK_DEMO1 = {
+  es: "Mmm, no entendí — ¡pregúntame sobre reservas, horarios o el menú!",
+  fr: "Hmm, je n'ai pas bien compris — demandez-moi des infos sur les réservations, les horaires ou le menu !",
+  pt: "Hmm, não entendi — pergunte sobre agendamentos, horários ou o cardápio!",
+  zh: "嗯，我没太听明白——可以问我预约、营业时间或菜单相关的问题！",
+  hi: "हम्म, समझ नहीं आई — बुकिंग, खुलने के समय, या मेनू के बारे में पूछिए!",
+  ar: "همم، لم أفهم ذلك — اسألني عن الحجوزات أو ساعات العمل أو قائمة الطعام!",
+  bn: "হুম, বুঝতে পারলাম না — বুকিং, সময়সূচি বা মেনু নিয়ে জিজ্ঞাসা করুন!",
+  ru: "Хм, не совсем поняла — спросите меня о записи, часах работы или меню!",
+  ur: "ہمم، سمجھ نہیں آیا — مجھ سے بکنگ، اوقات، یا مینیو کے بارے میں پوچھیں!",
+};
+const FALLBACK_WG = {
+  es: "Buena pregunta — te puedo explicar los precios, el piloto gratis o lo que automatizaríamos para tu negocio. ¿Qué tienes en mente?",
+  fr: "Bonne question — je peux vous expliquer les tarifs, l'essai gratuit, ou ce que nous automatiserions pour votre entreprise. Qu'est-ce qui vous intéresse ?",
+  pt: "Ótima pergunta — posso te mostrar os preços, o piloto gratuito ou o que automatizaríamos no seu negócio. O que você quer saber?",
+  zh: "问得好——我可以带您了解价格、免费试用，或我们能为您的生意自动化什么。您想先聊哪个？",
+  hi: "बहुत अच्छा सवाल — मैं आपको कीमतें, मुफ़्त पायलट, या आपके व्यापार के लिए हम क्या ऑटोमेट करेंगे, ये सब समझा सकती हूँ। आपके मन में क्या है?",
+  ar: "سؤال رائع — يمكنني شرح الأسعار، أو التجربة المجانية، أو ما سنؤتمته في نشاطك. ما الذي يدور في ذهنك؟",
+  bn: "দারুণ প্রশ্ন — আমি আপনাকে প্রাইসিং, ফ্রি পাইলট, অথবা আপনার ব্যবসার জন্য আমরা কী অটোমেট করব তা বুঝিয়ে দিতে পারি। কী ভাবছেন?",
+  ru: "Отличный вопрос — могу рассказать о ценах, бесплатном пилоте или о том, что мы автоматизируем для вашего бизнеса. Что вас интересует?",
+  ur: "بہت اچھا سوال — میں آپ کو قیمتیں سمجھا سکتی ہوں، مفت پائلٹ، یا یہ کہ ہم آپ کے کاروبار کے لیے کیا آٹومیٹ کریں گے۔ آپ کے ذہن میں کیا ہے؟",
+};
+
+function demoSystem(industry, lang) {
   const b = DEMO_BUSINESSES[industry] || DEMO_BUSINESSES[DEMO_DEFAULT];
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, server date
   return `You are Flo, the AI assistant for ${b.name} — a live demo of what FloGlo AI builds for local businesses. Stay in character as the business's assistant.
@@ -137,7 +171,7 @@ Today's date is ${today}. Resolve relative dates like "Friday" or "tomorrow" aga
 ${b.facts}
 
 ${b.booking}
-- Keep replies short and warm (under 60 words). No emojis.`;
+- Keep replies short and warm (under 60 words). No emojis.${langInstruction(lang)}`;
 }
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -197,14 +231,15 @@ function validChat(body) {
     if (!h || (h.role !== 'user' && h.role !== 'assistant') || typeof h.content !== 'string') return null;
   }
   const industry = DEMO_BUSINESSES[body.industry] ? body.industry : DEMO_DEFAULT;
-  return { message, history, industry };
+  const lang = validLang(body.lang);
+  return { message, history, industry, lang };
 }
 
 app.post('/api/demo-chat', rateLimit, async (req, res) => {
   const parsed = validChat(req.body);
   if (!parsed) return res.status(400).json({ error: 'Invalid chat request.' });
   const messages = [
-    { role: 'system', content: demoSystem(parsed.industry) },
+    { role: 'system', content: demoSystem(parsed.industry, parsed.lang) },
     ...parsed.history.map((h) => ({ role: h.role, content: h.content })),
     { role: 'user', content: parsed.message },
   ];
@@ -214,7 +249,7 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
   } catch (e) {
     const fb = faqReply(parsed.message, parsed.industry);
     return res.json({
-      reply: fb || "I can help with bookings, hours, the menu, or directions — what do you need?",
+      reply: fb || FALLBACK_DEMO1[parsed.lang] || "I can help with bookings, hours, the menu, or directions — what do you need?",
       provider: 'local-faq',
     });
   }
@@ -224,7 +259,7 @@ app.post('/api/demo-chat', rateLimit, async (req, res) => {
    A floating assistant that answers visitor questions about FloGlo AI itself —
    services, pricing, the free pilot — and captures pilot signups. Same
    Groq-with-local-fallback pattern as the Flo demo. */
-function siteSystem() {
+function siteSystem(lang) {
   return `You are Flo, the warm and welcoming AI sales assistant on FloGlo AI's website — a live demo of the kind of assistant FloGlo AI builds for local businesses. Your personality: genuinely friendly, enthusiastic, and helpful, like the best front-desk person a business ever had. Your goal: make every visitor feel welcome and guide them toward claiming the free 7-day pilot. Be conversational and concise (under 60 words). No emojis.
 About FloGlo AI (AI automation agency for local businesses):
 - Services: 24/7 AI receptionist (answers calls, texts, and website chat; books appointments straight into the calendar), missed-call text-back, review engine (asks happy customers for Google reviews), lead follow-up automation.
@@ -236,7 +271,7 @@ Sales playbook:
 - When someone shows interest (asks about pricing, the pilot, or says yes), move things forward: collect name, email, business name, and what they want automated — one piece at a time, naturally.
 - Once you have the details, confirm: "You're all set, [name]! We'll reply within one business day with your pilot plan."
 - If they hesitate, remind them the pilot is free for 7 days with zero obligation — there's nothing to lose.
-Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features. If asked who you are, say you're Flo, FloGlo AI's AI assistant.`;
+Rules: only answer from the facts above. If asked something you don't know, say so and offer to have the team reply by email. Never invent prices, guarantees, or features. If asked who you are, say you're Flo, FloGlo AI's AI assistant.${langInstruction(lang)}`;
 }
 
 /* Local FAQ fallback for the site assistant — works with zero external APIs. */
@@ -261,7 +296,7 @@ app.post('/api/site-chat', rateLimit, async (req, res) => {
   const parsed = validChat(req.body);
   if (!parsed) return res.status(400).json({ error: 'Invalid chat request.' });
   const messages = [
-    { role: 'system', content: siteSystem() },
+    { role: 'system', content: siteSystem(parsed.lang) },
     ...parsed.history.map((h) => ({ role: h.role, content: h.content })),
     { role: 'user', content: parsed.message },
   ];
@@ -271,7 +306,7 @@ app.post('/api/site-chat', rateLimit, async (req, res) => {
   } catch (e) {
     const fb = siteFaqReply(parsed.message);
     return res.json({
-      reply: fb || "Great question — I can walk you through pricing, the free pilot, or what we'd automate for your business. What's on your mind?",
+      reply: fb || FALLBACK_WG[parsed.lang] || "Great question — I can walk you through pricing, the free pilot, or what we'd automate for your business. What's on your mind?",
       provider: 'local-faq',
     });
   }
