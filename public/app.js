@@ -3,6 +3,41 @@
 (function () {
   'use strict';
 
+  /* ---------- multi-language (default English) ---------- */
+  var LANG_KEY = 'floglo-lang';
+  var HTML_KEYS = {};
+  (function () {
+    var en = (window.FLOGLO_I18N && window.FLOGLO_I18N.en) || {};
+    for (var k in en) { if (/<[a-z][^>]*>/i.test(en[k])) HTML_KEYS[k] = true; }
+  })();
+  var currentLang = 'en';
+  try { currentLang = localStorage.getItem(LANG_KEY) || 'en'; } catch (e) {}
+  if (!window.FLOGLO_I18N || !window.FLOGLO_I18N[currentLang]) currentLang = 'en';
+  function langMeta(code) {
+    var langs = window.FLOGLO_LANGS || [];
+    for (var i = 0; i < langs.length; i++) if (langs[i].code === code) return langs[i];
+    return { code: 'en', name: 'English', dir: 'ltr' };
+  }
+  function t(key) {
+    var d = window.FLOGLO_I18N[currentLang] || {};
+    if (d[key] != null && d[key] !== '') return d[key];
+    var en = window.FLOGLO_I18N.en || {};
+    return en[key] || '';
+  }
+  function applyStaticStrings() {
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n');
+      var v = t(k);
+      if (HTML_KEYS[k]) el.innerHTML = v; else el.textContent = v;
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+      el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    });
+  }
+
   /* ---------- 3D tilt: cards and the demo phone lean toward the cursor ---------- */
   (function () {
     if (!window.matchMedia('(pointer: fine)').matches) return;
@@ -73,33 +108,20 @@
   var history = [];
   var busy = false;
   var currentIndustry = 'pizzeria';
-  var industryData = {
-    pizzeria: {
-      name: "Bella's Pizzeria",
-      greeting: "Hey, welcome to Bella's Pizzeria! I'm Flo — I can book you a table, share our hours, or run through the menu. What sounds good?",
-      prompts: ["What are your hours?", "Book a table for 4 this Friday at 7pm", "What's good on the menu?", "Where are you located?"]
-    },
-    salon: {
-      name: "Luxe Locks Salon",
-      greeting: "Hi, welcome to Luxe Locks Salon! I'm Flo — I can book your appointment, share our services and prices, or answer anything else. What can I do for you?",
-      prompts: ["What are your hours?", "Book a balayage this Saturday", "How much is a women's cut?", "Where are you located?"]
-    },
-    plumber: {
-      name: "Rapid Rooter Plumbing",
-      greeting: "Hey, this is Flo with Rapid Rooter Plumbing! I can schedule a service visit, give you a ballpark on pricing, or help with an urgent issue. What's going on?",
-      prompts: ["My drain is clogged, what do I do?", "How much for a water heater install?", "Do you do emergency calls?", "What areas do you serve?"]
-    },
-    dental: {
-      name: "Bright Smile Dental",
-      greeting: "Hi, welcome to Bright Smile Dental! I'm Flo — I can book your visit, explain our services, or check what to expect. How can I help?",
-      prompts: ["Do you take my insurance?", "I have tooth pain, can I come today?", "How much is whitening?", "Where are you located?"]
-    },
-    autorepair: {
-      name: "Precision Auto Care",
-      greeting: "Hey, welcome to Precision Auto Care! I'm Flo — I can schedule your service, give you an estimate, or answer questions about your car. What's up?",
-      prompts: ["How much for an oil change?", "My brakes are squeaking", "Do you offer a shuttle?", "What are your hours?"]
-    }
-  };
+  function buildIndustryData() {
+    var inds = ['pizzeria', 'salon', 'plumber', 'dental', 'autorepair'];
+    var out = {};
+    inds.forEach(function (ind) {
+      out[ind] = {
+        name: t('biz.' + ind + '.name'),
+        greeting: t('biz.' + ind + '.greeting'),
+        prompts: [t('biz.' + ind + '.p1'), t('biz.' + ind + '.p2'), t('biz.' + ind + '.p3'), t('biz.' + ind + '.p4')]
+      };
+    });
+    return out;
+  }
+  var industryData = buildIndustryData();
+  function industryChipLabel(ind) { return t('ind.' + ind); }
 
   function scroll() { box.scrollTop = box.scrollHeight; }
   function addMsg(text, who) {
@@ -116,23 +138,23 @@
     if (!msg) return;
     busy = true;
     addMsg(msg, 'user');
-    var typing = addMsg('Flo is typing…', 'bot typing');
+    var typing = addMsg(t('demo.typing'), 'bot typing');
     fetch('/api/demo-chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, history: history, industry: currentIndustry })
+      body: JSON.stringify({ message: msg, history: history, industry: currentIndustry, lang: currentLang })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         typing.remove();
-        var reply = data.reply || "Hmm, I didn't catch that — ask me about bookings, hours, or the menu!";
+        var reply = data.reply || t('demo.fallback1');
         addMsg(reply, 'bot');
         history.push({ role: 'user', content: msg }, { role: 'assistant', content: reply });
         if (history.length > 12) history = history.slice(-12);
       })
       .catch(function () {
         typing.remove();
-        addMsg("I'm having a little trouble right now — but I can still take your booking details! What's your name?", 'bot');
+        addMsg(t('demo.fallback2'), 'bot');
       })
       .finally(function () { busy = false; });
   }
@@ -168,12 +190,28 @@
     });
   });
 
+  /* refresh demo chat when the site language changes */
+  window.__demoLangRefresh = function () {
+    industryData = buildIndustryData();
+    history = [];
+    if (promptRow) {
+      promptRow.innerHTML = industryData[currentIndustry].prompts.map(function (p) {
+        return '<button class="chip" data-prompt="' + p.replace(/"/g, '&quot;') + '">' + p.replace(/</g, '&lt;') + '</button>';
+      }).join('');
+      promptRow.querySelectorAll('.chip').forEach(function (chip) {
+        chip.addEventListener('click', function () { send(chip.dataset.prompt); });
+      });
+    }
+    box.innerHTML = '';
+    addMsg(industryData[currentIndustry].greeting, 'bot');
+  };
+
   /* ---------- contact form ---------- */
   var cForm = document.getElementById('contactForm');
   var cMsg = document.getElementById('formMsg');
   cForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    cMsg.textContent = 'Sending…';
+    cMsg.textContent = t('ct.sending');
     var fd = new FormData(cForm);
     var payload = {
       name: fd.get('name'), email: fd.get('email'),
@@ -187,13 +225,13 @@
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {
         if (res.ok) {
-          cMsg.textContent = "You're in! We'll reply within one business day with your pilot plan.";
+          cMsg.textContent = t('ct.success');
           cForm.reset();
         } else {
-          cMsg.textContent = res.d.error || 'Something went wrong — try again.';
+          cMsg.textContent = res.d.error || t('ct.error');
         }
       })
-      .catch(function () { cMsg.textContent = 'Something went wrong — try again.'; });
+      .catch(function () { cMsg.textContent = t('ct.error'); });
   });
 
   /* ---------- floating site-assistant widget ---------- */
@@ -242,26 +280,32 @@
       sBusy = true;
       sAddMsg(msg, 'user');
       sInput.value = '';
-      var typing = sAddMsg('Flo is typing…', 'bot typing');
+      var typing = sAddMsg(t('wg.typing'), 'bot typing');
       fetch('/api/site-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, history: sHistory })
+        body: JSON.stringify({ message: msg, history: sHistory, lang: currentLang })
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
           typing.remove();
-          var reply = data.reply || "Great question — I can walk you through pricing, the free pilot, or what we'd automate for your business. What's on your mind?";
+          var reply = data.reply || t('wg.fallback');
           sAddMsg(reply, 'bot');
           sHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: reply });
           if (sHistory.length > 12) sHistory = sHistory.slice(-12);
         })
         .catch(function () {
           typing.remove();
-          sAddMsg("I'm having a little trouble right now — email us at aiflowline@gmail.com and a human will reply within one business day.", 'bot');
+          sAddMsg(t('wg.error'), 'bot');
         })
         .finally(function () { sBusy = false; sInput.focus(); });
     });
+    /* refresh site-assistant greeting when the site language changes */
+    window.__siteChatLangRefresh = function () {
+      sHistory = [];
+      sBox.innerHTML = '';
+      sAddMsg(t('wg.greeting'), 'bot');
+    };
   })();
 
   /* ---------- Daily Videos: one native player per platform ---------- */
@@ -287,17 +331,17 @@
         // own embed refuses to play this account's videos).
         return slot('tiktok',
           '<div class="tiktok-player">' +
-          '<a class="tiktok-profile-link" href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok">' +
+          '<a class="tiktok-profile-link" href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="' + t('misc.tiktokprofile') + '">' +
           '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>' +
-          '<video class="tiktok-video" src="videos/tiktok-latest.mp4?v=1" poster="videos/tiktok-latest.jpg?v=1" playsinline preload="metadata" aria-label="Latest FloGlo AI TikTok video — tap to play"></video>' +
-          '<button class="tiktok-play-btn" type="button" aria-label="Play video">' +
+          '<video class="tiktok-video" src="videos/tiktok-latest.mp4?v=1" poster="videos/tiktok-latest.jpg?v=1" playsinline preload="metadata" aria-label="' + t('misc.tiktokvideo') + '"></video>' +
+          '<button class="tiktok-play-btn" type="button" aria-label="' + t('misc.play') + '">' +
           '<svg class="icon-play" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>' +
           '<svg class="icon-replay" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>' +
           '</button></div>');
       }
       if (v.platform === 'youtube-playlist') {
         return slot('youtube',
-          '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
+          '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="' + t('misc.ytvideos') + '" loading="lazy" allow="' +
           YT_ALLOW + '" allowfullscreen></iframe>');
       }
       return slot('youtube',
@@ -307,7 +351,7 @@
     }
     function fallback() {
       row.innerHTML = slot('youtube',
-        '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="Latest FloGlo AI videos" loading="lazy" allow="' +
+        '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="' + t('misc.ytvideos') + '" loading="lazy" allow="' +
         YT_ALLOW + '" allowfullscreen></iframe>');
     }
     function processEmbeds() {
@@ -328,7 +372,7 @@
       function sync() {
         player.classList.toggle('playing', !v.paused && !v.ended);
         player.classList.toggle('ended', v.ended);
-        btn.setAttribute('aria-label', v.ended ? 'Replay video' : (v.paused ? 'Play video' : 'Pause video'));
+        btn.setAttribute('aria-label', v.ended ? t('misc.replay') : (v.paused ? t('misc.play') : t('misc.pause')));
       }
       function toggle() {
         if (v.ended) v.currentTime = 0;
@@ -392,5 +436,76 @@
     }
     [calls, value, rate].forEach(function (el) { el.addEventListener('input', update); });
     update();
+  })();
+
+  /* ---------- language switcher ---------- */
+  (function () {
+    var btn = document.getElementById('langBtn');
+    var menu = document.getElementById('langMenu');
+    var cur = document.getElementById('langCurrent');
+    if (!btn || !menu) return;
+
+    // build menu
+    window.FLOGLO_LANGS.forEach(function (l) {
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'option');
+      b.dataset.lang = l.code;
+      b.setAttribute('aria-selected', l.code === currentLang ? 'true' : 'false');
+      var nm = document.createElement('span');
+      nm.textContent = l.name;
+      var en = document.createElement('span');
+      en.className = 'lang-en';
+      en.textContent = l.code.toUpperCase();
+      b.appendChild(nm);
+      b.appendChild(en);
+      b.addEventListener('click', function () { setLang(l.code); closeMenu(); });
+      li.appendChild(b);
+      menu.appendChild(li);
+    });
+
+    function closeMenu() {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = menu.hidden;
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) closeMenu();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.hidden) closeMenu();
+    });
+
+    window.setLang = setLang;
+    function setLang(code) {
+      if (!window.FLOGLO_I18N[code]) code = 'en';
+      currentLang = code;
+      try { localStorage.setItem(LANG_KEY, code); } catch (e) {}
+      applyLang();
+    }
+
+    function applyLang() {
+      var meta = langMeta(currentLang);
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = meta.dir;
+      if (cur) cur.textContent = currentLang.toUpperCase();
+      menu.querySelectorAll('button').forEach(function (b) {
+        b.setAttribute('aria-selected', b.dataset.lang === currentLang ? 'true' : 'false');
+      });
+      applyStaticStrings();
+      // refresh translated dynamic modules
+      if (window.__demoLangRefresh) window.__demoLangRefresh();
+      if (window.__siteChatLangRefresh) window.__siteChatLangRefresh();
+    }
+
+    // expose for the demo-chat module
+    window.__applyLang = applyLang;
+    applyLang();
   })();
 })();

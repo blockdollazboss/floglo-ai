@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=20">
+<link rel="stylesheet" href="styles.css?v=21">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -36,12 +36,18 @@
   <div class="nav-inner">
     <a class="logo" href="#top"><img src="logo.png" alt="FloGlo AI logo" width="34" height="34">FLOGLO <span>AI</span></a>
     <div class="nav-links">
-      <a href="#demo">Live demo</a>
-      <a href="#services">What we automate</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#faq">FAQ</a>
+      <a href="#demo" data-i18n="nav.demo">Live demo</a>
+      <a href="#services" data-i18n="nav.services">What we automate</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </div>
-    <a class="btn btn-gold btn-sm" href="#contact">Free pilot</a>
+    <a class="btn btn-gold btn-sm" href="#contact" data-i18n="nav.pilot">Free pilot</a>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language">
+        <span id="langCurrent">EN</span><span class="lang-caret">▾</span>
+      </button>
+      <ul class="lang-menu" id="langMenu" role="listbox" hidden></ul>
+    </div>
   </div>
 </nav>
 
@@ -50,57 +56,57 @@
     <div class="loop-space">
       <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" hidden>
     </div>
-    <p class="badge reveal"><span class="pulse"></span>AI AUTOMATION AGENCY</p>
-    <h1 class="reveal">We make your business<br><span class="gold-grad">glow.</span></h1>
-    <p class="sub reveal">We build AI assistants that answer your customers, book your appointments, and chase your leads — 24/7, while you sleep. Built for local businesses. Priced for them too.</p>
+    <p class="badge reveal"><span class="pulse"></span data-i18n="hero.badge">AI AUTOMATION AGENCY</p>
+    <h1 class="reveal" data-i18n="hero.title">We make your business<br><span class="gold-grad">glow.</span></h1>
+    <p class="sub reveal" data-i18n="hero.sub">We build AI assistants that answer your customers, book your appointments, and chase your leads — 24/7, while you sleep. Built for local businesses. Priced for them too.</p>
     <div class="hero-cta reveal">
-      <a class="btn btn-gold btn-lg" href="#demo">Talk to the demo</a>
-      <a class="btn btn-ghost btn-lg" href="#contact">Claim your free 7-day pilot</a>
+      <a class="btn btn-gold btn-lg" href="#demo" data-i18n="hero.cta1">Talk to the demo</a>
+      <a class="btn btn-ghost btn-lg" href="#contact" data-i18n="hero.cta2">Claim your free 7-day pilot</a>
     </div>
     <div class="stats reveal">
-      <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl">always answering</span></div>
-      <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s">0</span><span class="lbl">response time</span></div>
-      <div class="stat"><span class="num" data-count="0" data-suffix="">0</span><span class="lbl">missed calls</span></div>
-      <div class="stat"><span class="num" data-count="7" data-suffix="-day">0</span><span class="lbl">free pilot</span></div>
+      <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl" data-i18n="hero.stat1">always answering</span></div>
+      <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s">0</span><span class="lbl" data-i18n="hero.stat2">response time</span></div>
+      <div class="stat"><span class="num" data-count="0" data-suffix="">0</span><span class="lbl" data-i18n="hero.stat3">missed calls</span></div>
+      <div class="stat"><span class="num" data-count="7" data-suffix="-day">0</span><span class="lbl" data-i18n="hero.stat4">free pilot</span></div>
     </div>
   </div>
-  <a class="scroll-hint" href="#demo" aria-label="Scroll to demo">↓</a>
+  <a class="scroll-hint" href="#demo" data-i18n-aria="hero.scroll" aria-label="Scroll to demo">↓</a>
 </header>
 
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span>24/7 AI RECEPTIONIST</span><i>◆</i><span>MISSED-CALL TEXT-BACK</span><i>◆</i><span>REVIEW ENGINE</span><i>◆</i><span>LEAD FOLLOW-UP</span><i>◆</i><span>APPOINTMENT BOOKING</span><i>◆</i>
-    <span>24/7 AI RECEPTIONIST</span><i>◆</i><span>MISSED-CALL TEXT-BACK</span><i>◆</i><span>REVIEW ENGINE</span><i>◆</i><span>LEAD FOLLOW-UP</span><i>◆</i><span>APPOINTMENT BOOKING</span><i>◆</i>
+    <span data-i18n="marquee.1">24/7 AI RECEPTIONIST</span><i>◆</i><span data-i18n="marquee.2">MISSED-CALL TEXT-BACK</span><i>◆</i><span data-i18n="marquee.3">REVIEW ENGINE</span><i>◆</i><span data-i18n="marquee.4">LEAD FOLLOW-UP</span><i>◆</i><span data-i18n="marquee.5">APPOINTMENT BOOKING</span><i>◆</i>
+    <span data-i18n="marquee.1">24/7 AI RECEPTIONIST</span><i>◆</i><span data-i18n="marquee.2">MISSED-CALL TEXT-BACK</span><i>◆</i><span data-i18n="marquee.3">REVIEW ENGINE</span><i>◆</i><span data-i18n="marquee.4">LEAD FOLLOW-UP</span><i>◆</i><span data-i18n="marquee.5">APPOINTMENT BOOKING</span><i>◆</i>
   </div>
 </div>
 
 <section class="social" id="videos">
   <div class="wrap">
-    <p class="kicker reveal">DAILY VIDEOS</p>
-    <h2 class="reveal">See what we're <span class="gold-grad">building.</span></h2>
-    <p class="section-sub reveal">We post new videos every day — live demos, automations in action, and straight talk for local businesses. Watch the latest right here, or follow along on your favorite platform.</p>
+    <p class="kicker reveal" data-i18n="videos.kicker">DAILY VIDEOS</p>
+    <h2 class="reveal" data-i18n="videos.title">See what we're <span class="gold-grad">building.</span></h2>
+    <p class="section-sub reveal" data-i18n="videos.sub">We post new videos every day — live demos, automations in action, and straight talk for local businesses. Watch the latest right here, or follow along on your favorite platform.</p>
     <div class="video-feature reveal">
       <div class="video-row" id="videoRow" aria-live="polite">
-        <div class="video-cell"><span class="video-loading">Loading latest videos…</span></div>
-        <div class="video-cell"><span class="video-loading">Loading latest videos…</span></div>
-        <div class="video-cell"><span class="video-loading">Loading latest videos…</span></div>
+        <div class="video-cell"><span class="video-loading" data-i18n="videos.loading">Loading latest videos…</span></div>
+        <div class="video-cell"><span class="video-loading" data-i18n="videos.loading">Loading latest videos…</span></div>
+        <div class="video-cell"><span class="video-loading" data-i18n="videos.loading">Loading latest videos…</span></div>
       </div>
-      <p class="video-note">Fresh from Instagram, TikTok, and YouTube.</p>
+      <p class="video-note" data-i18n="videos.note">Fresh from Instagram, TikTok, and YouTube.</p>
     </div>
   </div>
 </section>
 
 <section class="demo" id="demo">
   <div class="wrap">
-    <p class="kicker reveal">LIVE DEMO</p>
-    <h2 class="reveal">Don't take our word for it.<br><span class="gold-grad">Talk to the product.</span></h2>
-    <p class="section-sub reveal">This is "Flo" — an AI assistant we built for fictional local businesses. Pick an industry, then text her. Imagine this working <em>your</em> business while you sleep.</p>
+    <p class="kicker reveal" data-i18n="demo.kicker">LIVE DEMO</p>
+    <h2 class="reveal" data-i18n="demo.title">Don't take our word for it.<br><span class="gold-grad">Talk to the product.</span></h2>
+    <p class="section-sub reveal" data-i18n="demo.sub">This is "Flo" — an AI assistant we built for fictional local businesses. Pick an industry, then text her. Imagine this working <em>your</em> business while you sleep.</p>
     <div class="demo-industries reveal" id="demoIndustries">
-      <button class="chip industry-chip active" data-industry="pizzeria">Pizzeria</button>
-      <button class="chip industry-chip" data-industry="salon">Hair Salon</button>
-      <button class="chip industry-chip" data-industry="plumber">Plumber</button>
-      <button class="chip industry-chip" data-industry="dental">Dental</button>
-      <button class="chip industry-chip" data-industry="autorepair">Auto Repair</button>
+      <button class="chip industry-chip active" data-industry="pizzeria" data-i18n="ind.pizzeria">Pizzeria</button>
+      <button class="chip industry-chip" data-industry="salon" data-i18n="ind.salon">Hair Salon</button>
+      <button class="chip industry-chip" data-industry="plumber" data-i18n="ind.plumber">Plumber</button>
+      <button class="chip industry-chip" data-industry="dental" data-i18n="ind.dental">Dental</button>
+      <button class="chip industry-chip" data-industry="autorepair" data-i18n="ind.autorepair">Auto Repair</button>
     </div>
     <div class="phone reveal">
       <div class="phone-notch"></div>
@@ -108,74 +114,74 @@
         <div class="chat-head">
           <div class="chat-avatar">F</div>
           <div>
-            <p class="chat-name">Flo — Booking Assistant</p>
-            <p class="chat-status"><span class="dot"></span> Online · demo by FloGlo AI</p>
+            <p class="chat-name" data-i18n="demo.chatname">Flo — Booking Assistant</p>
+            <p class="chat-status" data-i18n="demo.chatstatus"><span class="dot"></span> Online · demo by FloGlo AI</p>
           </div>
         </div>
         <div class="chat-messages" id="chatMessages" aria-live="polite">
-          <div class="msg bot">Hey, welcome to Bella's Pizzeria! I'm Flo — I can book you a table, share our hours, or run through the menu. What sounds good?</div>
+          <div class="msg bot" data-i18n="biz.pizzeria.greeting">Hey, welcome to Bella's Pizzeria! I'm Flo — I can book you a table, share our hours, or run through the menu. What sounds good?</div>
         </div>
         <form class="chat-input" id="chatForm">
-          <input id="chatText" type="text" placeholder="Text Flo something…" autocomplete="off" maxlength="1000">
-          <button type="submit" class="btn btn-gold btn-sm">Send</button>
+          <input id="chatText" type="text" data-i18n-ph="demo.placeholder" placeholder="Text Flo something…" autocomplete="off" maxlength="1000">
+          <button type="submit" class="btn btn-gold btn-sm" data-i18n="demo.send">Send</button>
         </form>
       </div>
     </div>
     <div class="demo-prompts reveal">
-      <button class="chip" data-prompt="What are your hours?">What are your hours?</button>
-      <button class="chip" data-prompt="Book a table for 4 this Friday at 7pm">Book a table for 4</button>
-      <button class="chip" data-prompt="What's good on the menu?">What's good on the menu?</button>
-      <button class="chip" data-prompt="Where are you located?">Where are you located?</button>
+      <button class="chip" data-i18n="biz.pizzeria.p1" data-prompt="What are your hours?">What are your hours?</button>
+      <button class="chip" data-i18n="biz.pizzeria.p2label" data-prompt="Book a table for 4 this Friday at 7pm">Book a table for 4</button>
+      <button class="chip" data-i18n="biz.pizzeria.p3" data-prompt="What's good on the menu?">What's good on the menu?</button>
+      <button class="chip" data-i18n="biz.pizzeria.p4" data-prompt="Where are you located?">Where are you located?</button>
     </div>
   </div>
 </section>
 
 <section class="services" id="services">
   <div class="wrap">
-    <p class="kicker reveal">WHAT WE AUTOMATE</p>
-    <h2 class="reveal">Four machines that <span class="gold-grad">print money</span><br>for local businesses.</h2>
+    <p class="kicker reveal" data-i18n="svc.kicker">WHAT WE AUTOMATE</p>
+    <h2 class="reveal" data-i18n="svc.title">Four machines that <span class="gold-grad">print money</span><br>for local businesses.</h2>
     <div class="cards">
-      <div class="card reveal"><div class="card-icon">◉</div><h3>24/7 AI Receptionist</h3><p>Answers every call, text, and website chat instantly. Books appointments straight into your calendar. Never misses a lead again.</p></div>
-      <div class="card reveal"><div class="card-icon">✦</div><h3>Missed-Call Text-Back</h3><p>Missed a call? The customer gets a text in 30 seconds: "Sorry we missed you — how can we help?" 80% of business goes to whoever responds first.</p></div>
-      <div class="card reveal"><div class="card-icon">★</div><h3>Review Engine</h3><p>Automatically asks happy customers for Google reviews after every job. More 5-star reviews, higher rankings, more calls.</p></div>
-      <div class="card reveal"><div class="card-icon">➤</div><h3>Lead Follow-Up</h3><p>Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
+      <div class="card reveal"><div class="card-icon">◉</div><h3 data-i18n="svc.1t">24/7 AI Receptionist</h3><p data-i18n="svc.1d">Answers every call, text, and website chat instantly. Books appointments straight into your calendar. Never misses a lead again.</p></div>
+      <div class="card reveal"><div class="card-icon">✦</div><h3 data-i18n="svc.2t">Missed-Call Text-Back</h3><p data-i18n="svc.2d">Missed a call? The customer gets a text in 30 seconds: "Sorry we missed you — how can we help?" 80% of business goes to whoever responds first.</p></div>
+      <div class="card reveal"><div class="card-icon">★</div><h3 data-i18n="svc.3t">Review Engine</h3><p data-i18n="svc.3d">Automatically asks happy customers for Google reviews after every job. More 5-star reviews, higher rankings, more calls.</p></div>
+      <div class="card reveal"><div class="card-icon">➤</div><h3 data-i18n="svc.4t">Lead Follow-Up</h3><p data-i18n="svc.4d">Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
     </div>
   </div>
 </section>
 
 <section class="how" id="how">
   <div class="wrap">
-    <p class="kicker reveal">HOW IT WORKS</p>
-    <h2 class="reveal">Live in <span class="gold-grad">7 days.</span></h2>
+    <p class="kicker reveal" data-i18n="how.kicker">HOW IT WORKS</p>
+    <h2 class="reveal" data-i18n="how.title">Live in <span class="gold-grad">7 days.</span></h2>
     <div class="steps">
-      <div class="step reveal"><span class="step-n">1</span><h3>Free pilot</h3><p>We install one automation on your business for 7 days. Free. You watch it work.</p></div>
-      <div class="step reveal"><span class="step-n">2</span><h3>You see bookings</h3><p>Calls answered, tables booked, reviews collected. Real numbers, not promises.</p></div>
-      <div class="step reveal"><span class="step-n">3</span><h3>You keep it</h3><p>Pick a plan. We manage everything — you just run your business.</p></div>
+      <div class="step reveal"><span class="step-n">1</span><h3 data-i18n="how.1t">Free pilot</h3><p data-i18n="how.1d">We install one automation on your business for 7 days. Free. You watch it work.</p></div>
+      <div class="step reveal"><span class="step-n">2</span><h3 data-i18n="how.2t">You see bookings</h3><p data-i18n="how.2d">Calls answered, tables booked, reviews collected. Real numbers, not promises.</p></div>
+      <div class="step reveal"><span class="step-n">3</span><h3 data-i18n="how.3t">You keep it</h3><p data-i18n="how.3d">Pick a plan. We manage everything — you just run your business.</p></div>
     </div>
   </div>
 </section>
 
 <section class="compare" id="compare">
   <div class="wrap">
-    <p class="kicker reveal">THE MATH</p>
-    <h2 class="reveal">What standing still <span class="gold-grad">costs.</span></h2>
+    <p class="kicker reveal" data-i18n="cmp.kicker">THE MATH</p>
+    <h2 class="reveal" data-i18n="cmp.title">What standing still <span class="gold-grad">costs.</span></h2>
     <div class="cards">
-      <div class="card reveal"><div class="card-icon">✕</div><h3>Doing nothing</h3><p>Every missed call is a customer dialing your competitor next. Thin reviews keep you buried on Google. Old quotes sit in a spreadsheet, dying quietly.</p></div>
-      <div class="card reveal"><div class="card-icon">✕</div><h3>Hiring help</h3><p>A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
-      <div class="card reveal"><div class="card-icon">✓</div><h3>FloGlo</h3><p>Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
+      <div class="card reveal"><div class="card-icon">✕</div><h3 data-i18n="cmp.1t">Doing nothing</h3><p data-i18n="cmp.1d">Every missed call is a customer dialing your competitor next. Thin reviews keep you buried on Google. Old quotes sit in a spreadsheet, dying quietly.</p></div>
+      <div class="card reveal"><div class="card-icon">✕</div><h3 data-i18n="cmp.2t">Hiring help</h3><p data-i18n="cmp.2d">A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
+      <div class="card reveal"><div class="card-icon">✓</div><h3 data-i18n="cmp.3t">FloGlo</h3><p data-i18n="cmp.3d">Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
     </div>
     <div class="cost-table-wrap reveal">
-      <h3>Monthly cost, side by side</h3>
+      <h3 data-i18n="cmp.tableh">Monthly cost, side by side</h3>
       <table class="cost-table">
-        <thead><tr><th></th><th>Receptionist</th><th class="highlight-col">FloGlo Growth</th></tr></thead>
+        <thead><tr><th></th><th data-i18n="cmp.th2">Receptionist</th><th class="highlight-col" data-i18n="cmp.th3">FloGlo Growth</th></tr></thead>
         <tbody>
-          <tr><td>Monthly cost</td><td>$3,000+</td><td class="highlight-col">$297</td></tr>
-          <tr><td>Answers after hours</td><td>✕</td><td class="highlight-col">✓ 24/7</td></tr>
-          <tr><td>Answers on weekends</td><td>✕</td><td class="highlight-col">✓ 24/7</td></tr>
-          <tr><td>Texts back missed calls</td><td>✕</td><td class="highlight-col">✓ instantly</td></tr>
-          <tr><td>Follows up with cold leads</td><td>Rarely</td><td class="highlight-col">✓ automatically</td></tr>
-          <tr><td>Asks for Google reviews</td><td>Sometimes</td><td class="highlight-col">✓ every happy customer</td></tr>
-          <tr><td>Sick days / turnover</td><td>Yes</td><td class="highlight-col">Never</td></tr>
+          <tr><td data-i18n="cmp.r1c1">Monthly cost</td><td data-i18n="cmp.r1c2">$3,000+</td><td class="highlight-col" data-i18n="cmp.r1c3">$297</td></tr>
+          <tr><td data-i18n="cmp.r2c1">Answers after hours</td><td data-i18n="cmp.r2c2">✕</td><td class="highlight-col" data-i18n="cmp.r2c3">✓ 24/7</td></tr>
+          <tr><td data-i18n="cmp.r3c1">Answers on weekends</td><td data-i18n="cmp.r3c2">✕</td><td class="highlight-col" data-i18n="cmp.r3c3">✓ 24/7</td></tr>
+          <tr><td data-i18n="cmp.r4c1">Texts back missed calls</td><td data-i18n="cmp.r4c2">✕</td><td class="highlight-col" data-i18n="cmp.r4c3">✓ instantly</td></tr>
+          <tr><td data-i18n="cmp.r5c1">Follows up with cold leads</td><td data-i18n="cmp.r5c2">Rarely</td><td class="highlight-col" data-i18n="cmp.r5c3">✓ automatically</td></tr>
+          <tr><td data-i18n="cmp.r6c1">Asks for Google reviews</td><td data-i18n="cmp.r6c2">Sometimes</td><td class="highlight-col" data-i18n="cmp.r6c3">✓ every happy customer</td></tr>
+          <tr><td data-i18n="cmp.r7c1">Sick days / turnover</td><td data-i18n="cmp.r7c2">Yes</td><td class="highlight-col" data-i18n="cmp.r7c3">Never</td></tr>
         </tbody>
       </table>
     </div>
@@ -184,29 +190,29 @@
 
 <section class="roi" id="roi">
   <div class="wrap narrow">
-    <p class="kicker reveal">THE MATH</p>
-    <h2 class="reveal">What are missed calls <span class="gold-grad">costing you?</span></h2>
-    <p class="section-sub reveal">Drag the sliders. This is what a missed call really costs a local business.</p>
+    <p class="kicker reveal" data-i18n="roi.kicker">THE MATH</p>
+    <h2 class="reveal" data-i18n="roi.title">What are missed calls <span class="gold-grad">costing you?</span></h2>
+    <p class="section-sub reveal" data-i18n="roi.sub">Drag the sliders. This is what a missed call really costs a local business.</p>
     <div class="roi-box reveal">
       <div class="roi-inputs">
-        <label>Missed calls per week
+        <label data-i18n="roi.l1">Missed calls per week
           <input type="range" id="roiCalls" min="1" max="50" value="10">
           <span class="roi-val" id="roiCallsVal">10</span>
         </label>
-        <label>Average job value
+        <label data-i18n="roi.l2">Average job value
           <input type="range" id="roiValue" min="50" max="2000" step="50" value="300">
           <span class="roi-val" id="roiValueVal">$300</span>
         </label>
-        <label>How many callers would book if someone answered?
+        <label data-i18n="roi.l3">How many callers would book if someone answered?
           <input type="range" id="roiRate" min="10" max="90" step="5" value="40">
           <span class="roi-val" id="roiRateVal">40%</span>
         </label>
       </div>
       <div class="roi-result">
-        <p class="roi-lost-label">You're losing about</p>
-        <p class="roi-lost" id="roiLost">$4,800<span>/mo</span></p>
-        <p class="roi-flo">Flo Growth costs $297/mo and answers every call, 24/7.</p>
-        <a class="btn btn-gold" href="#contact">Stop losing it</a>
+        <p class="roi-lost-label" data-i18n="roi.lostlabel">You're losing about</p>
+        <p class="roi-lost" id="roiLost">$4,800<span data-i18n="roi.permo">/mo</span></p>
+        <p class="roi-flo" data-i18n="roi.flo">Flo Growth costs $297/mo and answers every call, 24/7.</p>
+        <a class="btn btn-gold" href="#contact" data-i18n="roi.cta">Stop losing it</a>
       </div>
     </div>
   </div>
@@ -214,30 +220,30 @@
 
 <section class="pricing" id="pricing">
   <div class="wrap">
-    <p class="kicker reveal">PRICING</p>
-    <h2 class="reveal">Simple. <span class="gold-grad">No contracts.</span></h2>
+    <p class="kicker reveal" data-i18n="pr.kicker">PRICING</p>
+    <h2 class="reveal" data-i18n="pr.title">Simple. <span class="gold-grad">No contracts.</span></h2>
     <div class="cards pricing-cards">
       <div class="card price reveal">
-        <h3>Pilot</h3>
-        <p class="amount">$0</p>
-        <p class="per">7 days</p>
-        <ul><li>One automation, fully installed</li><li>We handle all setup</li><li>You keep the results report</li></ul>
-        <a class="btn btn-ghost" href="#contact">Start free</a>
+        <h3 data-i18n="pr.pilot.n">Pilot</h3>
+        <p class="amount" data-i18n="pr.pilot.amt">$0</p>
+        <p class="per" data-i18n="pr.pilot.per">7 days</p>
+        <ul><li data-i18n="pr.pilot.f1">One automation, fully installed</li><li data-i18n="pr.pilot.f2">We handle all setup</li><li data-i18n="pr.pilot.f3">You keep the results report</li></ul>
+        <a class="btn btn-ghost" href="#contact" data-i18n="pr.pilot.cta">Start free</a>
       </div>
       <div class="card price featured reveal">
-        <div class="flag">MOST POPULAR</div>
-        <h3>Launch</h3>
-        <p class="amount">$750</p>
-        <p class="per">one-time</p>
-        <ul><li>AI receptionist on your website</li><li>Missed-call text-back</li><li>Review engine</li><li>30 days of tuning included</li></ul>
-        <a class="btn btn-gold" href="#contact">Get launched</a>
+        <div class="flag" data-i18n="pr.launch.flag">MOST POPULAR</div>
+        <h3 data-i18n="pr.launch.n">Launch</h3>
+        <p class="amount" data-i18n="pr.launch.amt">$750</p>
+        <p class="per" data-i18n="pr.launch.per">one-time</p>
+        <ul><li data-i18n="pr.launch.f1">AI receptionist on your website</li><li data-i18n="pr.launch.f2">Missed-call text-back</li><li data-i18n="pr.launch.f3">Review engine</li><li data-i18n="pr.launch.f4">30 days of tuning included</li></ul>
+        <a class="btn btn-gold" href="#contact" data-i18n="pr.launch.cta">Get launched</a>
       </div>
       <div class="card price reveal">
-        <h3>Growth</h3>
-        <p class="amount">$297<span class="mo">/mo</span></p>
-        <p class="per">cancel anytime</p>
-        <ul><li>Everything in Launch</li><li>Lead follow-up automation</li><li>Monthly performance reports</li><li>Priority support &amp; updates</li></ul>
-        <a class="btn btn-ghost" href="#contact">Go growth</a>
+        <h3 data-i18n="pr.growth.n">Growth</h3>
+        <p class="amount" data-i18n="pr.growth.amt">$297<span class="mo">/mo</span></p>
+        <p class="per" data-i18n="pr.growth.per">cancel anytime</p>
+        <ul><li data-i18n="pr.growth.f1">Everything in Launch</li><li data-i18n="pr.growth.f2">Lead follow-up automation</li><li data-i18n="pr.growth.f3">Monthly performance reports</li><li data-i18n="pr.growth.f4">Priority support &amp; updates</li></ul>
+        <a class="btn btn-ghost" href="#contact" data-i18n="pr.growth.cta">Go growth</a>
       </div>
     </div>
   </div>
@@ -245,17 +251,17 @@
 
 <section class="faq" id="faq">
   <div class="wrap narrow">
-    <p class="kicker reveal">FAQ</p>
-    <h2 class="reveal">Fair <span class="gold-grad">questions.</span></h2>
-    <details class="reveal" open><summary>Will this actually sound like my business?</summary><p>Yes. Every assistant is trained on your services, prices, hours, and tone of voice. Customers won't know it's AI unless you tell them.</p></details>
-    <details class="reveal"><summary>What if it gives a wrong answer?</summary><p>It only answers from information you approve. Anything it's unsure about gets escalated to you or your team instantly — never guessed.</p></details>
-    <details class="reveal"><summary>Do I need new software or hardware?</summary><p>No. It plugs into the website, phone number, and calendar you already have. Nothing to install, nothing to learn.</p></details>
-    <details class="reveal"><summary>What happens after the free pilot?</summary><p>You get a report: calls answered, bookings made, reviews collected. If the numbers don't impress you, we remove everything. No charge, no hard feelings.</p></details>
-    <details class="reveal"><summary>Why local businesses?</summary><p>Because that's where the pain is worst — missed calls, no-shows, dead lead lists — and where automation pays for itself fastest.</p></details>
-    <details class="reveal"><summary>How long does setup take?</summary><p>Most pilots go live in 3–5 days. We handle everything — training, phone setup, calendar connection. You just approve the wording.</p></details>
-    <details class="reveal"><summary>Am I locked into a contract?</summary><p>No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime — though nobody has yet.</p></details>
-    <details class="reveal"><summary>Which industries does this work for?</summary><p>Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry.</p></details>
-    <details class="reveal"><summary>I already have front-desk staff. Why do I need this?</summary><p>Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps.</p></details>
+    <p class="kicker reveal" data-i18n="faq.kicker">FAQ</p>
+    <h2 class="reveal" data-i18n="faq.title">Fair <span class="gold-grad">questions.</span></h2>
+    <details class="reveal" open><summary data-i18n="faq.q1">Will this actually sound like my business?</summary><p data-i18n="faq.a1">Yes. Every assistant is trained on your services, prices, hours, and tone of voice. Customers won't know it's AI unless you tell them.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q2">What if it gives a wrong answer?</summary><p data-i18n="faq.a2">It only answers from information you approve. Anything it's unsure about gets escalated to you or your team instantly — never guessed.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q3">Do I need new software or hardware?</summary><p data-i18n="faq.a3">No. It plugs into the website, phone number, and calendar you already have. Nothing to install, nothing to learn.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q4">What happens after the free pilot?</summary><p data-i18n="faq.a4">You get a report: calls answered, bookings made, reviews collected. If the numbers don't impress you, we remove everything. No charge, no hard feelings.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q5">Why local businesses?</summary><p data-i18n="faq.a5">Because that's where the pain is worst — missed calls, no-shows, dead lead lists — and where automation pays for itself fastest.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q6">How long does setup take?</summary><p data-i18n="faq.a6">Most pilots go live in 3–5 days. We handle everything — training, phone setup, calendar connection. You just approve the wording.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q7">Am I locked into a contract?</summary><p data-i18n="faq.a7">No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime — though nobody has yet.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q8">Which industries does this work for?</summary><p data-i18n="faq.a8">Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q9">I already have front-desk staff. Why do I need this?</summary><p data-i18n="faq.a9">Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps.</p></details>
   </div>
 </section>
 
@@ -263,39 +269,39 @@
 
 <section class="results" id="results">
   <div class="wrap narrow">
-    <p class="kicker reveal">RESULTS</p>
-    <h2 class="reveal">Real numbers, <span class="gold-grad">coming soon.</span></h2>
+    <p class="kicker reveal" data-i18n="res.kicker">RESULTS</p>
+    <h2 class="reveal" data-i18n="res.title">Real numbers, <span class="gold-grad">coming soon.</span></h2>
     <div class="results-box reveal">
-      <p>We're running free 7-day pilots with local businesses right now. Every pilot ends with a full report — calls answered, bookings made, revenue recovered.</p>
-      <p>Those real numbers go here. No made-up testimonials, no stock photos — just the math.</p>
-      <a class="btn btn-ghost" href="#contact">Be our next pilot</a>
+      <p data-i18n="res.p1">We're running free 7-day pilots with local businesses right now. Every pilot ends with a full report — calls answered, bookings made, revenue recovered.</p>
+      <p data-i18n="res.p2">Those real numbers go here. No made-up testimonials, no stock photos — just the math.</p>
+      <a class="btn btn-ghost" href="#contact" data-i18n="res.cta">Be our next pilot</a>
     </div>
   </div>
 </section>
 
 <section class="contact" id="contact">
   <div class="wrap narrow">
-    <p class="kicker reveal">GET STARTED</p>
-    <h2 class="reveal">Claim your <span class="gold-grad">free 7-day pilot.</span></h2>
-    <p class="section-sub reveal">Tell us about your business. We reply within one business day with your pilot plan.</p>
+    <p class="kicker reveal" data-i18n="ct.kicker">GET STARTED</p>
+    <h2 class="reveal" data-i18n="ct.title">Claim your <span class="gold-grad">free 7-day pilot.</span></h2>
+    <p class="section-sub reveal" data-i18n="ct.sub">Tell us about your business. We reply within one business day with your pilot plan.</p>
     <form id="contactForm" class="contact-form reveal">
-      <label>Your name<input name="name" type="text" required maxlength="80" placeholder="Jane Smith"></label>
-      <label>Email<input name="email" type="email" required maxlength="120" placeholder="jane@mybusiness.com"></label>
-      <label>Business name<input name="business" type="text" maxlength="120" placeholder="Smith's Auto Repair"></label>
-      <label>What should the AI handle for you?<textarea name="message" required maxlength="2000" rows="4" placeholder="We miss a lot of calls after 6pm and our Google reviews are thin…"></textarea></label>
-      <button type="submit" class="btn btn-gold btn-lg">Claim my free pilot</button>
+      <label data-i18n="ct.l1">Your name<input name="name" type="text" required maxlength="80" data-i18n-ph="ct.ph1" placeholder="Jane Smith"></label>
+      <label data-i18n="ct.l2">Email<input name="email" type="email" required maxlength="120" data-i18n-ph="ct.ph2" placeholder="jane@mybusiness.com"></label>
+      <label data-i18n="ct.l3">Business name<input name="business" type="text" maxlength="120" data-i18n-ph="ct.ph3" placeholder="Smith's Auto Repair"></label>
+      <label data-i18n="ct.l4">What should the AI handle for you?<textarea name="message" required maxlength="2000" rows="4" data-i18n-ph="ct.ph4" placeholder="We miss a lot of calls after 6pm and our Google reviews are thin…"></textarea></label>
+      <button type="submit" class="btn btn-gold btn-lg" data-i18n="ct.submit">Claim my free pilot</button>
       <p class="form-msg" id="formMsg" role="status"></p>
     </form>
-    <p class="section-sub reveal">Prefer email? <a href="mailto:support@flogloai.com">support@flogloai.com</a></p>
+    <p class="section-sub reveal"><span data-i18n="ct.prefer">Prefer email?</span> <a href="mailto:support@flogloai.com">support@flogloai.com</a></p>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot">
     <p class="logo"><img src="logo.png" alt="FloGlo AI logo" width="30" height="30">FLOGLO <span>AI</span></p>
-    <p>We make your business glow.</p>
-    <p class="fine">© 2026 FloGlo AI. Demo business "Bella's Pizzeria" is fictional.</p>
-    <p class="legal-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a></p>
+    <p data-i18n="ft.tagline">We make your business glow.</p>
+    <p class="fine" data-i18n="ft.fine">© 2026 FloGlo AI. Demo business "Bella's Pizzeria" is fictional.</p>
+    <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a></p>
    <p class="social-links">
          <a href="https://instagram.com/flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><span>@FloGloAI</span></a>
          <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@FloGloAI</span></a>
@@ -305,7 +311,7 @@
 </footer>
 
 <!-- Flo: our AI sales assistant — the product selling itself -->
-<button id="chatFab" class="chat-fab" aria-label="Chat with Flo, our AI assistant" aria-expanded="false">
+<button id="chatFab" class="chat-fab" data-i18n-aria="wg.open" aria-label="Chat with Flo, our AI assistant" aria-expanded="false">
   <img src="flo-avatar.png" alt="Flo">
 </button>
 <div class="chat-widget" id="chatWidget" hidden>
@@ -313,28 +319,29 @@
     <div class="chat-head">
       <div class="chat-avatar"><img src="flo-avatar.png" alt="Flo"></div>
       <div>
-        <p class="chat-name">Flo</p>
-        <p class="chat-status"><span class="dot"></span> FloGlo AI assistant · Online</p>
+        <p class="chat-name" data-i18n="wg.name">Flo</p>
+        <p class="chat-status" data-i18n="wg.status"><span class="dot"></span> FloGlo AI assistant · Online</p>
       </div>
-      <button class="chat-close" id="chatClose" aria-label="Close chat">×</button>
+      <button class="chat-close" id="chatClose" data-i18n-aria="wg.close" aria-label="Close chat">×</button>
     </div>
     <div class="chat-messages" id="siteChatMessages" aria-live="polite">
-      <div class="msg bot">Hey there, welcome to FloGlo AI! I'm Flo — I can show you exactly how we'd make your business glow. What kind of business are you running?</div>
+      <div class="msg bot" data-i18n="wg.greeting">Hey there, welcome to FloGlo AI! I'm Flo — I can show you exactly how we'd make your business glow. What kind of business are you running?</div>
     </div>
     <form class="chat-input" id="siteChatForm">
-      <input id="siteChatText" type="text" placeholder="Ask about pricing, the pilot…" autocomplete="off" maxlength="1000">
-      <button type="submit" class="btn btn-gold btn-sm">Send</button>
+      <input id="siteChatText" type="text" data-i18n-ph="wg.placeholder" placeholder="Ask about pricing, the pilot…" autocomplete="off" maxlength="1000">
+      <button type="submit" class="btn btn-gold btn-sm" data-i18n="wg.send">Send</button>
     </form>
   </div>
 </div>
 
 <!-- sticky mobile CTA -->
 <div class="sticky-cta" id="stickyCta">
-  <span>We make your business glow.</span>
-  <a class="btn btn-gold btn-sm" href="#contact">Free 7-day pilot</a>
+  <span data-i18n="st.text">We make your business glow.</span>
+  <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="app.js?v=10"></script>
+<script src="i18n.js?v=1"></script>
+<script src="app.js?v=11"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>
