@@ -22,12 +22,12 @@ app.use((req, res, next) => {
   // frames for video embeds; images/data for avatars and inline SVGs.
   res.setHeader('Content-Security-Policy', [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.instagram.com",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "media-src 'self' https:",
     "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://www.instagram.com",
-    "connect-src 'self' https://api.groq.com https://raw.githubusercontent.com https://www.youtube.com",
+    "connect-src 'self' https://api.groq.com https://raw.githubusercontent.com https://www.youtube.com https://www.instagram.com",
     "font-src 'self' data:",
     "object-src 'none'",
     "base-uri 'self'",
