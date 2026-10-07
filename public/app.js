@@ -24,11 +24,30 @@
     var en = window.FLOGLO_I18N.en || {};
     return en[key] || '';
   }
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
   function applyStaticStrings() {
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var k = el.getAttribute('data-i18n');
       var v = t(k);
-      if (HTML_KEYS[k]) el.innerHTML = v; else el.textContent = v;
+      if (HTML_KEYS[k]) { el.innerHTML = v; return; }
+      var keep = el.getAttribute('data-i18n-keep');
+      if (keep) {
+        var kept = el.querySelector(keep);
+        var keptHTML = kept ? kept.outerHTML : '';
+        el.innerHTML = keptHTML + escapeHtml(v);
+      } else {
+        el.textContent = v;
+      }
+    });
+    document.querySelectorAll('[data-i18n-suffix]').forEach(function (el) {
+      var suf = t(el.getAttribute('data-i18n-suffix'));
+      el.dataset.suffix = suf;
+      var target = parseInt(el.dataset.count, 10);
+      if (!isNaN(target) && el.textContent.indexOf(String(target)) !== -1) {
+        el.innerHTML = (el.dataset.prefix || '') + target + suf;
+      }
     });
     document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
@@ -494,6 +513,7 @@
       var meta = langMeta(currentLang);
       document.documentElement.lang = currentLang;
       document.documentElement.dir = meta.dir;
+      document.title = t('meta.title');
       if (cur) cur.textContent = currentLang.toUpperCase();
       menu.querySelectorAll('button').forEach(function (b) {
         b.setAttribute('aria-selected', b.dataset.lang === currentLang ? 'true' : 'false');
