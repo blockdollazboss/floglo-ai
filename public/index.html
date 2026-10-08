@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=22">
+<link rel="stylesheet" href="styles.css?v=23">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -279,6 +279,29 @@
   </div>
 </section>
 
+<section class="reviews" id="reviews">
+  <div class="wrap narrow">
+    <p class="kicker reveal" data-i18n="rv.kicker">REVIEWS</p>
+    <h2 class="reveal" data-i18n="rv.title">What customers <span class="gold-grad">say.</span></h2>
+    <p class="section-sub reveal" data-i18n="rv.sub">Real reviews from real businesses. Every review is moderated before it appears here.</p>
+    <div id="reviewsList" class="reviews-list reveal"></div>
+    <p id="reviewsEmpty" class="reviews-empty reveal" data-i18n="rv.empty">No reviews yet — yours could be the first.</p>
+    <form id="reviewForm" class="contact-form review-form reveal">
+      <h3 data-i18n="rv.ftitle">Leave a review</h3>
+      <label data-i18n="rv.l1" data-i18n-keep="input">Your name<input name="name" type="text" required maxlength="80" data-i18n-ph="rv.ph1" placeholder="Jane Smith"></label>
+      <label data-i18n="rv.l2" data-i18n-keep="input">Company<input name="company" type="text" required maxlength="120" data-i18n-ph="rv.ph2" placeholder="Smith's Auto Repair"></label>
+      <label data-i18n="rv.l3" data-i18n-keep="input">Your relationship to FloGlo AI<input name="relationship" type="text" required maxlength="120" data-i18n-ph="rv.ph3" placeholder="Customer since March"></label>
+      <label data-i18n="rv.l4" data-i18n-keep="textarea">Your review<textarea name="text" required maxlength="2000" rows="4" data-i18n-ph="rv.ph4" placeholder="Flo answers our website visitors in seconds…"></textarea></label>
+      <!-- honeypot: invisible to humans, bots fill it in -->
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0">
+      <input type="hidden" name="ts" id="reviewTs" value="">
+      <button type="submit" class="btn btn-gold btn-lg" data-i18n="rv.submit">Submit for review</button>
+      <p class="form-msg" id="reviewMsg" role="status"></p>
+      <p class="review-note" data-i18n="rv.note">Reviews are moderated and only published after approval.</p>
+    </form>
+  </div>
+</section>
+
 <section class="contact" id="contact">
   <div class="wrap narrow">
     <p class="kicker reveal" data-i18n="ct.kicker">GET STARTED</p>
@@ -343,8 +366,8 @@
   <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="i18n.js?v=5"></script>
-<script src="app.js?v=14"></script>
+<script src="i18n.js?v=6"></script>
+<script src="app.js?v=15"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>

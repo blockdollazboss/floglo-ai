@@ -260,6 +260,60 @@
       .catch(function () { cMsg.textContent = t('ct.error'); });
   });
 
+  /* ---------- reviews section ---------- */
+  (function () {
+    var list = document.getElementById('reviewsList');
+    var empty = document.getElementById('reviewsEmpty');
+    if (list) {
+      fetch('/api/reviews')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var reviews = (d && d.reviews) || [];
+          if (!reviews.length) return; // keep the empty state
+          if (empty) empty.style.display = 'none';
+          list.innerHTML = reviews.map(function (r) {
+            return '<article class="review-card">' +
+              '<div class="rc-name">' + escapeHtml(r.name) + '</div>' +
+              '<div class="rc-meta">' + escapeHtml(r.company) + ' \u00b7 ' + escapeHtml(r.relationship) + '</div>' +
+              '<p class="rc-text">' + escapeHtml(r.text).replace(/\n/g, '<br>') + '</p>' +
+              '</article>';
+          }).join('');
+        })
+        .catch(function () { /* leave the empty state */ });
+    }
+    var rForm = document.getElementById('reviewForm');
+    var rMsg = document.getElementById('reviewMsg');
+    var rTs = document.getElementById('reviewTs');
+    if (rTs) rTs.value = String(Date.now());
+    if (!rForm) return;
+    rForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      rMsg.textContent = t('rv.sending');
+      var fd = new FormData(rForm);
+      var payload = {
+        name: fd.get('name'), company: fd.get('company'),
+        relationship: fd.get('relationship'), text: fd.get('text'),
+        website: fd.get('website'), ts: fd.get('ts')
+      };
+      fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            rMsg.textContent = t('rv.success');
+            rForm.reset();
+            if (rTs) rTs.value = String(Date.now());
+          } else {
+            rMsg.textContent = (res.d && res.d.error) || t('rv.error');
+          }
+        })
+        .catch(function () { rMsg.textContent = t('rv.error'); });
+    });
+  })();
+
   /* ---------- floating site-assistant widget ---------- */
   (function () {
     var fab = document.getElementById('chatFab');

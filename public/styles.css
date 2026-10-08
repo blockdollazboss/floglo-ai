@@ -297,3 +297,14 @@ footer{border-top:1px solid var(--line)}
 /* ---- FloGlo logo cursor (v5): fully self-contained in cursor.js ----
    The custom cursor injects its own CSS/HTML at runtime (native arrow hidden,
    the logo itself is the pointer). Nothing needed here. */
+
+/* ---- Reviews section ---- */
+.reviews-list{display:grid;gap:1rem;margin:2rem 0}
+.review-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.6rem;text-align:left}
+.review-card .rc-name{font-weight:700;font-size:1.05rem}
+.review-card .rc-meta{color:var(--muted);font-size:.88rem;margin:.25rem 0 .8rem}
+.review-card .rc-text{font-size:.96rem;line-height:1.6;margin:0}
+.reviews-empty{color:var(--muted);margin:1.5rem 0}
+.review-form{margin-top:2rem}
+.review-form h3{margin:0 0 .5rem;font-size:1.2rem}
+.review-note{color:var(--muted);font-size:.85rem;margin:0}
