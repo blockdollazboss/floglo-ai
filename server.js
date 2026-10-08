@@ -449,6 +449,21 @@ app.post('/api/reviews', rateLimit, (req, res) => {
   res.json({ ok: true });
 });
 
+/* Read-only review-submission feed for the owner's alert watcher. Guarded by
+   the same bearer token as /api/leads so submissions are never public. */
+app.get('/api/review-submissions', rateLimit, (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (!LEADS_TOKEN || auth !== `Bearer ${LEADS_TOKEN}`) {
+    return res.status(404).json({ error: 'Not found.' });
+  }
+  let subs = [];
+  try {
+    subs = JSON.parse(fs.readFileSync(REVIEW_SUBMISSIONS_FILE, 'utf8'));
+    if (!Array.isArray(subs)) subs = [];
+  } catch { /* file may not exist yet */ }
+  res.json({ submissions: subs });
+});
+
 /* Featured videos for the homepage "Daily Videos" section: one native player per
    platform (Instagram, TikTok, YouTube), in that order. YouTube resolves
    automatically from the channel's public RSS feed (no API key needed), cached
