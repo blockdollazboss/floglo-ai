@@ -391,6 +391,64 @@ app.get('/api/leads', rateLimit, (req, res) => {
   res.json({ leads });
 });
 
+/* ---------------- reviews ----------------
+   Published reviews live in reviews.json (curated via repo commits — nothing
+   publishes without approval). Submissions go to review-submissions.json plus
+   stdout (survives Render's disk wipes, like leads) for the moderation queue. */
+const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
+const REVIEW_SUBMISSIONS_FILE = path.join(__dirname, 'review-submissions.json');
+
+app.get('/api/reviews', rateLimit, (req, res) => {
+  let reviews = [];
+  try {
+    const raw = JSON.parse(fs.readFileSync(REVIEWS_FILE, 'utf8'));
+    if (raw && Array.isArray(raw.reviews)) reviews = raw.reviews;
+  } catch { /* file may not exist yet */ }
+  res.json({
+    reviews: reviews.map((r) => ({
+      name: String(r.name || '').slice(0, 80),
+      company: String(r.company || '').slice(0, 120),
+      relationship: String(r.relationship || '').slice(0, 120),
+      text: String(r.text || '').slice(0, 2000),
+    })),
+  });
+});
+
+app.post('/api/reviews', rateLimit, (req, res) => {
+  const { name, company, relationship, text, website, ts } = req.body || {};
+  /* Honeypot + speed check: bots fill the hidden field or submit instantly. */
+  if (typeof website === 'string' && website.trim() !== '')
+    return res.status(400).json({ error: 'Invalid request.' });
+  const elapsed = Date.now() - parseInt(ts, 10);
+  if (!isNaN(elapsed) && elapsed < 3000)
+    return res.status(400).json({ error: 'Please take a moment to write your review.' });
+  if (typeof name !== 'string' || name.trim().length < 2 || name.trim().length > 80)
+    return res.status(400).json({ error: 'Please include your name.' });
+  if (typeof company !== 'string' || company.trim().length < 2 || company.trim().length > 120)
+    return res.status(400).json({ error: 'Please include your company.' });
+  if (typeof relationship !== 'string' || relationship.trim().length < 2 || relationship.trim().length > 120)
+    return res.status(400).json({ error: 'Please describe your relationship to FloGlo AI.' });
+  if (typeof text !== 'string' || text.trim().length < 10 || text.trim().length > 2000)
+    return res.status(400).json({ error: 'Please write a few words about your experience.' });
+
+  let subs = [];
+  try {
+    subs = JSON.parse(fs.readFileSync(REVIEW_SUBMISSIONS_FILE, 'utf8'));
+    if (!Array.isArray(subs)) subs = [];
+  } catch { /* file may not exist yet */ }
+  subs.push({
+    at: new Date().toISOString(),
+    name: name.trim(),
+    company: company.trim(),
+    relationship: relationship.trim(),
+    text: text.trim(),
+  });
+  /* Disk is wiped on deploy — also emit to stdout so submissions survive in logs. */
+  console.log('[floglo-ai] new review submission:', JSON.stringify(subs[subs.length - 1]));
+  fs.writeFileSync(REVIEW_SUBMISSIONS_FILE, JSON.stringify(subs, null, 2));
+  res.json({ ok: true });
+});
+
 /* Featured videos for the homepage "Daily Videos" section: one native player per
    platform (Instagram, TikTok, YouTube), in that order. YouTube resolves
    automatically from the channel's public RSS feed (no API key needed), cached
