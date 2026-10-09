@@ -514,10 +514,27 @@ function normTitle(s) {
     .replace(/\s+/g, ' ')
     .trim();
 }
+/* Significant-word comparison for the never-duplicate rule: catches the same
+   video posted with different per-platform suffixes, e.g.
+   "The Glow-Up Your Business Deserves | FloGlo AI" (YouTube) vs
+   "The glow-up your business deserves. Every question answered" (Instagram).
+   Two titles are the same video when every significant word of the shorter
+   one appears in the longer one. */
+const DEDUP_STOPWORDS = new Set(['the','a','an','and','or','of','to','in','on','for',
+  'your','you','my','is','are','it','its','this','that','with','by','at','as','be',
+  'we','our','us','flo','floglo','ai','flogloai']);
+function sigWords(s) {
+  return normTitle(s).split(' ').filter(w => w.length > 2 && !DEDUP_STOPWORDS.has(w));
+}
 function sameVideo(a, b) {
   const na = normTitle(a), nb = normTitle(b);
   if (!na || !nb || na.length < 8 || nb.length < 8) return false;
-  return na === nb || na.includes(nb) || nb.includes(na);
+  if (na === nb || na.includes(nb) || nb.includes(na)) return true;
+  const wa = sigWords(a), wb = sigWords(b);
+  if (wa.length < 3 || wb.length < 3) return false;
+  const [shorter, longer] = wa.length <= wb.length ? [wa, wb] : [wb, wa];
+  const inLonger = new Set(longer);
+  return shorter.every(w => inLonger.has(w));
 }
 async function latestYouTube(blockedTitles) {
   if (Date.now() - ytCache.at < 30 * 60_000 && ytCache.video) {
