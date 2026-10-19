@@ -290,5 +290,15 @@
   "proof.kicker": "PROOF, NOT PROMISES",
   "proof.title": "Show, <span class=\"gold-grad\">not claim.</span>",
   "proof.p": "No fake testimonials. No rented sports cars. Run the scanner on your own business and check our math — every finding traces to something you can verify yourself.",
-  "proof.cta": "Run the scan on my business"
+  "proof.cta": "Run the scan on my business",
+  "pr.flow": "Three steps, in order: try it free, pay once to build it, then one monthly plan keeps it running.",
+  "pr.step1": "Step 1",
+  "pr.step2": "Step 2",
+  "pr.step3": "Step 3",
+  "sc.email_t": "Get the full breakdown in your inbox",
+  "sc.email_name": "Your name",
+  "sc.email_email": "Work email",
+  "sc.email_btn": "Send my breakdown",
+  "sc.email_ok": "Sent — check your inbox.",
+  "sc.email_err": "Something went wrong — please try again."
 }
