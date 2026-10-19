@@ -680,10 +680,20 @@ async function fetchPublicSite(rawUrl) {
 const BOOKING_DOMAINS = [
   'opentable', 'resy', 'booksy', 'vagaro', 'mindbodyonline', 'squareup.com/appointments',
   'calendly', 'acuityscheduling', 'schedulicity', 'zola.com', 'theknot.com', 'weddingwire',
+  /* Online ordering counts too — for a restaurant it is the conversion path. */
+  'square.site', 'toasttab', 'chownow', 'olo.com', 'doordash',
+  'ubereats', 'grubhub', 'seamless', 'postmates',
 ];
 const BOOKING_PATHS = [
   '/book', '/booking', '/reserve', '/reservation', '/schedule', '/appointment',
   '/booknow', '/book-online', '/request-appointment',
+  '/order', '/order-online', '/online-ordering', '/ordernow', '/takeout',
+];
+/* Bot-protection challenge pages: the fetch saw a wall, not the real site.
+   Scoring checks against a challenge page produces false findings. */
+const BOT_PATTERNS = [
+  /sucuri/i, /just a moment/i, /attention required/i, /are you a robot/i,
+  /distil/i, /perimeterx/i, /datadome/i, /incapsula/i, /__cf_chl_/i,
 ];
 
 function scanChecks(html, finalUrl) {
@@ -709,18 +719,26 @@ function scanChecks(html, finalUrl) {
     const l = a.href.toLowerCase();
     return BOOKING_PATHS.some((p) => l.includes(p));
   });
-  const hasBookingText = anchors.some((a) =>
-    /book\s+(now|online|a\s+table|an?\s+appointment|your\s+visit)/i.test(a.text)
+  const hasBookingText = anchors.some(
+    (a) =>
+      /book\s+(now|online|a\s+table|an?\s+appointment|your\s+visit)/i.test(a.text) ||
+      /order\s+(online|now|pickup|ahead)/i.test(a.text)
   );
   const hasBooking = hasBookingDomain || hasBookingPath || hasBookingText;
-  const hasPhone = /href\s*=\s*["']tel:/i.test(html);
+  const hasPhoneLink = /href\s*=\s*["']tel:/i.test(html);
+  /* JSON-LD telephone: the number is published in structured data. Most templates
+     that bother with schema link the number too, and the alternative — flagging
+     "no click-to-call" when a JS-rendered tel: link exists — is the worse error. */
+  const hasPhoneSchema = /"telephone"\s*:\s*"/i.test(html);
+  const hasPhone = hasPhoneLink || hasPhoneSchema;
   const hasForm = /<form[\s>]/i.test(html);
   const hasMailto = /href\s*=\s*["']mailto:/i.test(html);
   const hasViewport = /<meta[^>]*name\s*=\s*["']viewport["']/i.test(html);
   const isHttps = finalUrl.startsWith('https://');
+  const limited = BOT_PATTERNS.some((p) => p.test(html));
   const tm = html.match(/<title[^>]*>([^<]{1,120})<\/title>/i);
   const title = tm ? tm[1].trim() : '';
-  return { host, hasBooking, hasPhone, hasForm, hasMailto, hasViewport, isHttps, title };
+  return { host, hasBooking, hasPhone, hasForm, hasMailto, hasViewport, isHttps, title, limited };
 }
 
 app.post('/api/scan', scanRateLimit, async (req, res) => {
@@ -750,48 +768,52 @@ app.post('/api/scan', scanRateLimit, async (req, res) => {
   const issues = [];
   const push = (title, detail, share) =>
     issues.push({ title, detail, monthly_impact: Math.round(base * share) });
-  if (!c.hasBooking)
-    push(
-      'No online booking',
-      `No booking link found on ${c.host}. Every "call to book" is a call that can go unanswered.`,
-      0.35
-    );
-  if (!c.hasPhone)
-    push(
-      'No click-to-call phone number',
-      `No tap-to-call link on ${c.host}. Mobile visitors will not dial a number they cannot tap.`,
-      0.1
-    );
-  if (!c.hasForm && !c.hasMailto)
-    push(
-      'No after-hours way to reach you',
-      `No contact form or email found on ${c.host}. After closing time, inquiries have nowhere to go.`,
-      0.15
-    );
-  if (!c.hasViewport)
-    push(
-      'Not mobile-friendly',
-      `No mobile viewport tag on ${c.host}. Most local searches happen on phones.`,
-      0.1
-    );
-  if (fetched.ms > 3000)
-    push(
-      'Slow website',
-      `Homepage took ${(fetched.ms / 1000).toFixed(1)}s to load. Slow pages lose visitors before they ever call.`,
-      0.1
-    );
-  if (!c.isHttps)
-    push(
-      'Site not secure (no HTTPS)',
-      `${c.host} loads over plain HTTP. Browsers warn visitors away from insecure pages.`,
-      0.05
-    );
+  /* When the fetch hit a bot-protection wall, we did not see the real site —
+     score nothing rather than manufacture false findings. */
+  if (!c.limited) {
+    if (!c.hasBooking)
+      push(
+        'No online booking or ordering',
+        `No booking or ordering link found on ${c.host}. Every "call to book" is a call that can go unanswered.`,
+        0.35
+      );
+    if (!c.hasPhone)
+      push(
+        'No click-to-call phone number',
+        `No tap-to-call link on ${c.host}. Mobile visitors will not dial a number they cannot tap.`,
+        0.1
+      );
+    if (!c.hasForm && !c.hasMailto)
+      push(
+        'No after-hours way to reach you',
+        `No contact form or email found on ${c.host}. After closing time, inquiries have nowhere to go.`,
+        0.15
+      );
+    if (!c.hasViewport)
+      push(
+        'Not mobile-friendly',
+        `No mobile viewport tag on ${c.host}. Most local searches happen on phones.`,
+        0.1
+      );
+    if (fetched.ms > 3000)
+      push(
+        'Slow website',
+        `Homepage took ${(fetched.ms / 1000).toFixed(1)}s to load. Slow pages lose visitors before they ever call.`,
+        0.1
+      );
+    if (!c.isHttps)
+      push(
+        'Site not secure (no HTTPS)',
+        `${c.host} loads over plain HTTP. Browsers warn visitors away from insecure pages.`,
+        0.05
+      );
+  }
 
   const leak = issues.reduce((s, i) => s + i.monthly_impact, 0);
   res.json({
     business: { name, website: fetched.finalUrl, page_title: c.title },
     checks: [
-      { key: 'booking', label: 'Online booking', passed: c.hasBooking, detail: c.hasBooking ? 'Booking link found' : 'No booking link found' },
+      { key: 'booking', label: 'Online booking / ordering', passed: c.hasBooking, detail: c.hasBooking ? 'Booking or ordering link found' : 'No booking or ordering link found' },
       { key: 'phone', label: 'Click-to-call phone', passed: c.hasPhone, detail: c.hasPhone ? 'Tap-to-call link found' : 'No tap-to-call link' },
       {
         key: 'contact',
@@ -806,6 +828,10 @@ app.post('/api/scan', scanRateLimit, async (req, res) => {
     issues,
     assumptions: { missed_calls_per_month: missedCalls, avg_job_value: avgJob },
     estimated_leak_monthly: leak,
+    limited: c.limited,
+    limited_note: c.limited
+      ? 'We could not fully load this website (bot protection) — these results are unverifiable and no leak was estimated.'
+      : null,
     methodology:
       'Each issue impact = missed calls/mo x avg job value x share. Shares are rough weights, not measurements — change the assumptions and the math updates.',
   });
