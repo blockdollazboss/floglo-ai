@@ -421,3 +421,6 @@ footer{border-top:1px solid var(--line)}
 .scan-email-form input{background:#0b1424;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:.8rem 1rem;font:inherit;min-width:200px;flex:1 1 200px;max-width:280px}
 .scan-email-form input:focus{outline:none;border-color:var(--gold)}
 .scan-email-form .btn{flex:0 0 auto}
+
+/* scan: bot-protected site notice */
+.scan-limited{background:rgba(255,180,60,.08);border:1px solid rgba(255,180,60,.35);border-radius:10px;padding:.9rem 1.1rem;color:#ffd9a0;font-size:.92rem;margin:1rem 0}

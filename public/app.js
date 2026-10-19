@@ -665,6 +665,9 @@
 
     function renderReport(d) {
       var permo = t('sc.permo');
+      var limitedHtml = d.limited
+        ? '<p class="scan-limited">' + esc(d.limited_note || t('sc.limited')) + '</p>'
+        : '';
       var issuesHtml = d.issues.length
         ? '<div class="scan-issues">' + d.issues.map(function (it) {
             return '<div class="scan-issue"><div><div class="si-t">' + esc(it.title) +
@@ -678,10 +681,22 @@
         '<p class="rep-est">' + esc(t('sc.est')) + ' ' + esc(t('sc.based')) + ' ' +
           d.assumptions.missed_calls_per_month + ' ' + esc(t('sc.calls')) + ' &times; ' +
           money(d.assumptions.avg_job_value) + ' ' + esc(t('sc.job')) + '.</p>' +
+        limitedHtml +
         issuesHtml +
         '<p class="scan-method">' + esc(d.methodology) + '</p>' +
         '<div class="btn-row"><a class="btn btn-gold" href="#contact" id="scanCta">' +
-          esc(t('sc.cta')) + ' &rarr;</a></div>';
+          esc(t('sc.cta')) + ' &rarr;</a></div>' +
+        '<div class="scan-email">' +
+          '<p class="scan-email-t">' + esc(t('sc.email_t')) + '</p>' +
+          '<form id="scanEmailForm" class="scan-email-form" novalidate>' +
+            '<input name="name" type="text" maxlength="80" required placeholder="' + esc(t('sc.email_name')) + '" aria-label="' + esc(t('sc.email_name')) + '">' +
+            '<input name="email" type="email" maxlength="120" required placeholder="' + esc(t('sc.email_email')) + '" aria-label="' + esc(t('sc.email_email')) + '">' +
+            '<input type="text" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0">' +
+            '<input type="hidden" name="ts" value="' + Date.now() + '">' +
+            '<button type="submit" class="btn btn-ghost">' + esc(t('sc.email_btn')) + '</button>' +
+          '</form>' +
+          '<p class="form-msg" id="scanEmailMsg" role="status"></p>' +
+        '</div>';
       reportEl.hidden = false;
       var cta = document.getElementById('scanCta');
       if (cta) cta.addEventListener('click', function () {
@@ -692,6 +707,37 @@
             ') — estimated leak ' + money(d.estimated_leak_monthly) + '/mo. I\'d like to talk about the pilot.';
         }
         if (biz && !biz.value) biz.value = d.business.name;
+      });
+      var emailForm = document.getElementById('scanEmailForm');
+      if (emailForm) emailForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var msg = document.getElementById('scanEmailMsg');
+        var fd = new FormData(emailForm);
+        var btn = emailForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        fetch('/api/scan-report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: fd.get('name'),
+            email: fd.get('email'),
+            business_name: d.business.name,
+            website: d.business.website,
+            scan: d,
+            hp: fd.get('hp'),
+            ts: fd.get('ts'),
+          }),
+        })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+          .then(function (res) {
+            btn.disabled = false;
+            msg.textContent = res.ok ? t('sc.email_ok') : (res.j && res.j.error) || t('sc.email_err');
+            if (res.ok) emailForm.reset();
+          })
+          .catch(function () {
+            btn.disabled = false;
+            msg.textContent = t('sc.email_err');
+          });
       });
     }
 
