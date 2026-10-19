@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=23">
+<link rel="stylesheet" href="styles.css?v=24">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -36,6 +36,7 @@
   <div class="nav-inner">
     <a class="logo" href="#top"><img src="logo.png" alt="FloGlo AI logo" width="34" height="34">FLOGLO <span>AI</span></a>
     <div class="nav-links">
+      <a href="#scanner" data-i18n="nav.scan">Free scan</a>
       <a href="#demo" data-i18n="nav.demo">Live demo</a>
       <a href="#services" data-i18n="nav.services">What we automate</a>
       <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
@@ -52,25 +53,65 @@
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-inner">
+  <div class="hero-inner wide">
     <div class="loop-space">
       <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" hidden>
     </div>
-    <p class="badge reveal" data-i18n="hero.badge" data-i18n-keep=".pulse"><span class="pulse"></span>AI AUTOMATION AGENCY</p>
-    <h1 class="reveal" data-i18n="hero.title">We make your business<br><span class="gold-grad">glow.</span></h1>
-    <p class="sub reveal" data-i18n="hero.sub">We build AI assistants that answer your customers, book your appointments, and chase your leads — 24/7, while you sleep. Built for local businesses. Priced for them too.</p>
-    <div class="hero-cta reveal">
-      <a class="btn btn-gold btn-lg" href="#demo" data-i18n="hero.cta1">Talk to the demo</a>
-      <a class="btn btn-ghost btn-lg" href="#contact" data-i18n="hero.cta2">Claim your free 7-day pilot</a>
-    </div>
-    <div class="stats reveal">
-      <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl" data-i18n="hero.stat1">always answering</span></div>
-      <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s" data-i18n-suffix="hero.suf_s">0</span><span class="lbl" data-i18n="hero.stat2">response time</span></div>
-      <div class="stat"><span class="num" data-count="0" data-suffix="">0</span><span class="lbl" data-i18n="hero.stat3">missed calls</span></div>
-      <div class="stat"><span class="num" data-count="7" data-suffix="-day" data-i18n-suffix="hero.suf_day">0</span><span class="lbl" data-i18n="hero.stat4">free pilot</span></div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="badge reveal" data-i18n="hero.badge" data-i18n-keep=".pulse"><span class="pulse"></span>AI AUTOMATION AGENCY</p>
+        <h1 class="reveal" data-i18n="hero.title">We make your business<br><span class="gold-grad">glow.</span></h1>
+        <p class="sub reveal" data-i18n="hero.sub">We build AI assistants that answer your customers, book your appointments, and chase your leads — 24/7, while you sleep. Built for local businesses. Priced for them too.</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-gold btn-lg" href="#scanner" data-i18n="hero.cta_scan">Scan my business</a>
+          <a class="btn btn-ghost btn-lg" href="#contact" data-i18n="hero.cta2">Claim your free 7-day pilot</a>
+        </div>
+        <div class="stats reveal">
+          <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl" data-i18n="hero.stat1">always answering</span></div>
+          <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s" data-i18n-suffix="hero.suf_s">0</span><span class="lbl" data-i18n="hero.stat2">response time</span></div>
+          <div class="stat"><span class="num" data-count="0" data-suffix="">0</span><span class="lbl" data-i18n="hero.stat3">missed calls</span></div>
+          <div class="stat"><span class="num" data-count="7" data-suffix="-day" data-i18n-suffix="hero.suf_day">0</span><span class="lbl" data-i18n="hero.stat4">free pilot</span></div>
+        </div>
+      </div>
+      <div class="loop-panel reveal" aria-hidden="true">
+        <p class="loop-title" data-i18n="dl.title">Watch Flo take a call</p>
+        <div class="loop-screen">
+          <div class="loop-state" id="loop0">
+            <div class="loop-kicker" data-i18n="dl.incoming">INCOMING CALL</div>
+            <div class="loop-ring"><span class="loop-pulse"></span><span class="loop-avatar">F</span></div>
+            <p class="loop-sub" data-i18n="dl.ringing">Ringing…</p>
+          </div>
+          <div class="loop-state" id="loop1">
+            <div class="loop-kicker cyan" data-i18n="dl.answered">FLO ANSWERED</div>
+            <div class="loop-chat">
+              <div class="loop-bubble them">Hi, Bella's — how can I help?</div>
+              <div class="loop-bubble me">Table for 2 tonight?</div>
+              <div class="loop-bubble them">7:30 PM is open — locking it in now.</div>
+            </div>
+          </div>
+          <div class="loop-state" id="loop2">
+            <div class="loop-kicker cyan" data-i18n="dl.booking">BOOKING CONFIRMED</div>
+            <div class="loop-ticket">
+              <p class="loop-big" data-i18n="dl.table">Table for 2 · Tonight 7:30 PM</p>
+              <p class="loop-sub" data-i18n="dl.name">Name captured: Sarah J.</p>
+              <p class="loop-sub" data-i18n="dl.intent">Intent: reservation</p>
+            </div>
+          </div>
+          <div class="loop-state" id="loop3">
+            <div class="loop-kicker cyan" data-i18n="dl.summary">CALL SUMMARY</div>
+            <div class="loop-ticket">
+              <p class="loop-big" data-i18n="dl.dur">Duration 2:14</p>
+              <p class="loop-sub" data-i18n="dl.followup">Follow-up text sent ✓</p>
+              <p class="loop-sub" data-i18n="dl.review">Review request queued ✓</p>
+            </div>
+          </div>
+        </div>
+        <div class="loop-dots"><i class="on"></i><i></i><i></i><i></i></div>
+        <p class="loop-cap" data-i18n="dl.cap">Flo handling a real call, on loop.</p>
+      </div>
     </div>
   </div>
-  <a class="scroll-hint" href="#demo" data-i18n-aria="hero.scroll" aria-label="Scroll to demo">↓</a>
+  <a class="scroll-hint" href="#scanner" data-i18n-aria="hero.scroll" aria-label="Scroll to scanner">↓</a>
 </header>
 
 <div class="marquee" aria-hidden="true">
@@ -79,6 +120,27 @@
     <span data-i18n="marquee.1">24/7 AI RECEPTIONIST</span><i>◆</i><span data-i18n="marquee.2">MISSED-CALL TEXT-BACK</span><i>◆</i><span data-i18n="marquee.3">REVIEW ENGINE</span><i>◆</i><span data-i18n="marquee.4">LEAD FOLLOW-UP</span><i>◆</i><span data-i18n="marquee.5">APPOINTMENT BOOKING</span><i>◆</i>
   </div>
 </div>
+
+<section class="scanner" id="scanner">
+  <div class="wrap narrow">
+    <p class="kicker reveal" data-i18n="sc.kicker">FREE BUSINESS SCAN</p>
+    <h2 class="reveal" data-i18n="sc.title">Find the money <span class="gold-grad">you're leaving on the table.</span></h2>
+    <p class="section-sub reveal" data-i18n="sc.sub">Enter your business name and website. We run real checks on your site — booking, contact options, mobile, speed — and show you what the gaps are costing you.</p>
+    <form id="scanForm" class="scan-form reveal" novalidate>
+      <input id="scanName" type="text" maxlength="80" required autocomplete="organization" data-i18n-ph="sc.name_ph" placeholder="Business name" aria-label="Business name">
+      <input id="scanWeb" type="text" maxlength="200" required inputmode="url" autocomplete="url" data-i18n-ph="sc.web_ph" placeholder="Website — yourbusiness.com" aria-label="Website">
+      <button class="btn btn-gold btn-lg" type="submit" id="scanBtn" data-i18n="sc.run">Run free scan</button>
+    </form>
+    <div class="scan-assume reveal">
+      <label data-i18n="sc.calls" data-i18n-keep="input">Missed calls/mo <input id="scanCalls" type="number" value="15" min="1" max="500"></label>
+      <label data-i18n="sc.job" data-i18n-keep="input">Avg job value $ <input id="scanJob" type="number" value="285" min="10" max="50000" step="5"></label>
+    </div>
+    <p class="scan-est reveal"><em data-i18n="sc.est">Estimate, not a promise.</em> <span data-i18n="sc.est2">Change the numbers — the math updates.</span></p>
+    <ul class="scan-checks" id="scanChecks" hidden></ul>
+    <div class="scan-report" id="scanReport" hidden></div>
+    <p class="form-msg" id="scanMsg" role="status"></p>
+  </div>
+</section>
 
 <section class="social" id="videos">
   <div class="wrap">
@@ -153,10 +215,20 @@
   <div class="wrap">
     <p class="kicker reveal" data-i18n="how.kicker">HOW IT WORKS</p>
     <h2 class="reveal" data-i18n="how.title">Live in <span class="gold-grad">7 days.</span></h2>
-    <div class="steps">
-      <div class="step reveal"><span class="step-n">1</span><h3 data-i18n="how.1t">Free pilot</h3><p data-i18n="how.1d">We install one automation on your business for 7 days. Free. You watch it work.</p></div>
-      <div class="step reveal"><span class="step-n">2</span><h3 data-i18n="how.2t">You see bookings</h3><p data-i18n="how.2d">Calls answered, tables booked, reviews collected. Real numbers, not promises.</p></div>
-      <div class="step reveal"><span class="step-n">3</span><h3 data-i18n="how.3t">You keep it</h3><p data-i18n="how.3d">Pick a plan. We manage everything — you just run your business.</p></div>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="how-step reveal" data-day="1"><span class="step-n">1</span><h3 data-i18n="how.s1t">You scan</h3><p data-i18n="how.s1d">Run the free scan above. You see exactly where calls and bookings leak — with the math shown.</p></div>
+        <div class="how-step reveal" data-day="2"><span class="step-n">2</span><h3 data-i18n="how.s2t">We build Flo</h3><p data-i18n="how.s2d">We train your AI receptionist on your menu, services, hours, and FAQs. She sounds like your best hire.</p></div>
+        <div class="how-step reveal" data-day="5"><span class="step-n">3</span><h3 data-i18n="how.s3t">You approve</h3><p data-i18n="how.s3d">Test her yourself by voice or chat. Nothing goes live until you love it.</p></div>
+        <div class="how-step reveal" data-day="7"><span class="step-n">4</span><h3 data-i18n="how.s4t">Flo goes live</h3><p data-i18n="how.s4d">She answers every call, books every job, and texts back every missed call — 24/7.</p></div>
+      </div>
+      <div class="how-sticky">
+        <div class="card how-card reveal">
+          <p class="kicker" id="howTag">DAY 1</p>
+          <h3 id="howCardT">You scan</h3>
+          <p id="howCardD">Run the free scan above. You see exactly where calls and bookings leak — with the math shown.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -218,6 +290,15 @@
   </div>
 </section>
 
+<section class="proof">
+  <div class="wrap narrow">
+    <p class="kicker reveal" data-i18n="proof.kicker">PROOF, NOT PROMISES</p>
+    <h2 class="reveal" data-i18n="proof.title">Show, <span class="gold-grad">not claim.</span></h2>
+    <p class="section-sub reveal" data-i18n="proof.p">No fake testimonials. No rented sports cars. Run the scanner on your own business and check our math — every finding traces to something you can verify yourself.</p>
+    <div class="reveal"><a class="btn btn-ghost btn-lg" href="#scanner" data-i18n="proof.cta">Run the scan on my business</a></div>
+  </div>
+</section>
+
 <section class="pricing" id="pricing">
   <div class="wrap">
     <p class="kicker reveal" data-i18n="pr.kicker">PRICING</p>
@@ -258,14 +339,12 @@
     <details class="reveal"><summary data-i18n="faq.q3">Do I need new software or hardware?</summary><p data-i18n="faq.a3">No. It plugs into the website, phone number, and calendar you already have. Nothing to install, nothing to learn.</p></details>
     <details class="reveal"><summary data-i18n="faq.q4">What happens after the free pilot?</summary><p data-i18n="faq.a4">You get a report: calls answered, bookings made, reviews collected. If the numbers don't impress you, we remove everything. No charge, no hard feelings.</p></details>
     <details class="reveal"><summary data-i18n="faq.q5">Why local businesses?</summary><p data-i18n="faq.a5">Because that's where the pain is worst — missed calls, no-shows, dead lead lists — and where automation pays for itself fastest.</p></details>
-    <details class="reveal"><summary data-i18n="faq.q6">How long does setup take?</summary><p data-i18n="faq.a6">Most pilots go live in 3–5 days. We handle everything — training, phone setup, calendar connection. You just approve the wording.</p></details>
-    <details class="reveal"><summary data-i18n="faq.q7">Am I locked into a contract?</summary><p data-i18n="faq.a7">No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime — though nobody has yet.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q6">How long does setup take?</summary><p data-i18n="faq.a6">We build and launch your pilot within 7 days — you approve everything before it goes live.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q7">Am I locked into a contract?</summary><p data-i18n="faq.a7">No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime.</p></details>
     <details class="reveal"><summary data-i18n="faq.q8">Which industries does this work for?</summary><p data-i18n="faq.a8">Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry.</p></details>
     <details class="reveal"><summary data-i18n="faq.q9">I already have front-desk staff. Why do I need this?</summary><p data-i18n="faq.a9">Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps.</p></details>
   </div>
 </section>
-
-
 
 <section class="results" id="results">
   <div class="wrap narrow">
@@ -367,8 +446,8 @@
   <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="i18n.js?v=6"></script>
-<script src="app.js?v=15"></script>
+<script src="i18n.js?v=7"></script>
+<script src="app.js?v=16"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>

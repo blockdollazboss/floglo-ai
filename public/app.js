@@ -583,10 +583,168 @@
       // refresh translated dynamic modules
       if (window.__demoLangRefresh) window.__demoLangRefresh();
       if (window.__siteChatLangRefresh) window.__siteChatLangRefresh();
+      if (window.__howLangRefresh) window.__howLangRefresh();
+      if (window.__scanLangRefresh) window.__scanLangRefresh();
     }
 
     // expose for the demo-chat module
     window.__applyLang = applyLang;
+    window.__t = t;
     applyLang();
+  })();
+
+  /* ---------- hero looping demo ---------- */
+  (function () {
+    var states = [0, 1, 2, 3].map(function (n) { return document.getElementById('loop' + n); });
+    if (!states[0]) return;
+    var dots = document.querySelectorAll('.loop-dots i');
+    var i = 0;
+    states[0].classList.add('on');
+    setInterval(function () {
+      states[i].classList.remove('on');
+      if (dots[i]) dots[i].classList.remove('on');
+      i = (i + 1) % states.length;
+      states[i].classList.add('on');
+      if (dots[i]) dots[i].classList.add('on');
+    }, 3400);
+  })();
+
+  /* ---------- how-it-works scroll choreography ---------- */
+  (function () {
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.how-step'));
+    var tag = document.getElementById('howTag');
+    var cardT = document.getElementById('howCardT');
+    var cardD = document.getElementById('howCardD');
+    if (!steps.length || !tag) return;
+    function refresh() {
+      var mid = window.innerHeight * 0.45, best = 0;
+      steps.forEach(function (s, idx) {
+        if (s.getBoundingClientRect().top < mid) best = idx;
+      });
+      steps.forEach(function (s, idx) { s.classList.toggle('on', idx === best); });
+      var h3 = steps[best].querySelector('h3');
+      var p = steps[best].querySelector('p');
+      tag.textContent = 'DAY ' + (steps[best].getAttribute('data-day') || (best + 1));
+      if (h3 && cardT) cardT.textContent = h3.textContent;
+      if (p && cardD) cardD.textContent = p.textContent;
+    }
+    window.__howLangRefresh = refresh;
+    window.addEventListener('scroll', refresh, { passive: true });
+    refresh();
+  })();
+
+  /* ---------- business scanner ---------- */
+  (function () {
+    var form = document.getElementById('scanForm');
+    if (!form) return;
+    var t = window.__t || function (k) { return k; };
+    var nameEl = document.getElementById('scanName');
+    var webEl = document.getElementById('scanWeb');
+    var btn = document.getElementById('scanBtn');
+    var callsEl = document.getElementById('scanCalls');
+    var jobEl = document.getElementById('scanJob');
+    var checksEl = document.getElementById('scanChecks');
+    var reportEl = document.getElementById('scanReport');
+    var msgEl = document.getElementById('scanMsg');
+    var lastScan = null;
+    var CHECK_KEYS = ['sc.c1', 'sc.c2', 'sc.c3', 'sc.c4', 'sc.c5'];
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function money(n) { return '$' + Number(n).toLocaleString('en-US'); }
+
+    function renderChecks(active) {
+      checksEl.innerHTML = CHECK_KEYS.map(function (k, i) {
+        var cls = i < active ? 'done' : (i === active ? 'run' : '');
+        var mark = i < active ? '&#10003;' : '';
+        return '<li class="' + cls + '"><span class="ck">' + mark + '</span><span>' + esc(t(k)) + '</span></li>';
+      }).join('');
+      checksEl.hidden = false;
+    }
+
+    function renderReport(d) {
+      var permo = t('sc.permo');
+      var issuesHtml = d.issues.length
+        ? '<div class="scan-issues">' + d.issues.map(function (it) {
+            return '<div class="scan-issue"><div><div class="si-t">' + esc(it.title) +
+              '</div><div class="si-d">' + esc(it.detail) + '</div></div><div class="si-v">&minus;' +
+              money(it.monthly_impact) + permo + '</div></div>';
+          }).join('') + '</div>'
+        : '<p class="scan-est" style="text-align:left">' + esc(t('sc.clean')) + '</p>';
+      reportEl.innerHTML =
+        '<p class="rep-kicker">' + esc(t('sc.report')) + ' — ' + esc(d.business.name) + '</p>' +
+        '<p class="rep-leak">' + money(d.estimated_leak_monthly) + '<small>' + esc(permo) + '</small></p>' +
+        '<p class="rep-est">' + esc(t('sc.est')) + ' ' + esc(t('sc.based')) + ' ' +
+          d.assumptions.missed_calls_per_month + ' ' + esc(t('sc.calls')) + ' &times; ' +
+          money(d.assumptions.avg_job_value) + ' ' + esc(t('sc.job')) + '.</p>' +
+        issuesHtml +
+        '<p class="scan-method">' + esc(d.methodology) + '</p>' +
+        '<div class="btn-row"><a class="btn btn-gold" href="#contact" id="scanCta">' +
+          esc(t('sc.cta')) + ' &rarr;</a></div>';
+      reportEl.hidden = false;
+      var cta = document.getElementById('scanCta');
+      if (cta) cta.addEventListener('click', function () {
+        var ta = document.querySelector('#contactForm textarea[name="message"]');
+        var biz = document.querySelector('#contactForm input[name="business"]');
+        if (ta && !ta.value) {
+          ta.value = 'I ran the free scan on ' + d.business.name + ' (' + d.business.website +
+            ') — estimated leak ' + money(d.estimated_leak_monthly) + '/mo. I\'d like to talk about the pilot.';
+        }
+        if (biz && !biz.value) biz.value = d.business.name;
+      });
+    }
+
+    window.__scanLangRefresh = function () {
+      if (lastScan) renderReport(lastScan);
+    };
+
+    var scanning = false;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (scanning) return;
+      var name = nameEl.value.trim();
+      var web = webEl.value.trim();
+      if (!name || !web) return;
+      scanning = true;
+      btn.disabled = true;
+      btn.textContent = t('sc.running');
+      msgEl.textContent = '';
+      reportEl.hidden = true;
+      var calls = Math.min(500, Math.max(1, parseInt(callsEl.value, 10) || 15));
+      var job = Math.min(50000, Math.max(10, parseInt(jobEl.value, 10) || 285));
+      var step = 0;
+      renderChecks(0);
+      var timer = setInterval(function () {
+        step++;
+        if (step < CHECK_KEYS.length) renderChecks(step);
+      }, 700);
+      fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ business_name: name, website: web, missed_calls_per_month: calls, avg_job_value: job }),
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          clearInterval(timer);
+          renderChecks(CHECK_KEYS.length);
+          scanning = false;
+          btn.disabled = false;
+          btn.textContent = t('sc.run');
+          if (!res.ok) {
+            msgEl.textContent = (res.d && res.d.error) || t('sc.err');
+            return;
+          }
+          lastScan = res.d;
+          setTimeout(function () { renderReport(res.d); }, 450);
+        })
+        .catch(function () {
+          clearInterval(timer);
+          scanning = false;
+          btn.disabled = false;
+          btn.textContent = t('sc.run');
+          msgEl.textContent = t('sc.err');
+        });
+    });
   })();
 })();
