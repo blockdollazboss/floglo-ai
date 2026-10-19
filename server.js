@@ -592,5 +592,224 @@ app.get('/api/latest-videos', rateLimit, async (req, res) => {
   res.json({ videos });
 });
 
+/* ================= business scanner (/api/scan) =================
+   Real checks against the visitor's own website. Nothing is fabricated:
+   every finding traces to a fetched page. Dollar figures are estimates
+   built from caller-supplied assumptions, and the math is shown. */
+const dns = require('dns').promises;
+
+const SCAN_MAX_BYTES = 1_500_000;
+const SCAN_TIMEOUT_MS = 9000;
+
+function scanRateLimit(req, res, next) {
+  const ip = req.ip || 'unknown';
+  const now = Date.now();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < 60_000);
+  if (recent.length >= 10) {
+    return res.status(429).json({ error: 'Too many scans — wait a minute and try again.' });
+  }
+  return rateLimit(req, res, next);
+}
+
+function isPrivateIP(ip) {
+  if (ip.includes(':')) {
+    const l = ip.toLowerCase();
+    return l === '::1' || l.startsWith('fc') || l.startsWith('fd') || l.startsWith('fe80');
+  }
+  const p = ip.split('.').map(Number);
+  if (p.length !== 4 || p.some((n) => Number.isNaN(n) || n < 0 || n > 255)) return true;
+  return (
+    p[0] === 10 ||
+    (p[0] === 172 && p[1] >= 16 && p[1] <= 31) ||
+    (p[0] === 192 && p[1] === 168) ||
+    p[0] === 127 ||
+    (p[0] === 169 && p[1] === 254) ||
+    p[0] === 0
+  );
+}
+
+async function fetchPublicSite(rawUrl) {
+  let url = String(rawUrl || '').trim();
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  let u;
+  try {
+    u = new URL(url);
+  } catch {
+    throw new Error('bad_url');
+  }
+  if (!['http:', 'https:'].includes(u.protocol)) throw new Error('bad_url');
+  let html = '';
+  let finalUrl = u.toString();
+  let ms = 0;
+  for (let hop = 0; hop < 4; hop++) {
+    const addrs = await dns.lookup(u.hostname, { all: true }).catch(() => null);
+    if (!addrs || !addrs.length) throw new Error('dns_fail');
+    if (addrs.some((a) => isPrivateIP(a.address))) throw new Error('blocked_host');
+    const t0 = Date.now();
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), SCAN_TIMEOUT_MS);
+    let r;
+    try {
+      r = await fetch(u.toString(), {
+        signal: ctrl.signal,
+        redirect: 'manual',
+        headers: { 'User-Agent': 'FloGloAI-scanner/1.0 (+https://flogloai.com)' },
+      });
+    } catch (e) {
+      clearTimeout(timer);
+      throw new Error('fetch_fail');
+    }
+    clearTimeout(timer);
+    ms += Date.now() - t0;
+    const loc = r.headers.get('location');
+    if (r.status >= 300 && r.status < 400 && loc) {
+      u = new URL(loc, u);
+      if (!['http:', 'https:'].includes(u.protocol)) throw new Error('bad_url');
+      finalUrl = u.toString();
+      continue;
+    }
+    if (!r.ok) throw new Error('http_' + r.status);
+    const buf = Buffer.from(await r.arrayBuffer());
+    html = buf.slice(0, SCAN_MAX_BYTES).toString('utf8');
+    finalUrl = u.toString();
+    break;
+  }
+  return { html, finalUrl, ms };
+}
+
+const BOOKING_DOMAINS = [
+  'opentable', 'resy', 'booksy', 'vagaro', 'mindbodyonline', 'squareup.com/appointments',
+  'calendly', 'acuityscheduling', 'schedulicity', 'zola.com', 'theknot.com', 'weddingwire',
+];
+const BOOKING_PATHS = [
+  '/book', '/booking', '/reserve', '/reservation', '/schedule', '/appointment',
+  '/booknow', '/book-online', '/request-appointment',
+];
+
+function scanChecks(html, finalUrl) {
+  // Booking intent is only trusted inside real links — marketing copy that
+  // merely says "book" elsewhere on the page must not count.
+  const anchors = [];
+  const are = /<a\b[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]{0,200}?)<\/a>/gi;
+  let am;
+  while ((am = are.exec(html)) !== null && anchors.length < 2000) {
+    anchors.push({ href: am[1], text: am[2].replace(/<[^>]+>/g, ' ').trim() });
+  }
+  let host = '';
+  try {
+    host = new URL(finalUrl).hostname;
+  } catch {
+    host = '';
+  }
+  const hasBookingDomain = anchors.some((a) => {
+    const l = a.href.toLowerCase();
+    return BOOKING_DOMAINS.some((d) => l.includes(d));
+  });
+  const hasBookingPath = anchors.some((a) => {
+    const l = a.href.toLowerCase();
+    return BOOKING_PATHS.some((p) => l.includes(p));
+  });
+  const hasBookingText = anchors.some((a) =>
+    /book\s+(now|online|a\s+table|an?\s+appointment|your\s+visit)/i.test(a.text)
+  );
+  const hasBooking = hasBookingDomain || hasBookingPath || hasBookingText;
+  const hasPhone = /href\s*=\s*["']tel:/i.test(html);
+  const hasForm = /<form[\s>]/i.test(html);
+  const hasMailto = /href\s*=\s*["']mailto:/i.test(html);
+  const hasViewport = /<meta[^>]*name\s*=\s*["']viewport["']/i.test(html);
+  const isHttps = finalUrl.startsWith('https://');
+  const tm = html.match(/<title[^>]*>([^<]{1,120})<\/title>/i);
+  const title = tm ? tm[1].trim() : '';
+  return { host, hasBooking, hasPhone, hasForm, hasMailto, hasViewport, isHttps, title };
+}
+
+app.post('/api/scan', scanRateLimit, async (req, res) => {
+  const name = String(req.body?.business_name || '').trim().slice(0, 80);
+  const website = String(req.body?.website || '').trim().slice(0, 200);
+  const missedCalls = Math.min(500, Math.max(1, parseInt(req.body?.missed_calls_per_month, 10) || 15));
+  const avgJob = Math.min(50000, Math.max(10, parseInt(req.body?.avg_job_value, 10) || 285));
+  if (!name) return res.status(400).json({ error: 'Business name is required.' });
+  if (!website) return res.status(400).json({ error: 'Website URL is required for the scan.' });
+
+  let fetched;
+  try {
+    fetched = await fetchPublicSite(website);
+  } catch (e) {
+    const msg =
+      {
+        bad_url: 'That URL does not look valid.',
+        dns_fail: 'Could not reach that website (DNS lookup failed).',
+        blocked_host: 'That address is not allowed.',
+        fetch_fail: 'Could not load that website (timeout). Check the URL and try again.',
+      }[e.message] || 'Could not load that website.';
+    return res.status(422).json({ error: msg });
+  }
+
+  const c = scanChecks(fetched.html, fetched.finalUrl);
+  const base = missedCalls * avgJob;
+  const issues = [];
+  const push = (title, detail, share) =>
+    issues.push({ title, detail, monthly_impact: Math.round(base * share) });
+  if (!c.hasBooking)
+    push(
+      'No online booking',
+      `No booking link found on ${c.host}. Every "call to book" is a call that can go unanswered.`,
+      0.35
+    );
+  if (!c.hasPhone)
+    push(
+      'No click-to-call phone number',
+      `No tap-to-call link on ${c.host}. Mobile visitors will not dial a number they cannot tap.`,
+      0.1
+    );
+  if (!c.hasForm && !c.hasMailto)
+    push(
+      'No after-hours way to reach you',
+      `No contact form or email found on ${c.host}. After closing time, inquiries have nowhere to go.`,
+      0.15
+    );
+  if (!c.hasViewport)
+    push(
+      'Not mobile-friendly',
+      `No mobile viewport tag on ${c.host}. Most local searches happen on phones.`,
+      0.1
+    );
+  if (fetched.ms > 3000)
+    push(
+      'Slow website',
+      `Homepage took ${(fetched.ms / 1000).toFixed(1)}s to load. Slow pages lose visitors before they ever call.`,
+      0.1
+    );
+  if (!c.isHttps)
+    push(
+      'Site not secure (no HTTPS)',
+      `${c.host} loads over plain HTTP. Browsers warn visitors away from insecure pages.`,
+      0.05
+    );
+
+  const leak = issues.reduce((s, i) => s + i.monthly_impact, 0);
+  res.json({
+    business: { name, website: fetched.finalUrl, page_title: c.title },
+    checks: [
+      { key: 'booking', label: 'Online booking', passed: c.hasBooking, detail: c.hasBooking ? 'Booking link found' : 'No booking link found' },
+      { key: 'phone', label: 'Click-to-call phone', passed: c.hasPhone, detail: c.hasPhone ? 'Tap-to-call link found' : 'No tap-to-call link' },
+      {
+        key: 'contact',
+        label: 'After-hours contact',
+        passed: c.hasForm || c.hasMailto,
+        detail: c.hasForm || c.hasMailto ? 'Contact form or email found' : 'No form or email found',
+      },
+      { key: 'mobile', label: 'Mobile-friendly', passed: c.hasViewport, detail: c.hasViewport ? 'Mobile viewport tag found' : 'No mobile viewport tag' },
+      { key: 'speed', label: 'Load speed', passed: fetched.ms <= 3000, detail: `Homepage loaded in ${(fetched.ms / 1000).toFixed(1)}s` },
+      { key: 'https', label: 'Secure (HTTPS)', passed: c.isHttps, detail: c.isHttps ? 'Serves over HTTPS' : 'Serves over plain HTTP' },
+    ],
+    issues,
+    assumptions: { missed_calls_per_month: missedCalls, avg_job_value: avgJob },
+    estimated_leak_monthly: leak,
+    methodology:
+      'Each issue impact = missed calls/mo x avg job value x share. Shares are rough weights, not measurements — change the assumptions and the math updates.',
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`[floglo-ai] listening on :${PORT}`));
