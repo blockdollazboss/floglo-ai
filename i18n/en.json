@@ -300,5 +300,6 @@
   "sc.email_email": "Work email",
   "sc.email_btn": "Send my breakdown",
   "sc.email_ok": "Sent — check your inbox.",
-  "sc.email_err": "Something went wrong — please try again."
+  "sc.email_err": "Something went wrong — please try again.",
+  "sc.limited": "We could not fully load this website (bot protection) — these results are unverifiable."
 }
