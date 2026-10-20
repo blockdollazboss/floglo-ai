@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=29">
+<link rel="stylesheet" href="styles.css?v=33">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -31,6 +31,7 @@
 <body>
 
 <canvas id="world" aria-hidden="true"></canvas>
+<div id="cursorGlow" aria-hidden="true"></div>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -52,7 +53,7 @@
   </div>
 </nav>
 
-<header class="hero" id="top">
+<header class="hero" id="top" data-parallax="0.12">
   <div class="hero-inner wide">
     <div class="loop-space">
       <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" hidden>
@@ -75,9 +76,15 @@
       </div>
       <div class="loop-wrap reveal" aria-hidden="true">
         <p class="loop-title" data-i18n="dl.title">Watch Flo take a call</p>
-        <div class="phone-loop">
-          <div class="phone-notch"></div>
-          <div class="loop-screen">
+        <div class="loop-stage">
+          <div class="ev-card ev-0 on"><b data-i18n="dl.incoming">INCOMING CALL</b><span>7:42 PM</span></div>
+          <div class="ev-card ev-1"><b data-i18n="dl.answered">FLO ANSWERED</b><span>Sarah J.</span></div>
+          <div class="phone-bevel" data-tilt data-tilt-max="7">
+            <div class="phone-body">
+              <div class="phone-screen">
+                <div class="phone-island"><span class="island-cam"><span class="island-lens"></span></span></div>
+                <div class="phone-status"><span>9:41</span><span class="ps-icons"><i class="ps-signal"></i><i class="ps-wifi"></i><i class="ps-batt"></i></span></div>
+                <div class="loop-screen">
           <div class="loop-state" id="loop0">
             <div class="loop-kicker" data-i18n="dl.incoming">INCOMING CALL</div>
             <div class="loop-ring"><span class="loop-pulse"></span><span class="loop-avatar">F</span></div>
@@ -107,7 +114,16 @@
               <p class="loop-sub" data-i18n="dl.review">Review request queued ✓</p>
             </div>
           </div>
+                </div>
+                <div class="phone-inset"></div>
+                <div class="phone-glint"></div>
+                <div class="phone-wash"></div>
+              </div>
+            </div>
+          </div>
         </div>
+          <div class="ev-card ev-2"><b data-i18n="dl.booking">BOOKING CONFIRMED</b><span>Table for 2 · 7:30 PM</span></div>
+          <div class="ev-card ev-3"><b data-i18n="dl.summary">CALL SUMMARY</b><span>2:14 · follow-up sent</span></div>
         </div>
         <div class="loop-dots"><i class="on"></i><i></i><i></i><i></i></div>
         <p class="loop-cap" data-i18n="dl.cap">Flo handling a real call, on loop.</p>
@@ -214,10 +230,10 @@
     <p class="kicker reveal" data-i18n="svc.kicker">WHAT WE AUTOMATE</p>
     <h2 class="reveal" data-i18n="svc.title">Four machines that <span class="gold-grad">print money</span><br>for local businesses.</h2>
     <div class="cards">
-      <div class="card reveal"><div class="card-icon">◉</div><h3 data-i18n="svc.1t">24/7 AI Receptionist</h3><p data-i18n="svc.1d">Answers every call, text, and website chat instantly. Books appointments straight into your calendar. Never misses a lead again.</p></div>
-      <div class="card reveal"><div class="card-icon">✦</div><h3 data-i18n="svc.2t">Missed-Call Text-Back</h3><p data-i18n="svc.2d">Missed a call? The customer gets a text in 30 seconds: "Sorry we missed you — how can we help?" 80% of business goes to whoever responds first.</p></div>
-      <div class="card reveal"><div class="card-icon">★</div><h3 data-i18n="svc.3t">Review Engine</h3><p data-i18n="svc.3d">Automatically asks happy customers for Google reviews after every job. More 5-star reviews, higher rankings, more calls.</p></div>
-      <div class="card reveal"><div class="card-icon">➤</div><h3 data-i18n="svc.4t">Lead Follow-Up</h3><p data-i18n="svc.4d">Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">◉</div><h3 data-i18n="svc.1t">24/7 AI Receptionist</h3><p data-i18n="svc.1d">Answers every call, text, and website chat instantly. Books appointments straight into your calendar. Never misses a lead again.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">✦</div><h3 data-i18n="svc.2t">Missed-Call Text-Back</h3><p data-i18n="svc.2d">Missed a call? The customer gets a text in 30 seconds: "Sorry we missed you — how can we help?" 80% of business goes to whoever responds first.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">★</div><h3 data-i18n="svc.3t">Review Engine</h3><p data-i18n="svc.3d">Automatically asks happy customers for Google reviews after every job. More 5-star reviews, higher rankings, more calls.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">➤</div><h3 data-i18n="svc.4t">Lead Follow-Up</h3><p data-i18n="svc.4d">Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
     </div>
   </div>
 </section>
@@ -228,6 +244,7 @@
     <h2 class="reveal" data-i18n="how.title">Live in <span class="gold-grad">7 days.</span></h2>
     <div class="how-grid">
       <div class="how-steps">
+        <div class="how-progress"><i id="howProgress"></i></div>
         <div class="how-step reveal" data-day="1"><span class="step-n">1</span><h3 data-i18n="how.s1t">You scan</h3><p data-i18n="how.s1d">Run the free scan above. You see exactly where calls and bookings leak — with the math shown.</p></div>
         <div class="how-step reveal" data-day="2"><span class="step-n">2</span><h3 data-i18n="how.s2t">We build Flo</h3><p data-i18n="how.s2d">We train your AI receptionist on your menu, services, hours, and FAQs. She sounds like your best hire.</p></div>
         <div class="how-step reveal" data-day="5"><span class="step-n">3</span><h3 data-i18n="how.s3t">You approve</h3><p data-i18n="how.s3d">Test her yourself by voice or chat. Nothing goes live until you love it.</p></div>
@@ -249,9 +266,9 @@
     <p class="kicker reveal" data-i18n="cmp.kicker">THE MATH</p>
     <h2 class="reveal" data-i18n="cmp.title">What standing still <span class="gold-grad">costs.</span></h2>
     <div class="cards">
-      <div class="card reveal"><div class="card-icon">✕</div><h3 data-i18n="cmp.1t">Doing nothing</h3><p data-i18n="cmp.1d">Every missed call is a customer dialing your competitor next. Thin reviews keep you buried on Google. Old quotes sit in a spreadsheet, dying quietly.</p></div>
-      <div class="card reveal"><div class="card-icon">✕</div><h3 data-i18n="cmp.2t">Hiring help</h3><p data-i18n="cmp.2d">A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
-      <div class="card reveal"><div class="card-icon">✓</div><h3 data-i18n="cmp.3t">FloGlo</h3><p data-i18n="cmp.3d">Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">✕</div><h3 data-i18n="cmp.1t">Doing nothing</h3><p data-i18n="cmp.1d">Every missed call is a customer dialing your competitor next. Thin reviews keep you buried on Google. Old quotes sit in a spreadsheet, dying quietly.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">✕</div><h3 data-i18n="cmp.2t">Hiring help</h3><p data-i18n="cmp.2d">A full-time receptionist runs about $3,000/month — and still sleeps, takes weekends off, and can't text back two hundred cold leads at once.</p></div>
+      <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">✓</div><h3 data-i18n="cmp.3t">FloGlo</h3><p data-i18n="cmp.3d">Growth is $297/month. Everything answered in under 30 seconds, 24/7. Every lead chased, every happy customer asked for a review. The 7-day pilot is free — the math isn't close.</p></div>
     </div>
     <div class="cost-table-wrap reveal">
       <h3 data-i18n="cmp.tableh">Monthly cost, side by side</h3>
@@ -316,7 +333,7 @@
     <h2 class="reveal" data-i18n="pr.title">Simple. <span class="gold-grad">No contracts.</span></h2>
     <p class="flow-sub reveal" data-i18n="pr.flow">Three steps, in order: try it free, pay once to build it, then one monthly plan keeps it running.</p>
     <div class="cards pricing-cards">
-      <div class="card price reveal">
+      <div class="card price reveal" data-tilt data-tilt-max="4">
         <span class="step-badge" data-i18n="pr.step1">Step 1</span>
         <h3 data-i18n="pr.pilot.n">Pilot</h3>
         <p class="amount" data-i18n="pr.pilot.amt">$0</p>
@@ -325,7 +342,7 @@
         <a class="btn btn-ghost" href="#contact" data-i18n="pr.pilot.cta">Start free</a>
       </div>
       <span class="flow-arrow" aria-hidden="true">→</span>
-      <div class="card price featured reveal">
+      <div class="card price featured reveal" data-tilt data-tilt-max="4">
         <span class="step-badge" data-i18n="pr.step2">Step 2</span>
         <div class="flag" data-i18n="pr.launch.flag">MOST POPULAR</div>
         <h3 data-i18n="pr.launch.n">Launch</h3>
@@ -335,7 +352,7 @@
         <a class="btn btn-gold" href="#contact" data-i18n="pr.launch.cta">Get launched</a>
       </div>
       <span class="flow-arrow" aria-hidden="true">→</span>
-      <div class="card price reveal">
+      <div class="card price reveal" data-tilt data-tilt-max="4">
         <span class="step-badge" data-i18n="pr.step3">Step 3</span>
         <h3 data-i18n="pr.growth.n">Growth</h3>
         <p class="amount" data-i18n="pr.growth.amt">$297<span class="mo" data-i18n="pr.mo">/mo</span></p>
@@ -464,7 +481,7 @@
 </div>
 
 <script src="i18n.js?v=10"></script>
-<script src="app.js?v=20"></script>
+<script src="app.js?v=22"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>
