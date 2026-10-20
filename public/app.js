@@ -856,3 +856,17 @@
   window.addEventListener('scroll', function () { requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
 })();
+
+/* ---------- live clock: phone status bars show the visitor's real time ---------- */
+(function () {
+  function tick() {
+    var d = new Date();
+    var h = d.getHours() % 12;
+    if (h === 0) h = 12;
+    var m = d.getMinutes();
+    if (m < 10) m = '0' + m;
+    document.querySelectorAll('.ps-time').forEach(function (el) { el.textContent = h + ':' + m; });
+  }
+  tick();
+  setInterval(tick, 20000);
+})();
