@@ -426,22 +426,90 @@ footer{border-top:1px solid var(--line)}
 .scan-limited{background:rgba(255,180,60,.08);border:1px solid rgba(255,180,60,.35);border-radius:10px;padding:.9rem 1.1rem;color:#ffd9a0;font-size:.92rem;margin:1rem 0}
 
 /* hero demo in a phone frame */
-.loop-wrap{max-width:380px;margin-left:auto;margin-right:auto}
+.loop-wrap{max-width:290px;margin-left:auto;margin-right:auto}
 .loop-wrap .loop-title{text-align:center;margin-bottom:.8rem}
-.phone-loop{position:relative;background:#000;border:1px solid #22304d;border-radius:3rem;padding:1rem;box-shadow:0 0 0 10px #0a1020,0 0 90px rgba(62,226,255,.18),0 30px 80px rgba(0,0,0,.6)}
-.phone-loop::before,.phone-loop::after{content:"";position:absolute;left:-3px;width:3px;border-radius:2px;background:#22304d}
-.phone-loop::before{top:120px;height:56px}
-.phone-loop::after{top:190px;height:90px}
-.phone-loop .phone-notch{top:1rem}
-.phone-loop .loop-screen{border-radius:2.2rem;min-height:330px}
-.phone-loop .loop-state{padding-top:3.2rem}
+/* LAYER 1: metallic bevel — 1px gradient catching light */
+.phone-bevel{position:relative;padding:1px;border-radius:3rem;background:linear-gradient(135deg,#5a6a85 0%,#0a0f1c 40%,#0a0f1c 60%,#4a5a75 100%);box-shadow:0 1px 2px rgba(0,0,0,.18),0 2px 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.1),0 12px 24px rgba(0,0,0,.08),0 16px 32px rgba(0,0,0,.07),0 24px 48px rgba(0,0,0,.06),0 0 70px rgba(62,226,255,.14)}
+/* LAYER 1b: dark matte casing */
+.phone-body{position:relative;padding:9px;border-radius:calc(3rem - 1px);background:#141414}
+/* LAYER 2: screen — clipped, with depth ring */
+.phone-screen{position:relative;border-radius:2.4rem;overflow:hidden;background:#04070f;line-height:0}
+.phone-inset{position:absolute;inset:0;border-radius:2.4rem;box-shadow:inset 0 0 4px 2px rgba(0,0,0,.55);pointer-events:none;z-index:8}
+/* LAYER 3: dynamic island with camera */
+.phone-island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:96px;height:26px;border-radius:999px;background:#0a0a0a;z-index:7;line-height:0}
+.island-cam{position:absolute;top:50%;right:12px;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#1c1c1c 0%,#050505 100%);box-shadow:inset 0 0 1px .5px rgba(255,255,255,.1)}
+.island-lens{position:absolute;inset:3px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#2a2a2a 0%,#0a0a0a 60%,#050505 100%)}
+.island-lens::after{content:"";position:absolute;top:20%;left:25%;width:28%;height:28%;border-radius:50%;background:rgba(255,255,255,.14)}
+/* LAYER 4: glass — sharp glint + soft wash */
+.phone-glint{position:absolute;top:-25%;left:-25%;right:-25%;bottom:-25%;background:linear-gradient(155deg,rgba(255,255,255,.09) 0%,rgba(255,255,255,.09) 32%,rgba(255,255,255,0) 32%);pointer-events:none;z-index:9}
+.phone-wash{position:absolute;inset:3px;background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,0) 55%);pointer-events:none;z-index:9;border-radius:2.3rem}
+/* side buttons */
+.phone-bevel::before,.phone-bevel::after{content:"";position:absolute;width:3px;border-radius:2px;background:linear-gradient(90deg,#3a4a63,#141c2c)}
+.phone-bevel::before{left:-4px;top:110px;height:64px}
+.phone-bevel::after{right:-4px;top:130px;height:88px}
+.phone-screen .loop-screen{border-radius:0;min-height:520px;line-height:1.6}
+.phone-screen .loop-state{padding-top:3.4rem}
+.phone-screen .loop-big{font-size:1.25rem}
+.phone-screen .phone-status{top:1rem;left:1.4rem;right:1.4rem}
 .loop-wrap .loop-dots{margin-top:1rem;text-align:center}
 .loop-wrap .loop-cap{text-align:center}
 .scan-empty{color:#8fa2ba;text-align:center;padding:2rem 1rem;font-size:1.02rem}
 
 /* scan report in a laptop frame */
-.laptop{max-width:780px;margin:2.2rem auto 0}
-.laptop-screen{background:#000;border:1px solid #22304d;border-radius:1.2rem 1.2rem 0 0;padding:.8rem;box-shadow:0 0 70px rgba(62,226,255,.12),0 30px 80px rgba(0,0,0,.5)}
-.laptop-screen .scan-report{margin-top:0;border-radius:.7rem}
-.laptop-base{height:14px;background:linear-gradient(180deg,#22304d,#0a1020);border-radius:0 0 1.2rem 1.2rem;position:relative}
-.laptop-base::after{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:6px;background:#04070f;border-radius:0 0 8px 8px}
+.laptop{max-width:720px;margin:2.2rem auto 0;position:relative}
+/* aluminum lid: metallic edge + dark bezel */
+.laptop-screen{background:linear-gradient(135deg,#3d4c66 0%,#0b1120 30%,#0b1120 70%,#33425c 100%);border-radius:1rem 1rem 0 0;padding:10px 10px 0;position:relative;box-shadow:0 1px 2px rgba(0,0,0,.2),0 4px 12px rgba(0,0,0,.18),0 12px 32px rgba(0,0,0,.16),0 24px 64px rgba(0,0,0,.14),0 0 60px rgba(62,226,255,.08)}
+.laptop-screen::before{content:"";position:absolute;top:3px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2a3a55,#0a0f1c);z-index:3}
+.laptop-screen .scan-report{margin-top:0;border-radius:.5rem .5rem 0 0;position:relative;overflow:hidden}
+/* screen glass: inset depth + glint */
+.laptop-screen .scan-report::after{content:"";position:absolute;inset:0;border-radius:.5rem .5rem 0 0;box-shadow:inset 0 0 4px 2px rgba(0,0,0,.5);pointer-events:none}
+.laptop-screen .scan-report::before{content:"";position:absolute;top:-30%;left:-30%;right:-30%;height:70%;background:linear-gradient(155deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.06) 40%,rgba(255,255,255,0) 40%);pointer-events:none;z-index:2}
+/* base: wedge with keyboard deck highlight */
+.laptop-base{height:22px;background:linear-gradient(180deg,#46586f 0%,#1a2436 55%,#0b1120 100%);border-radius:3px 3px 1.1rem 1.1rem;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.laptop-base::before{content:"";position:absolute;top:0;left:8%;right:8%;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);border-radius:2px}
+.laptop-base::after{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:140px;height:8px;background:#04070f;border-radius:0 0 10px 10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+
+/* phone status bar */
+.phone-status{position:absolute;top:1.55rem;left:1.9rem;right:1.9rem;display:flex;justify-content:space-between;align-items:center;z-index:6;color:#fff;font-size:.78rem;font-weight:700;pointer-events:none}
+.ps-icons{display:flex;align-items:center;gap:.35rem}
+.ps-signal{width:16px;height:10px;background:linear-gradient(90deg,#fff 70%,rgba(255,255,255,.3) 70%);clip-path:polygon(0 100%,0 60%,25% 60%,25% 100%,30% 100%,30% 40%,55% 40%,55% 100%,60% 100%,60% 20%,85% 20%,85% 100%,90% 100%,90% 0,100% 0,100% 100%)}
+.ps-wifi{width:14px;height:10px;border:2px solid #fff;border-top:none;border-left-color:transparent;border-right-color:transparent;border-radius:0 0 10px 10px;position:relative}
+.ps-wifi::after{content:"";position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:#fff;border-radius:50%}
+.ps-batt{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative}
+.ps-batt::before{content:"";position:absolute;inset:2px 4px 2px 2px;background:#fff;border-radius:1px}
+.ps-batt::after{content:"";position:absolute;top:3px;right:-4px;width:2.5px;height:5px;background:#fff;border-radius:0 2px 2px 0}
+
+/* floating event cards synced to the loop */
+.loop-stage{position:relative}
+.ev-card{position:absolute;z-index:5;background:#0d1528;border:1px solid #1e2a45;border-radius:14px;padding:.7rem 1rem;min-width:150px;box-shadow:0 14px 40px rgba(0,0,0,.45);opacity:.38;transform:scale(.94);transition:opacity .4s ease,transform .4s ease,border-color .4s ease,box-shadow .4s ease;pointer-events:none}
+.ev-card b{display:block;font-size:.68rem;letter-spacing:.14em;color:#8fb8d8;font-weight:800}
+.ev-card span{font-size:.85rem;color:#dbe7f7}
+.ev-card.on{opacity:1;transform:scale(1);border-color:#3ee2ff;box-shadow:0 0 34px rgba(62,226,255,.35),0 14px 40px rgba(0,0,0,.45)}
+.ev-card.on b{color:#3ee2ff}
+.ev-0{top:8%;left:-150px;animation:floaty 5s ease-in-out infinite}
+.ev-1{top:40%;left:-165px;animation:floaty 6s ease-in-out .8s infinite}
+.ev-2{top:8%;right:-150px;animation:floaty 5.5s ease-in-out .4s infinite}
+.ev-3{top:40%;right:-165px;animation:floaty 6.5s ease-in-out 1.2s infinite}
+@keyframes floaty{0%,100%{margin-top:0}50%{margin-top:-10px}}
+@media (max-width:1200px){.ev-card{display:none}}
+@media (max-width:1100px){.ev-card{display:none}}
+
+/* how-it-works progress line (fills as you scroll) */
+.how-steps{position:relative}
+.how-progress{position:absolute;left:21px;top:0;bottom:0;width:3px;background:rgba(62,226,255,.12);border-radius:3px;overflow:hidden}
+.how-progress i{display:block;width:100%;height:0;background:linear-gradient(180deg,#3ee2ff,#9beaff);border-radius:3px;transition:height .35s ease;box-shadow:0 0 12px rgba(62,226,255,.6)}
+.how-step{padding-left:4.2rem!important;position:relative}
+.how-step .step-n{position:absolute;left:0;top:2.2rem}
+@media (max-width:860px){.how-progress{display:none}.how-step{padding-left:0!important}.how-step .step-n{position:static}}
+
+/* ---- site-wide mouse + scroll reactions ---- */
+#cursorGlow{position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(62,226,255,.07) 0%,rgba(62,226,255,.025) 40%,transparent 70%);transform:translate(-9999px,-9999px)}
+[data-tilt]{transform-style:preserve-3d;will-change:transform;transition:transform .25s ease-out}
+.tilt-inner{transform:translateZ(30px)}
+.nav.scrolled{background:rgba(5,9,20,.94);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+[data-parallax]{will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  #cursorGlow{display:none}
+  [data-tilt]{transform:none!important}
+}
+@media (hover:none){#cursorGlow{display:none}}
