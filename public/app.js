@@ -598,14 +598,17 @@
     var states = [0, 1, 2, 3].map(function (n) { return document.getElementById('loop' + n); });
     if (!states[0]) return;
     var dots = document.querySelectorAll('.loop-dots i');
+    var cards = [0, 1, 2, 3].map(function (n) { return document.querySelector('.ev-' + n); });
     var i = 0;
     states[0].classList.add('on');
     setInterval(function () {
       states[i].classList.remove('on');
       if (dots[i]) dots[i].classList.remove('on');
+      if (cards[i]) cards[i].classList.remove('on');
       i = (i + 1) % states.length;
       states[i].classList.add('on');
       if (dots[i]) dots[i].classList.add('on');
+      if (cards[i]) cards[i].classList.add('on');
     }, 3400);
   })();
 
@@ -622,6 +625,8 @@
         if (s.getBoundingClientRect().top < mid) best = idx;
       });
       steps.forEach(function (s, idx) { s.classList.toggle('on', idx === best); });
+      var prog = document.getElementById('howProgress');
+      if (prog) prog.style.height = ((best + 1) / steps.length * 100) + '%';
       var h3 = steps[best].querySelector('h3');
       var p = steps[best].querySelector('p');
       tag.textContent = 'DAY ' + (steps[best].getAttribute('data-day') || (best + 1));
@@ -793,4 +798,61 @@
         });
     });
   })();
+})();
+
+/* ---------- site-wide mouse + scroll reactions ---------- */
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  var glow = document.getElementById('cursorGlow');
+  var mx = -9999, my = -9999, gx = -9999, gy = -9999;
+  var tiltEls = Array.prototype.slice.call(document.querySelectorAll('[data-tilt]'));
+  var plxEls = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  var nav = document.querySelector('.nav');
+  var ticking = false;
+
+  document.addEventListener('mousemove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+
+  function update() {
+    ticking = false;
+    /* cursor glow follows with easing */
+    gx += (mx - gx) * 0.12; gy += (my - gy) * 0.12;
+    if (glow) glow.style.transform = 'translate(' + gx + 'px,' + gy + 'px)';
+
+    /* 3D tilt for each tilt target */
+    tiltEls.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      var dx = (mx - cx) / (r.width / 2), dy = (my - cy) / (r.height / 2);
+      var max = parseFloat(el.getAttribute('data-tilt-max') || 6);
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 2.2 || mx < 0) {
+        el.style.transform = '';
+        return;
+      }
+      var rx = Math.max(-1, Math.min(1, dy)) * -max;
+      var ry = Math.max(-1, Math.min(1, dx)) * max;
+      var fade = Math.max(0, 1 - dist / 2.2);
+      el.style.transform = 'perspective(900px) rotateX(' + (rx * fade).toFixed(2) + 'deg) rotateY(' + (ry * fade).toFixed(2) + 'deg)';
+    });
+  }
+
+  /* scroll: nav state + parallax */
+  var lastY = -1;
+  function onScroll() {
+    var y = window.scrollY;
+    if (y === lastY) return;
+    lastY = y;
+    if (nav) nav.classList.toggle('scrolled', y > 40);
+    plxEls.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute('data-parallax') || 0.1);
+      el.style.transform = 'translateY(' + (y * speed).toFixed(1) + 'px)';
+    });
+  }
+  window.addEventListener('scroll', function () { requestAnimationFrame(onScroll); }, { passive: true });
+  onScroll();
 })();
