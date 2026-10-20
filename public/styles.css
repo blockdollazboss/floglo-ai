@@ -448,8 +448,15 @@ footer{border-top:1px solid var(--line)}
 
 /* scan report in a real laptop photo */
 .device-laptop{max-width:720px;margin:2.2rem auto 0;position:relative}
-.device-lscreen{position:absolute;left:7.09%;top:3.59%;width:84.40%;height:70.77%;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,#0a1428,#070d1d);box-shadow:inset 0 0 4px 2px rgba(0,0,0,.5)}
-.device-lscreen .scan-report{margin-top:0;border:none;border-radius:0;height:100%;overflow-y:auto;padding:1.5rem 1.7rem;background:transparent}
+.device-lscreen{position:absolute;left:7.09%;top:3.59%;width:84.40%;height:70.77%;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,#0a1428,#070d1d);box-shadow:inset 0 0 4px 2px rgba(0,0,0,.5);display:flex;flex-direction:column}
+.mac-bar{flex:none;height:27px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:rgba(8,13,26,.94);border-bottom:1px solid rgba(148,184,220,.16);color:#e9f3fd;font-size:12px;position:relative;z-index:5}
+.mac-app{font-weight:700;display:flex;align-items:center;gap:7px}
+.mac-logo{width:15px;height:15px;display:block;animation:flow-spin 32s linear infinite}
+@media(prefers-reduced-motion:reduce){.mac-logo{animation:none}}
+.mac-ai{color:var(--gold)}
+.mac-right{display:flex;align-items:center;gap:9px}
+.mac-clock{font-weight:600;white-space:nowrap}
+.device-lscreen .scan-report{margin-top:0;border:none;border-radius:0;flex:1;min-height:0;overflow-y:auto;padding:1.4rem 1.7rem;background:transparent}
 
 /* phone status bar */
 .phone-status{position:absolute;top:1.55rem;left:1.9rem;right:1.9rem;display:flex;justify-content:space-between;align-items:center;z-index:8;color:#fff;font-size:.78rem;font-weight:700;pointer-events:none}
