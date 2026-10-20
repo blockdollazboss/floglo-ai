@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=33">
+<link rel="stylesheet" href="styles.css?v=35">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -79,9 +79,9 @@
         <div class="loop-stage">
           <div class="ev-card ev-0 on"><b data-i18n="dl.incoming">INCOMING CALL</b><span>7:42 PM</span></div>
           <div class="ev-card ev-1"><b data-i18n="dl.answered">FLO ANSWERED</b><span>Sarah J.</span></div>
-          <div class="phone-bevel" data-tilt data-tilt-max="7">
-            <div class="phone-body">
-              <div class="phone-screen">
+          <div class="device-phone" data-tilt data-tilt-max="7">
+            <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true">
+            <div class="device-screen">
                 <div class="phone-island"><span class="island-cam"><span class="island-lens"></span></span></div>
                 <div class="phone-status"><span>9:41</span><span class="ps-icons"><i class="ps-signal"></i><i class="ps-wifi"></i><i class="ps-batt"></i></span></div>
                 <div class="loop-screen">
@@ -115,13 +115,8 @@
             </div>
           </div>
                 </div>
-                <div class="phone-inset"></div>
-                <div class="phone-glint"></div>
-                <div class="phone-wash"></div>
               </div>
             </div>
-          </div>
-        </div>
           <div class="ev-card ev-2"><b data-i18n="dl.booking">BOOKING CONFIRMED</b><span>Table for 2 · 7:30 PM</span></div>
           <div class="ev-card ev-3"><b data-i18n="dl.summary">CALL SUMMARY</b><span>2:14 · follow-up sent</span></div>
         </div>
@@ -156,14 +151,14 @@
     </div>
     <p class="scan-est reveal"><em data-i18n="sc.est">Estimate, not a promise.</em> <span data-i18n="sc.est2">Change the numbers — the math updates.</span></p>
     <ul class="scan-checks" id="scanChecks" hidden></ul>
-    <div class="laptop" id="scanLaptop">
-      <div class="laptop-screen">
+    <div class="device-laptop" id="scanLaptop">
+      <img class="device-frame" src="/laptop-frame.webp" alt="" aria-hidden="true">
+      <div class="device-lscreen">
         <div class="scan-report" id="scanReport">
           <p class="rep-kicker">YOUR SCAN RESULTS</p>
           <p class="scan-empty">Run the free scan above — your personalized report lands here.</p>
         </div>
       </div>
-      <div class="laptop-base"></div>
     </div>
     <p class="form-msg" id="scanMsg" role="status"></p>
   </div>
@@ -197,9 +192,12 @@
       <button class="chip industry-chip" data-industry="dental" data-i18n="ind.dental">Dental</button>
       <button class="chip industry-chip" data-industry="autorepair" data-i18n="ind.autorepair">Auto Repair</button>
     </div>
-    <div class="phone reveal">
-      <div class="phone-notch"></div>
-      <div class="chat-shell">
+    <div class="phone device-phone demo-device reveal">
+      <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true">
+      <div class="device-screen">
+        <div class="phone-island"><span class="island-cam"><span class="island-lens"></span></span></div>
+        <div class="phone-status"><span>9:41</span><span class="ps-icons"><i class="ps-signal"></i><i class="ps-wifi"></i><i class="ps-batt"></i></span></div>
+        <div class="chat-shell">
         <div class="chat-head">
           <div class="chat-avatar">F</div>
           <div>
@@ -214,6 +212,7 @@
           <input id="chatText" type="text" data-i18n-ph="demo.placeholder" placeholder="Text Flo something…" autocomplete="off" maxlength="1000">
           <button type="submit" class="btn btn-gold btn-sm" data-i18n="demo.send">Send</button>
         </form>
+        </div>
       </div>
     </div>
     <div class="demo-prompts reveal">
