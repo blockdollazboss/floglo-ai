@@ -645,6 +645,7 @@
     var jobEl = document.getElementById('scanJob');
     var checksEl = document.getElementById('scanChecks');
     var reportEl = document.getElementById('scanReport');
+    var laptopEl = document.getElementById('scanLaptop');
     var msgEl = document.getElementById('scanMsg');
     var lastScan = null;
     var CHECK_KEYS = ['sc.c1', 'sc.c2', 'sc.c3', 'sc.c4', 'sc.c5'];
@@ -697,7 +698,7 @@
           '</form>' +
           '<p class="form-msg" id="scanEmailMsg" role="status"></p>' +
         '</div>';
-      reportEl.hidden = false;
+      if (laptopEl) laptopEl.hidden = false;
       var cta = document.getElementById('scanCta');
       if (cta) cta.addEventListener('click', function () {
         var ta = document.querySelector('#contactForm textarea[name="message"]');
@@ -756,7 +757,7 @@
       btn.disabled = true;
       btn.textContent = t('sc.running');
       msgEl.textContent = '';
-      reportEl.hidden = true;
+      if (laptopEl) laptopEl.hidden = true;
       var calls = Math.min(500, Math.max(1, parseInt(callsEl.value, 10) || 15));
       var job = Math.min(50000, Math.max(10, parseInt(jobEl.value, 10) || 285));
       var step = 0;

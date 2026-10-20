@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=27">
+<link rel="stylesheet" href="styles.css?v=28">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -73,7 +73,8 @@
           <div class="stat"><span class="num" data-count="7" data-suffix="-day" data-i18n-suffix="hero.suf_day">0</span><span class="lbl" data-i18n="hero.stat4">free pilot</span></div>
         </div>
       </div>
-      <div class="loop-panel reveal" aria-hidden="true">
+      <div class="loop-panel phone-loop reveal" aria-hidden="true">
+        <div class="phone-notch"></div>
         <p class="loop-title" data-i18n="dl.title">Watch Flo take a call</p>
         <div class="loop-screen">
           <div class="loop-state" id="loop0">
@@ -137,7 +138,12 @@
     </div>
     <p class="scan-est reveal"><em data-i18n="sc.est">Estimate, not a promise.</em> <span data-i18n="sc.est2">Change the numbers — the math updates.</span></p>
     <ul class="scan-checks" id="scanChecks" hidden></ul>
-    <div class="scan-report" id="scanReport" hidden></div>
+    <div class="laptop" id="scanLaptop" hidden>
+      <div class="laptop-screen">
+        <div class="scan-report" id="scanReport"></div>
+      </div>
+      <div class="laptop-base"></div>
+    </div>
     <p class="form-msg" id="scanMsg" role="status"></p>
   </div>
 </section>
@@ -453,7 +459,7 @@
 </div>
 
 <script src="i18n.js?v=10"></script>
-<script src="app.js?v=18"></script>
+<script src="app.js?v=19"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>
