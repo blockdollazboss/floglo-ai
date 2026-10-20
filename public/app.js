@@ -866,6 +866,11 @@
     var m = d.getMinutes();
     if (m < 10) m = '0' + m;
     document.querySelectorAll('.ps-time').forEach(function (el) { el.textContent = h + ':' + m; });
+    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var ap = d.getHours() >= 12 ? 'PM' : 'AM';
+    var mac = days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + '  ' + h + ':' + m + ' ' + ap;
+    document.querySelectorAll('.mac-clock').forEach(function (el) { el.textContent = mac; });
   }
   tick();
   setInterval(tick, 20000);
