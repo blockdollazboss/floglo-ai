@@ -349,5 +349,17 @@
   "hear.btn": "点按收听 Flo",
   "hear.note": "Flo 的真实声音——和您的客户听到的一模一样。",
   "ft.vsrosie": "FloGlo vs Rosie",
-  "ft.vsocc": "FloGlo vs OnCallClerk"
+  "ft.vsocc": "FloGlo vs OnCallClerk",
+  "cmp.full": "完整的正面对比:",
+  "ft.vssmith": "FloGlo vs Smith.ai",
+  "svc.tools": "围绕您已经在用的工具构建——您的网站、您的电话号码、您的日历。无需推倒重来。无需学习新东西。",
+  "ct.textonly": "仅短信——请勿来电:(347) 671-7116",
+  "faq.q10": "FloGlo 与 Rosie 或 Smith.ai 有什么不同?",
+  "faq.a10": "一个包含一切的固定价格——没有按分钟或按通话的计时器,没有静默自动升级,没有附加项菜单。查看完整对比:<a href=\"vs-rosie.html\">FloGlo vs Rosie</a> 和 <a href=\"vs-smith.html\">FloGlo vs Smith.ai</a>。",
+  "faq.q11": "如果试点对我的业务不起作用怎么办?",
+  "faq.a11": "那您就什么都不用付。试点免费,$750 的一次性建设费只在结果报告说服您之后才收取,而且报告无论如何都归您。如果您决定离开,我们会移除一切——不收费,不勉强。",
+  "sc.free": "扫描免费,无需邮箱。详细的书面分析报告是可选的——只有您要求时才会发送。",
+  "videos.follow": "关注每日视频:",
+  "ui.skip": "跳到内容",
+  "ui.top": "回到顶部"
 }

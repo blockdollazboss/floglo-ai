@@ -349,5 +349,17 @@
   "hear.btn": "Toque para ouvir a Flo",
   "hear.note": "A voz real da Flo — a mesma que os seus clientes ouvem.",
   "ft.vsrosie": "FloGlo vs Rosie",
-  "ft.vsocc": "FloGlo vs OnCallClerk"
+  "ft.vsocc": "FloGlo vs OnCallClerk",
+  "cmp.full": "Comparações completas, frente a frente:",
+  "ft.vssmith": "FloGlo vs Smith.ai",
+  "svc.tools": "Construído em torno das ferramentas que você já usa — seu site, seu número de telefone, sua agenda. Nada para arrancar. Nada de novo para aprender.",
+  "ct.textonly": "Somente mensagens de texto — sem ligações: (347) 671-7116",
+  "faq.q10": "Como a FloGlo é diferente da Rosie ou da Smith.ai?",
+  "faq.a10": "Um preço fixo com tudo incluído — sem medidores por minuto ou por chamada, sem upgrades automáticos silenciosos, sem menu de adicionais. Veja as comparações completas: <a href=\"vs-rosie.html\">FloGlo vs Rosie</a> e <a href=\"vs-smith.html\">FloGlo vs Smith.ai</a>.",
+  "faq.q11": "E se o piloto não funcionar para o meu negócio?",
+  "faq.a11": "Então você não paga nada. O piloto é gratuito, a taxa única de $750 só vence depois que o relatório de resultados convencer você, e o relatório fica com você de qualquer forma. Se desistir, removemos tudo — sem custo, sem ressentimentos.",
+  "sc.free": "A análise é gratuita e não precisa de e-mail. O relatório escrito detalhado é opcional — só se você pedir.",
+  "videos.follow": "Siga os vídeos diários:",
+  "ui.skip": "Pular para o conteúdo",
+  "ui.top": "Voltar ao topo"
 }

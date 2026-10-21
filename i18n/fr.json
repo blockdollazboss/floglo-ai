@@ -349,5 +349,17 @@
   "hear.btn": "Touchez pour écouter Flo",
   "hear.note": "La vraie voix de Flo — la même que celle qu'entendent vos clients.",
   "ft.vsrosie": "FloGlo vs Rosie",
-  "ft.vsocc": "FloGlo vs OnCallClerk"
+  "ft.vsocc": "FloGlo vs OnCallClerk",
+  "cmp.full": "Comparaisons complètes, face à face :",
+  "ft.vssmith": "FloGlo vs Smith.ai",
+  "svc.tools": "Conçu autour des outils que vous utilisez déjà — votre site web, votre numéro de téléphone, votre agenda. Rien à remplacer. Rien de nouveau à apprendre.",
+  "ct.textonly": "SMS uniquement — pas d'appels : (347) 671-7116",
+  "faq.q10": "En quoi FloGlo diffère-t-elle de Rosie ou Smith.ai ?",
+  "faq.a10": "Un prix unique et fixe, tout inclus — aucun compteur à la minute ou à l'appel, aucune montée automatique silencieuse, aucun menu d'options. Voir les comparaisons complètes : <a href=\"vs-rosie.html\">FloGlo vs Rosie</a> et <a href=\"vs-smith.html\">FloGlo vs Smith.ai</a>.",
+  "faq.q11": "Et si le pilote ne fonctionne pas pour mon entreprise ?",
+  "faq.a11": "Alors vous ne payez rien. Le pilote est gratuit, les frais uniques de 750 $ ne sont dus qu'après que le rapport de résultats vous a convaincu, et vous gardez le rapport dans tous les cas. Si vous partez, nous retirons tout — sans frais, sans rancune.",
+  "sc.free": "Le scan est gratuit et ne demande aucun e-mail. Le rapport écrit détaillé est facultatif — seulement si vous le demandez.",
+  "videos.follow": "Suivez les vidéos quotidiennes :",
+  "ui.skip": "Aller au contenu",
+  "ui.top": "Retour en haut"
 }

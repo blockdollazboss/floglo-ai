@@ -349,5 +349,17 @@
   "hear.btn": "Tap to hear Flo",
   "hear.note": "Flo's real voice — the same one your customers hear.",
   "ft.vsrosie": "FloGlo vs Rosie",
-  "ft.vsocc": "FloGlo vs OnCallClerk"
+  "ft.vsocc": "FloGlo vs OnCallClerk",
+  "cmp.full": "Full head-to-head breakdowns:",
+  "ft.vssmith": "FloGlo vs Smith.ai",
+  "svc.tools": "Built around the tools you already use — your website, your phone number, your calendar. Nothing to rip out. Nothing new to learn.",
+  "ct.textonly": "Text only — no calls: (347) 671-7116",
+  "faq.q10": "How is FloGlo different from Rosie or Smith.ai?",
+  "faq.a10": "One flat price with everything included — no per-minute or per-call meters, no silent auto-upgrades, no add-on menu. See the full breakdowns: <a href=\"vs-rosie.html\">FloGlo vs Rosie</a> and <a href=\"vs-smith.html\">FloGlo vs Smith.ai</a>.",
+  "faq.q11": "What if the pilot doesn't work for my business?",
+  "faq.a11": "Then you pay nothing. The pilot is free, the $750 build fee is only due after the results report convinces you, and you keep the report either way. If you walk away, we remove everything — no charge, no hard feelings.",
+  "sc.free": "The scan is free and needs no email. The detailed written breakdown is optional — only if you ask for it.",
+  "videos.follow": "Follow the daily videos:",
+  "ui.skip": "Skip to content",
+  "ui.top": "Back to top"
 }

@@ -349,5 +349,17 @@
   "hear.btn": "Toca para escuchar a Flo",
   "hear.note": "La voz real de Flo — la misma que escuchan tus clientes.",
   "ft.vsrosie": "FloGlo vs Rosie",
-  "ft.vsocc": "FloGlo vs OnCallClerk"
+  "ft.vsocc": "FloGlo vs OnCallClerk",
+  "cmp.full": "Comparativas completas, cara a cara:",
+  "ft.vssmith": "FloGlo vs Smith.ai",
+  "svc.tools": "Construido alrededor de las herramientas que ya usas: tu sitio web, tu número de teléfono, tu calendario. Nada que arrancar. Nada nuevo que aprender.",
+  "ct.textonly": "Solo mensajes de texto — sin llamadas: (347) 671-7116",
+  "faq.q10": "¿En qué se diferencia FloGlo de Rosie o Smith.ai?",
+  "faq.a10": "Un precio fijo con todo incluido: sin medidores por minuto ni por llamada, sin subidas automáticas silenciosas, sin menú de extras. Mira las comparativas completas: <a href=\"vs-rosie.html\">FloGlo vs Rosie</a> y <a href=\"vs-smith.html\">FloGlo vs Smith.ai</a>.",
+  "faq.q11": "¿Y si el piloto no funciona para mi negocio?",
+  "faq.a11": "Entonces no pagas nada. El piloto es gratuito, el cargo único de $750 solo vence después de que el informe de resultados te convenza, y te quedas con el informe de todos modos. Si te vas, lo retiramos todo: sin cargos y sin rencores.",
+  "sc.free": "El escaneo es gratuito y no necesita correo. El desglose escrito detallado es opcional, solo si lo pides.",
+  "videos.follow": "Sigue los videos diarios:",
+  "ui.skip": "Saltar al contenido",
+  "ui.top": "Volver arriba"
 }
