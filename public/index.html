@@ -19,13 +19,21 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=41">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="image" href="/phone-frame.webp" fetchpriority="high">
+<link rel="stylesheet" href="styles.css?v=42">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
   "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 }}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "FloGlo AI", "url": "https://flogloai.com/", "logo": "https://flogloai.com/logo.png", "image": "https://flogloai.com/og-image.png", "description": "AI receptionist and automation for local businesses - answers calls, texts, and website chat, books appointments, collects reviews. Free 7-day pilot.", "email": "support@flogloai.com", "telephone": "+1-347-671-7116", "priceRange": "$297/mo", "sameAs": ["https://www.instagram.com/flogloai", "https://www.tiktok.com/@flogloai", "https://www.youtube.com/@flogloai", "https://www.threads.com/@flogloai"]}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will this actually sound like my business?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Every assistant is trained on your services, prices, hours, and tone of voice. Customers won't know it's AI unless you tell them."}}, {"@type": "Question", "name": "What if it gives a wrong answer?", "acceptedAnswer": {"@type": "Answer", "text": "It only answers from information you approve. Anything it's unsure about gets escalated to you or your team instantly — never guessed."}}, {"@type": "Question", "name": "Do I need new software or hardware?", "acceptedAnswer": {"@type": "Answer", "text": "No. It plugs into the website, phone number, and calendar you already have. Nothing to install, nothing to learn."}}, {"@type": "Question", "name": "What happens after the free pilot?", "acceptedAnswer": {"@type": "Answer", "text": "You get a report: calls answered, bookings made, reviews collected. If the numbers don't impress you, we remove everything. No charge, no hard feelings."}}, {"@type": "Question", "name": "Why local businesses?", "acceptedAnswer": {"@type": "Answer", "text": "Because that's where the pain is worst — missed calls, no-shows, dead lead lists — and where automation pays for itself fastest."}}, {"@type": "Question", "name": "How long does setup take?", "acceptedAnswer": {"@type": "Answer", "text": "We build and launch your pilot within 7 days — you approve everything before it goes live."}}, {"@type": "Question", "name": "Am I locked into a contract?", "acceptedAnswer": {"@type": "Answer", "text": "No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime."}}, {"@type": "Question", "name": "Which industries does this work for?", "acceptedAnswer": {"@type": "Answer", "text": "Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry."}}, {"@type": "Question", "name": "I already have front-desk staff. Why do I need this?", "acceptedAnswer": {"@type": "Answer", "text": "Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps."}}, {"@type": "Question", "name": "How is FloGlo different from Rosie or Smith.ai?", "acceptedAnswer": {"@type": "Answer", "text": "One flat price with everything included — no per-minute or per-call meters, no silent auto-upgrades, no add-on menu. See the full breakdowns: FloGlo vs Rosie and FloGlo vs Smith.ai."}}, {"@type": "Question", "name": "What if the pilot doesn't work for my business?", "acceptedAnswer": {"@type": "Answer", "text": "Then you pay nothing. The pilot is free, the $750 build fee is only due after the results report convinces you, and you keep the report either way. If you walk away, we remove everything — no charge, no hard feelings."}}]}
 </script>
 </head>
 <body>
@@ -68,6 +76,7 @@
           <a class="btn btn-ghost btn-lg" href="#contact" data-i18n="hero.cta2">Claim your free 7-day pilot</a>
         </div>
         <p class="hero-price reveal" data-i18n="hero.price">Free 7-day pilot → $750 once → $297/mo. No per-minute fees. No contracts.</p>
+        <div class="hero-chips reveal"><span data-i18n="pl.i1">No per-minute billing</span><span data-i18n="pl.i2">No per-call charges</span><span data-i18n="pl.i5">Cancel anytime — no email, no 30-day notice</span></div>
         <div class="stats reveal">
           <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl" data-i18n="hero.stat1">always answering</span></div>
           <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s" data-i18n-suffix="hero.suf_s">0</span><span class="lbl" data-i18n="hero.stat2">response time</span></div>
@@ -81,7 +90,7 @@
           <div class="ev-card ev-0 on"><b data-i18n="dl.incoming">INCOMING CALL</b><span>7:42 PM</span></div>
           <div class="ev-card ev-1"><b data-i18n="dl.answered">FLO ANSWERED</b><span>Sarah J.</span></div>
           <div class="device-phone" data-tilt data-tilt-max="7">
-            <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true">
+            <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true" fetchpriority="high">
             <div class="device-screen">
                 <div class="phone-island"><span class="island-cam"><span class="island-lens"></span></span></div>
                 <div class="phone-status"><span class="ps-time">9:41</span><span class="ps-icons"><i class="ps-signal"></i><svg class="ps-wifi-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1.5" fill="#fff" stroke="none"/></svg><i class="ps-batt"></i></span></div>
@@ -151,9 +160,10 @@
       <label data-i18n="sc.job" data-i18n-keep="input">Avg job value $ <input id="scanJob" type="number" value="285" min="10" max="50000" step="5"></label>
     </div>
     <p class="scan-est reveal"><em data-i18n="sc.est">Estimate, not a promise.</em> <span data-i18n="sc.est2">Change the numbers — the math updates.</span></p>
+    <p class="scan-est reveal" data-i18n="sc.free">The scan is free and needs no email. The detailed written breakdown is optional — only if you ask for it.</p>
     <ul class="scan-checks" id="scanChecks" hidden></ul>
     <div class="device-laptop" id="scanLaptop">
-      <img class="device-frame" src="/laptop-frame.webp" alt="" aria-hidden="true">
+      <img class="device-frame" src="/laptop-frame.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="device-lscreen">
         <div class="mac-bar" aria-hidden="true">
           <span class="mac-app"><img class="mac-logo" src="logo.png" alt="" aria-hidden="true"><span>FloGlo <span class="mac-ai">AI</span></span></span>
@@ -181,6 +191,7 @@
         <div class="video-cell"><span class="video-loading" data-i18n="videos.loading">Loading latest videos…</span></div>
       </div>
       <p class="video-note" data-i18n="videos.note">Fresh from Instagram, TikTok, and YouTube.</p>
+      <p class="follow-row reveal"><span data-i18n="videos.follow">Follow the daily videos:</span> <a href="https://instagram.com/flogloai" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.youtube.com/@flogloai" target="_blank" rel="noopener">YouTube</a></p>
     </div>
   </div>
 </section>
@@ -207,7 +218,7 @@
       <button class="chip industry-chip" data-industry="autorepair" data-i18n="ind.autorepair">Auto Repair</button>
     </div>
     <div class="phone device-phone demo-device reveal">
-      <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true">
+      <img class="device-frame" src="/phone-frame.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="device-screen">
         <div class="phone-island"><span class="island-cam"><span class="island-lens"></span></span></div>
         <div class="phone-status"><span class="ps-time">9:41</span><span class="ps-icons"><i class="ps-signal"></i><svg class="ps-wifi-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1.5" fill="#fff" stroke="none"/></svg><i class="ps-batt"></i></span></div>
@@ -260,6 +271,7 @@
       <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">★</div><h3 data-i18n="svc.3t">Review Engine</h3><p data-i18n="svc.3d">Automatically asks happy customers for Google reviews after every job. More 5-star reviews, higher rankings, more calls.</p></div>
       <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">➤</div><h3 data-i18n="svc.4t">Lead Follow-Up</h3><p data-i18n="svc.4d">Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
     </div>
+    <p class="section-sub reveal svc-tools" data-i18n="svc.tools">Built around the tools you already use — your website, your phone number, your calendar. Nothing to rip out. Nothing new to learn.</p>
   </div>
 </section>
 
@@ -336,6 +348,7 @@
         </tbody>
       </table>
       <p class="stack-note" data-i18n="tc.note">Smith.ai estimate: independent breakdown (GetMacha) of their published per-call rates, Oct 2026. Rosie: their published plans and overage policy.</p>
+      <p class="cmp-links reveal"><span data-i18n="cmp.full">Full head-to-head breakdowns:</span> <a href="vs-rosie.html" data-i18n="ft.vsrosie">FloGlo vs Rosie</a> · <a href="vs-oncallclerk.html" data-i18n="ft.vsocc">FloGlo vs OnCallClerk</a> · <a href="vs-smith.html" data-i18n="ft.vssmith">FloGlo vs Smith.ai</a></p>
     </div>
   </div>
 </section>
@@ -445,6 +458,8 @@
     <details class="reveal"><summary data-i18n="faq.q7">Am I locked into a contract?</summary><p data-i18n="faq.a7">No. The pilot is free, Launch is one-time, and Growth is month-to-month. Cancel anytime.</p></details>
     <details class="reveal"><summary data-i18n="faq.q8">Which industries does this work for?</summary><p data-i18n="faq.a8">Any business that takes calls, books appointments, or chases leads — restaurants, salons, plumbers, dentists, auto shops, contractors, clinics, and more. Try the demo above in your industry.</p></details>
     <details class="reveal"><summary data-i18n="faq.q9">I already have front-desk staff. Why do I need this?</summary><p data-i18n="faq.a9">Flo doesn't replace your team — it covers what they can't: nights, weekends, lunch rushes, and the 3rd call ringing while they're with a customer. Think of it as the employee who never sleeps.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q10">How is FloGlo different from Rosie or Smith.ai?</summary><p data-i18n="faq.a10">One flat price with everything included — no per-minute or per-call meters, no silent auto-upgrades, no add-on menu. See the full breakdowns: <a href="vs-rosie.html">FloGlo vs Rosie</a> and <a href="vs-smith.html">FloGlo vs Smith.ai</a>.</p></details>
+    <details class="reveal"><summary data-i18n="faq.q11">What if the pilot doesn't work for my business?</summary><p data-i18n="faq.a11">Then you pay nothing. The pilot is free, the $750 build fee is only due after the results report convinces you, and you keep the report either way. If you walk away, we remove everything — no charge, no hard feelings.</p></details>
   </div>
 </section>
 
@@ -500,6 +515,7 @@
       <p class="form-msg" id="formMsg" role="status"></p>
     </form>
     <p class="section-sub reveal"><span data-i18n="ct.prefer">Prefer email?</span> <a href="mailto:support@flogloai.com">support@flogloai.com</a></p>
+    <p class="section-sub reveal" data-i18n="ct.textonly">Text only — no calls: (347) 671-7116</p>
   </div>
 </section>
 
@@ -508,7 +524,8 @@
     <p class="logo"><img src="logo.png" alt="FloGlo AI logo" width="30" height="30">FLOGLO <span>AI</span></p>
     <p data-i18n="ft.tagline">We make your business glow.</p>
     <p class="fine" data-i18n="ft.fine">© 2026 FloGlo AI. Demo business "Bella's Pizzeria" is fictional.</p>
-    <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a><a href="vs-rosie.html" data-i18n="ft.vsrosie">FloGlo vs Rosie</a><a href="vs-oncallclerk.html" data-i18n="ft.vsocc">FloGlo vs OnCallClerk</a></p>
+    <p class="foot-contact"><a href="mailto:support@flogloai.com">support@flogloai.com</a> · <span data-i18n="ct.textonly">Text only — no calls: (347) 671-7116</span></p>
+    <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a><a href="vs-rosie.html" data-i18n="ft.vsrosie">FloGlo vs Rosie</a><a href="vs-oncallclerk.html" data-i18n="ft.vsocc">FloGlo vs OnCallClerk</a><a href="vs-smith.html" data-i18n="ft.vssmith">FloGlo vs Smith.ai</a></p>
    <p class="social-links">
          <a href="https://instagram.com/flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><span>@FloGloAI</span></a>
          <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@FloGloAI</span></a>
@@ -548,8 +565,8 @@
   <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="i18n.js?v=13"></script>
-<script src="app.js?v=25"></script>
+<script src="i18n.js?v=14"></script>
+<script src="app.js?v=26"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>
@@ -561,5 +578,6 @@ setTimeout(function () {
   }
 }, 7000);
 </script>
+<button class="to-top" id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5l7 7-1.8 1.8L13 9.6V19h-2V9.6l-4.2 4.2L5 12z" fill="currentColor"/></svg><span class="sr-only" data-i18n="ui.top">Back to top</span></button>
 </body>
 </html>

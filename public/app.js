@@ -11,7 +11,14 @@
     for (var k in en) { if (/<[a-z][^>]*>/i.test(en[k])) HTML_KEYS[k] = true; }
   })();
   var currentLang = 'en';
-  try { currentLang = localStorage.getItem(LANG_KEY) || 'en'; } catch (e) {}
+  try {
+    currentLang = localStorage.getItem(LANG_KEY) || '';
+    if (!currentLang) {
+      var navLang = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      var supportedLangs = { en: 1, es: 1, fr: 1, pt: 1, zh: 1, hi: 1, ar: 1, bn: 1, ru: 1, ur: 1 };
+      currentLang = supportedLangs[navLang] ? navLang : 'en';
+    }
+  } catch (e) { currentLang = 'en'; }
   if (!window.FLOGLO_I18N || !window.FLOGLO_I18N[currentLang]) currentLang = 'en';
   function langMeta(code) {
     var langs = window.FLOGLO_LANGS || [];
@@ -887,4 +894,17 @@
   audio.addEventListener('play', function () { btn.classList.add('playing'); btn.setAttribute('aria-pressed', 'true'); });
   audio.addEventListener('pause', function () { btn.classList.remove('playing'); btn.setAttribute('aria-pressed', 'false'); });
   audio.addEventListener('ended', function () { btn.classList.remove('playing'); btn.setAttribute('aria-pressed', 'false'); });
+})();
+
+/* Back-to-top (stack) */
+(function () {
+  var btn = document.getElementById('toTop');
+  if (!btn) return;
+  function onScroll() { btn.classList.toggle('show', window.scrollY > 1200); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  btn.addEventListener('click', function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
 })();
