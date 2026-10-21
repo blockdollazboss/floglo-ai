@@ -222,6 +222,27 @@ footer{border-top:1px solid var(--line)}
 .cost-table td:first-child{color:var(--muted)}
 .cost-table .highlight-col{color:#3ee2ff;font-weight:700}
 .cost-table thead .highlight-col{color:#3ee2ff}
+.hero-price{margin-top:1.1rem;color:var(--muted);font-size:.95rem;font-weight:600}
+.cost-table .stack-v{text-align:right;font-weight:600;white-space:nowrap}
+.cost-table tr.stack-total td{border-top:2px solid var(--line);font-weight:700;color:var(--text)}
+.cost-table tr.stack-flo td{border-bottom:none}
+.stack-note{margin-top:1rem;color:var(--muted);font-size:.88rem}
+.guarantee{margin-top:2.2rem;border:1px solid rgba(62,226,255,.45);border-radius:16px;padding:1.6rem 1.8rem;text-align:center;background:rgba(62,226,255,.05)}
+.gu-name{font-weight:800;letter-spacing:.14em;color:var(--gold);margin-bottom:.5rem}
+.gu-text{color:var(--muted);max-width:640px;margin:0 auto}
+.tc-sub{color:var(--muted);margin-bottom:1rem;font-size:.95rem}
+.proof-note{text-align:center;color:var(--muted);max-width:680px;margin:1.6rem auto 0}
+.hear-flo{text-align:center;margin:1.4rem 0 .4rem}
+.hear-btn{display:inline-flex;align-items:center;gap:.55rem}
+.hear-btn .ic-stop{display:none}
+.hear-btn.playing .ic-stop{display:block}
+.hear-btn.playing .ic-play{display:none}
+.hear-note{color:var(--muted);font-size:.85rem;margin-top:.55rem}
+.pledge-items{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;justify-content:center;margin:0 0 .8rem;padding:0}
+.pledge-items li{font-weight:600;font-size:.95rem}
+.pledge-items li::before{content:"\2713  ";color:var(--gold);font-weight:800}
+.lang-chips{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1.2rem 0 1.4rem}
+.lang-chips span{border:1px solid rgba(62,226,255,.4);border-radius:999px;padding:.45rem 1rem;font-weight:600;background:rgba(62,226,255,.06)}
 
 /* ROI calculator */
 .roi{text-align:center}

@@ -19,7 +19,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="styles.css?v=39">
+<link rel="stylesheet" href="styles.css?v=41">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -67,6 +67,7 @@
           <a class="btn btn-gold btn-lg" href="#scanner" data-i18n="hero.cta_scan">Scan my business</a>
           <a class="btn btn-ghost btn-lg" href="#contact" data-i18n="hero.cta2">Claim your free 7-day pilot</a>
         </div>
+        <p class="hero-price reveal" data-i18n="hero.price">Free 7-day pilot → $750 once → $297/mo. No per-minute fees. No contracts.</p>
         <div class="stats reveal">
           <div class="stat"><span class="num" data-count="24" data-suffix="/7">0</span><span class="lbl" data-i18n="hero.stat1">always answering</span></div>
           <div class="stat"><span class="num" data-count="30" data-prefix="&lt;" data-suffix="s" data-i18n-suffix="hero.suf_s">0</span><span class="lbl" data-i18n="hero.stat2">response time</span></div>
@@ -189,6 +190,15 @@
     <p class="kicker reveal" data-i18n="demo.kicker">LIVE DEMO</p>
     <h2 class="reveal" data-i18n="demo.title">Don't take our word for it.<br><span class="gold-grad">Talk to the product.</span></h2>
     <p class="section-sub reveal" data-i18n="demo.sub">This is "Flo" — an AI assistant we built for fictional local businesses. Pick an industry, then text her. Imagine this working <em>your</em> business while you sleep.</p>
+    <div class="hear-flo reveal">
+      <button class="btn btn-ghost hear-btn" id="hearFloBtn" type="button" aria-pressed="false" aria-label="Tap to hear Flo">
+        <svg class="ic-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+        <svg class="ic-stop" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" fill="currentColor"/><rect x="14" y="5" width="4" height="14" fill="currentColor"/></svg>
+        <span data-i18n="hear.btn">Tap to hear Flo</span>
+      </button>
+      <p class="hear-note" data-i18n="hear.note">Flo's real voice — the same one your customers hear.</p>
+      <audio id="hearFloAudio" src="audio/flo-hello.mp3" preload="none"></audio>
+    </div>
     <div class="demo-industries reveal" id="demoIndustries">
       <button class="chip industry-chip active" data-industry="pizzeria" data-i18n="ind.pizzeria">Pizzeria</button>
       <button class="chip industry-chip" data-industry="salon" data-i18n="ind.salon">Hair Salon</button>
@@ -225,6 +235,18 @@
       <button class="chip" data-i18n="biz.pizzeria.p3" data-prompt="What's good on the menu?">What's good on the menu?</button>
       <button class="chip" data-i18n="biz.pizzeria.p4" data-prompt="Where are you located?">Where are you located?</button>
     </div>
+  </div>
+</section>
+
+<section class="languages" id="languages">
+  <div class="wrap narrow">
+    <p class="kicker reveal" data-i18n="lang.kicker">10 LANGUAGES</p>
+    <h2 class="reveal" data-i18n="lang.title">Flo speaks your customers' <span class="gold-grad">language.</span></h2>
+    <p class="section-sub reveal" data-i18n="lang.p">Every answer, booking, and follow-up — in whichever language your customer chooses. Rosie and Smith.ai stop at two: English and Spanish. Flo covers ten.</p>
+    <div class="lang-chips reveal">
+      <span>English</span><span>Español</span><span>Français</span><span>Português</span><span>中文</span><span>हिन्दी</span><span>العربية</span><span>বাংলা</span><span>Русский</span><span>اردو</span>
+    </div>
+    <p class="section-sub reveal" data-i18n="lang.demo">Try it: switch this page's language at the top, then ask Flo something in the demo. She answers in kind.</p>
   </div>
 </section>
 
@@ -287,6 +309,33 @@
           <tr><td data-i18n="cmp.r7c1">Sick days / turnover</td><td data-i18n="cmp.r7c2">Yes</td><td class="highlight-col" data-i18n="cmp.r7c3">Never</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="cost-table-wrap reveal">
+      <h3 data-i18n="cmp.stackh">Or patch it together yourself</h3>
+      <table class="cost-table">
+        <tbody>
+          <tr><td data-i18n="cmp.st1">After-hours answering service</td><td class="stack-v" data-i18n="cmp.st1v">$290/mo</td></tr>
+          <tr><td data-i18n="cmp.st2">Missed-call text-back tool</td><td class="stack-v" data-i18n="cmp.st2v">$79/mo</td></tr>
+          <tr><td data-i18n="cmp.st3">Review management software</td><td class="stack-v" data-i18n="cmp.st3v">$119/mo</td></tr>
+          <tr><td data-i18n="cmp.st4">Lead follow-up automation</td><td class="stack-v" data-i18n="cmp.st4v">$99/mo</td></tr>
+          <tr class="stack-total"><td data-i18n="cmp.sttot">The patchwork total</td><td class="stack-v" data-i18n="cmp.sttotv">$587/mo</td></tr>
+          <tr class="stack-flo"><td data-i18n="cmp.stflo">FloGlo Growth — all of it, done for you</td><td class="stack-v highlight-col" data-i18n="cmp.stflov">$297/mo</td></tr>
+        </tbody>
+      </table>
+      <p class="stack-note" data-i18n="cmp.stnote">Typical prices — before the hours you spend stitching it all together, and none of it answers like one receptionist who knows your business.</p>
+    </div>
+    <div class="cost-table-wrap reveal">
+      <h3 data-i18n="tc.title">What 200 calls a month really costs</h3>
+      <p class="tc-sub" data-i18n="tc.sub">Booking included — not a 3× upsell. Flo books straight into your calendar on the only plan we sell. No higher tier to unlock it.</p>
+      <table class="cost-table">
+        <thead><tr><th></th><th data-i18n="tc.th2">At 200 calls/mo</th><th data-i18n="tc.th3">The catch</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight-col" data-i18n="tc.r1c1">FloGlo Growth</td><td class="highlight-col" data-i18n="tc.r1c2">$297 — the same in a quiet month or a slammed one</td><td data-i18n="tc.r1c3">None. No meters running.</td></tr>
+          <tr><td data-i18n="tc.r2c1">Smith.ai AI Receptionist</td><td data-i18n="tc.r2c2">≈$385 — ≈$505 if 1 in 5 calls escalates to a human (+$3 a call)</td><td data-i18n="tc.r2c3">Per-call billing, plus per-call add-ons</td></tr>
+          <tr><td data-i18n="tc.r3c1">Rosie AI</td><td data-i18n="tc.r3c2">$49 to start — go over your minutes and you're auto-upgraded to $149+, and it sticks</td><td data-i18n="tc.r3c3">Direct booking locked until the $149 plan</td></tr>
+        </tbody>
+      </table>
+      <p class="stack-note" data-i18n="tc.note">Smith.ai estimate: independent breakdown (GetMacha) of their published per-call rates, Oct 2026. Rosie: their published plans and overage policy.</p>
     </div>
   </div>
 </section>
@@ -351,7 +400,7 @@
         <h3 data-i18n="pr.launch.n">Launch</h3>
         <p class="amount" data-i18n="pr.launch.amt">$750</p>
         <p class="per" data-i18n="pr.launch.per">one-time</p>
-        <ul><li data-i18n="pr.launch.f1">AI receptionist on your website</li><li data-i18n="pr.launch.f2">Missed-call text-back</li><li data-i18n="pr.launch.f3">Review engine</li><li data-i18n="pr.launch.f4">30 days of tuning included</li></ul>
+        <ul><li data-i18n="pr.launch.f1">AI receptionist on your website</li><li data-i18n="pr.launch.f2">Missed-call text-back</li><li data-i18n="pr.launch.f3">Review engine</li><li data-i18n="pr.launch.f4">30 days of tuning included</li><li data-i18n="pr.launch.f5">Pay-on-proof: due only after your pilot report</li></ul>
         <a class="btn btn-gold" href="#contact" data-i18n="pr.launch.cta">Get launched</a>
       </div>
       <span class="flow-arrow" aria-hidden="true">→</span>
@@ -363,6 +412,22 @@
         <ul><li data-i18n="pr.growth.f1">Everything in Launch</li><li data-i18n="pr.growth.f2">Lead follow-up automation</li><li data-i18n="pr.growth.f3">Monthly performance reports</li><li data-i18n="pr.growth.f4">Priority support &amp; updates</li></ul>
         <a class="btn btn-ghost" href="#contact" data-i18n="pr.growth.cta">Go growth</a>
       </div>
+    </div>
+    <p class="proof-note reveal" data-i18n="pr.proofnote"><strong>Pay-on-proof:</strong> the $750 build fee comes after your free pilot's results report. If the numbers don't convince you, you never pay it — and you keep the report either way.</p>
+    <div class="guarantee reveal">
+      <p class="gu-name" data-i18n="gu.name">THE APPROVE-IT-FIRST GUARANTEE</p>
+      <p class="gu-text" data-i18n="gu.text">Nothing goes live until you approve it. Run the free 7-day pilot — if Flo doesn't sound like your best hire, you pay nothing. There's nothing to cancel.</p>
+    </div>
+    <div class="guarantee pledge reveal">
+      <p class="gu-name" data-i18n="pl.name">THE FLOGLO PLEDGE</p>
+      <ul class="pledge-items">
+        <li data-i18n="pl.i1">No per-minute billing</li>
+        <li data-i18n="pl.i2">No per-call charges</li>
+        <li data-i18n="pl.i3">No silent auto-upgrades</li>
+        <li data-i18n="pl.i4">No add-on menu</li>
+        <li data-i18n="pl.i5">Cancel anytime — no email, no 30-day notice</li>
+      </ul>
+      <p class="gu-text" data-i18n="pl.text">One flat price, agreed in writing before you pay a cent. Your busiest month costs the same as your quietest.</p>
     </div>
   </div>
 </section>
@@ -443,7 +508,7 @@
     <p class="logo"><img src="logo.png" alt="FloGlo AI logo" width="30" height="30">FLOGLO <span>AI</span></p>
     <p data-i18n="ft.tagline">We make your business glow.</p>
     <p class="fine" data-i18n="ft.fine">© 2026 FloGlo AI. Demo business "Bella's Pizzeria" is fictional.</p>
-    <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a></p>
+    <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a><a href="vs-rosie.html" data-i18n="ft.vsrosie">FloGlo vs Rosie</a><a href="vs-oncallclerk.html" data-i18n="ft.vsocc">FloGlo vs OnCallClerk</a></p>
    <p class="social-links">
          <a href="https://instagram.com/flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><span>@FloGloAI</span></a>
          <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@FloGloAI</span></a>
@@ -483,8 +548,8 @@
   <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="i18n.js?v=10"></script>
-<script src="app.js?v=24"></script>
+<script src="i18n.js?v=13"></script>
+<script src="app.js?v=25"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>

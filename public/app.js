@@ -875,3 +875,16 @@
   tick();
   setInterval(tick, 20000);
 })();
+
+/* Tap-to-hear-Flo demo (Move 11) */
+(function () {
+  var btn = document.getElementById('hearFloBtn');
+  var audio = document.getElementById('hearFloAudio');
+  if (!btn || !audio) return;
+  btn.addEventListener('click', function () {
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+  });
+  audio.addEventListener('play', function () { btn.classList.add('playing'); btn.setAttribute('aria-pressed', 'true'); });
+  audio.addEventListener('pause', function () { btn.classList.remove('playing'); btn.setAttribute('aria-pressed', 'false'); });
+  audio.addEventListener('ended', function () { btn.classList.remove('playing'); btn.setAttribute('aria-pressed', 'false'); });
+})();
