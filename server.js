@@ -929,6 +929,10 @@ app.get('/api/scan-reports', rateLimit, (req, res) => {
   res.json({ reports });
 });
 
+app.get('/.well-known/security.txt', (req, res) => {
+  res.type('text/plain').send('Contact: mailto:support@flogloai.com\nExpires: 2027-10-21T00:00:00.000Z\nPreferred-Languages: en, es, fr, pt, zh, hi, ar, bn, ru, ur\nCanonical: https://flogloai.com/.well-known/security.txt\n');
+});
+
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found.' });
   res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
