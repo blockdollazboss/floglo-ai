@@ -234,6 +234,17 @@ footer{border-top:1px solid var(--line)}
 .proof-note{text-align:center;color:var(--muted);max-width:680px;margin:1.6rem auto 0}
 .cmp-links{text-align:center;margin-top:1rem;color:var(--muted)}
 .svc-tools{margin:1.8rem auto 0;text-align:center}
+.nav-links a.active{color:var(--gold)}
+.scan-article-link{color:var(--gold);font-weight:600}
+.ind-grid{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:1.4rem}
+.ind-chip2{border:1px solid rgba(62,226,255,.4);background:rgba(62,226,255,.06);color:var(--text);border-radius:999px;padding:.55rem 1.1rem;font-weight:600;cursor:pointer;font-size:.95rem}
+.ind-chip2:hover{border-color:var(--gold);color:var(--gold)}
+.mx-wrap{margin:2.2rem auto 0;max-width:760px}
+.mx-title{text-align:center;margin-bottom:1rem}
+.mx-table{width:100%;border-collapse:collapse;font-size:.93rem}
+.mx-table th,.mx-table td{padding:.6rem .7rem;border-bottom:1px solid var(--line);text-align:center}
+.mx-table td:first-child,.mx-table th:first-child{text-align:left;color:var(--muted);font-weight:600}
+.mx-table th{color:var(--gold);font-size:.85rem;text-transform:uppercase;letter-spacing:.03em}
 .skip-link{position:absolute;left:-9999px;top:0;background:var(--gold);color:#04121a;padding:.6rem 1rem;z-index:200;font-weight:700;border-radius:0 0 10px 0}
 .skip-link:focus{left:0}
 .hero-chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}

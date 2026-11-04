@@ -11,17 +11,20 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://flogloai.com/">
 <meta property="og:image" content="https://flogloai.com/og-image.png">
+<meta property="og:site_name" content="FloGlo AI">
 <link rel="canonical" href="https://flogloai.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FloGlo AI — We make your business glow.">
 <meta name="twitter:description" content="AI assistants for local businesses. Free 7-day pilot.">
+<meta name="twitter:image" content="https://flogloai.com/og-image.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/gif" href="favicon.gif?v=4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="/phone-frame.webp" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=42">
+<link rel="stylesheet" href="styles.css?v=43">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 <script type="importmap">
 {"imports":{
@@ -65,7 +68,7 @@
 <header class="hero" id="top" data-parallax="0.12">
   <div class="hero-inner wide">
     <div class="loop-space">
-      <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" hidden>
+      <img id="logoFallback" src="logo.png" alt="FloGlo AI logo" width="512" height="512" hidden>
     </div>
     <div class="hero-grid">
       <div class="hero-copy">
@@ -162,12 +165,13 @@
     </div>
     <p class="scan-est reveal"><em data-i18n="sc.est">Estimate, not a promise.</em> <span data-i18n="sc.est2">Change the numbers — the math updates.</span></p>
     <p class="scan-est reveal" data-i18n="sc.free">The scan is free and needs no email. The detailed written breakdown is optional — only if you ask for it.</p>
+    <p class="scan-est reveal"><a class="scan-article-link" href="blog/missed-call-cost.html" data-i18n="sc.readmath">Read the math: what a missed call actually costs</a></p>
     <ul class="scan-checks" id="scanChecks" hidden></ul>
     <div class="device-laptop" id="scanLaptop">
       <img class="device-frame" src="/laptop-frame.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="device-lscreen">
         <div class="mac-bar" aria-hidden="true">
-          <span class="mac-app"><img class="mac-logo" src="logo.png" alt="" aria-hidden="true"><span>FloGlo <span class="mac-ai">AI</span></span></span>
+          <span class="mac-app"><img class="mac-logo" src="logo.png" alt="" aria-hidden="true" width="512" height="512"><span>FloGlo <span class="mac-ai">AI</span></span></span>
           <span class="mac-right"><svg class="ps-wifi-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1.5" fill="#fff" stroke="none"/></svg><i class="ps-batt"></i><span class="mac-clock"></span></span>
         </div>
         <div class="scan-report" id="scanReport">
@@ -273,6 +277,24 @@
       <div class="card reveal" data-tilt data-tilt-max="5"><div class="card-icon">➤</div><h3 data-i18n="svc.4t">Lead Follow-Up</h3><p data-i18n="svc.4d">Old quotes and cold leads get smart, human-sounding follow-ups until they book or opt out. Turns your dead list into revenue.</p></div>
     </div>
     <p class="section-sub reveal svc-tools" data-i18n="svc.tools">Built around the tools you already use — your website, your phone number, your calendar. Nothing to rip out. Nothing new to learn.</p>
+  </div>
+</section>
+
+<section class="industries" id="industries">
+  <div class="wrap">
+    <p class="kicker reveal" data-i18n="inds.kicker">WHO IT'S FOR</p>
+    <h2 class="reveal" data-i18n="inds.title">Built for businesses that <span class="gold-grad">live on the phone.</span></h2>
+    <p class="section-sub reveal" data-i18n="inds.sub">If your day runs on calls, bookings, and regulars, Flo was built for you. Tap your trade to watch her work it in the demo.</p>
+    <div class="ind-grid reveal">
+      <button class="ind-chip2" data-industry="pizzeria" data-i18n="ind.food">Restaurants &amp; pizzerias</button>
+      <button class="ind-chip2" data-industry="salon" data-i18n="ind.salon">Hair Salon</button>
+      <button class="ind-chip2" data-industry="plumber" data-i18n="ind.plumber">Plumber</button>
+      <button class="ind-chip2" data-industry="dental" data-i18n="ind.dental">Dental</button>
+      <button class="ind-chip2" data-industry="autorepair" data-i18n="ind.autorepair">Auto Repair</button>
+      <button class="ind-chip2" data-industry="plumber" data-i18n="ind.contractors">Contractors</button>
+      <button class="ind-chip2" data-industry="dental" data-i18n="ind.clinics">Clinics</button>
+      <button class="ind-chip2" data-industry="pizzeria" data-i18n="ind.retail">Retail shops</button>
+    </div>
   </div>
 </section>
 
@@ -443,6 +465,21 @@
       </ul>
       <p class="gu-text" data-i18n="pl.text">One flat price, agreed in writing before you pay a cent. Your busiest month costs the same as your quietest.</p>
     </div>
+    <div class="mx-wrap reveal">
+      <h3 class="mx-title" data-i18n="mx.title">What's in each step</h3>
+      <table class="mx-table">
+        <thead><tr><th></th><th data-i18n="mx.c0">Pilot · $0</th><th data-i18n="mx.c1">Launch · $750 once</th><th data-i18n="mx.c2">Growth · $297/mo</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="svc.1t">24/7 AI Receptionist</td><td data-i18n="mx.chatonly">Website chat only</td><td>✓</td><td>✓</td></tr>
+          <tr><td data-i18n="svc.2t">Missed-Call Text-Back</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td data-i18n="svc.3t">Review Engine</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td data-i18n="svc.4t">Lead Follow-Up</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td data-i18n="pr.launch.f4">30 days of tuning included</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td data-i18n="pr.growth.f3">Monthly performance reports</td><td>—</td><td>—</td><td>✓</td></tr>
+          <tr><td data-i18n="pr.growth.f4">Priority support &amp; updates</td><td>—</td><td>—</td><td>✓</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -528,22 +565,22 @@
     <p class="foot-contact"><a href="mailto:support@flogloai.com">support@flogloai.com</a> · <span data-i18n="ct.textonly">Text only — no calls: (347) 671-7116</span></p>
     <p class="legal-links"><a href="privacy.html" data-i18n="ft.privacy">Privacy</a><a href="terms.html" data-i18n="ft.terms">Terms</a><a href="refunds.html" data-i18n="ft.refunds">Refunds</a><a href="vs-rosie.html" data-i18n="ft.vsrosie">FloGlo vs Rosie</a><a href="vs-oncallclerk.html" data-i18n="ft.vsocc">FloGlo vs OnCallClerk</a><a href="vs-smith.html" data-i18n="ft.vssmith">FloGlo vs Smith.ai</a></p>
    <p class="social-links">
-         <a href="https://instagram.com/flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><span>@FloGloAI</span></a>
-         <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@FloGloAI</span></a>
-         <a href="https://www.youtube.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg><span>@FloGloAI</span></a>
-         <a href="https://www.threads.com/@flogloai" target="_blank" rel="noopener" aria-label="FloGlo AI on Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg><span>@FloGloAI</span></a>
+         <a href="https://instagram.com/flogloai" target="_blank" rel="me noopener" aria-label="FloGlo AI on Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><span>@FloGloAI</span></a>
+         <a href="https://www.tiktok.com/@flogloai" target="_blank" rel="me noopener" aria-label="FloGlo AI on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@FloGloAI</span></a>
+         <a href="https://www.youtube.com/@flogloai" target="_blank" rel="me noopener" aria-label="FloGlo AI on YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg><span>@FloGloAI</span></a>
+         <a href="https://www.threads.com/@flogloai" target="_blank" rel="me noopener" aria-label="FloGlo AI on Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg><span>@FloGloAI</span></a>
        </p>
   </div>
 </footer>
 
 <!-- Flo: our AI sales assistant — the product selling itself -->
 <button id="chatFab" class="chat-fab" data-i18n-aria="wg.open" aria-label="Chat with Flo, our AI assistant" aria-expanded="false">
-  <img src="flo-avatar.png" alt="Flo">
+  <img src="flo-avatar.png" alt="Flo" width="512" height="512">
 </button>
 <div class="chat-widget" id="chatWidget" hidden>
   <div class="chat-shell">
     <div class="chat-head">
-      <div class="chat-avatar"><img src="flo-avatar.png" alt="Flo"></div>
+      <div class="chat-avatar"><img src="flo-avatar.png" alt="Flo" width="512" height="512"></div>
       <div>
         <p class="chat-name" data-i18n="wg.name">Flo</p>
         <p class="chat-status" data-i18n="wg.status"><span class="dot"></span> FloGlo AI assistant · Online</p>
@@ -566,8 +603,8 @@
   <a class="btn btn-gold btn-sm" href="#contact" data-i18n="st.cta">Free 7-day pilot</a>
 </div>
 
-<script src="i18n.js?v=14"></script>
-<script src="app.js?v=26"></script>
+<script src="i18n.js?v=15"></script>
+<script src="app.js?v=27"></script>
 <script src="cursor.js?v=7"></script>
 <script type="module" src="world.js?v=6"></script>
 <script>

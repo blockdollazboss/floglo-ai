@@ -1,0 +1,12 @@
+{
+  "name": "FloGlo AI",
+  "short_name": "FloGlo",
+  "description": "AI receptionist and automation for local businesses. Free 7-day pilot.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050914",
+  "theme_color": "#050914",
+  "icons": [
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

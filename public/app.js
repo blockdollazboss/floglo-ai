@@ -697,7 +697,8 @@
         issuesHtml +
         '<p class="scan-method">' + esc(d.methodology) + '</p>' +
         '<div class="btn-row"><a class="btn btn-gold" href="#contact" id="scanCta">' +
-          esc(t('sc.cta')) + ' &rarr;</a></div>' +
+          esc(t('sc.cta')) + ' &rarr;</a>' +
+          '<button class="btn btn-ghost" id="scanCopy" type="button" data-copied="' + esc(t('sc.copied')) + '">' + esc(t('sc.copy')) + '</button></div>' +
         '<div class="scan-email">' +
           '<p class="scan-email-t">' + esc(t('sc.email_t')) + '</p>' +
           '<form id="scanEmailForm" class="scan-email-form" novalidate>' +
@@ -907,4 +908,63 @@
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   });
+})();
+
+/* Round 3: industries deep-link, scanner copy button, nav scrollspy */
+(function () {
+  document.querySelectorAll('.ind-chip2').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      var ind = chip.getAttribute('data-industry');
+      var target = document.querySelector('.industry-chip[data-industry="' + ind + '"]');
+      if (target) target.click();
+      var demo = document.getElementById('demo');
+      if (demo) demo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target || e.target.id !== 'scanCopy') return;
+    var el = document.getElementById('scanReport');
+    if (!el) return;
+    var clone = el.cloneNode(true);
+    var row = clone.querySelector('.btn-row');
+    if (row) row.remove();
+    var txt = (clone.innerText || '').replace(/\n{3,}/g, '\n\n').trim();
+    var btn = e.target;
+    var orig = btn.textContent;
+    function done() {
+      btn.textContent = btn.getAttribute('data-copied') || 'Copied';
+      setTimeout(function () { btn.textContent = orig; }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done, done);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      ta.remove();
+      done();
+    }
+  });
+  var navMap = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(function (a) {
+    navMap[a.getAttribute('href').slice(1)] = a;
+  });
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var link = navMap[en.target.id];
+        if (!link) return;
+        if (en.isIntersecting) {
+          Object.keys(navMap).forEach(function (k) { navMap[k].classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    ['scanner', 'demo', 'services', 'pricing', 'faq'].forEach(function (id) {
+      var sec = document.getElementById(id);
+      if (sec) spy.observe(sec);
+    });
+  }
 })();
