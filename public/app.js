@@ -633,7 +633,11 @@
       });
       steps.forEach(function (s, idx) { s.classList.toggle('on', idx === best); });
       var prog = document.getElementById('howProgress');
-      if (prog) prog.style.height = ((best + 1) / steps.length * 100) + '%';
+      if (prog) {
+        var sn = steps[best].querySelector('.step-n');
+        var target = steps[best].offsetTop + (sn ? sn.offsetTop + sn.offsetHeight / 2 : 22);
+        prog.style.height = target + 'px';
+      }
       var h3 = steps[best].querySelector('h3');
       var p = steps[best].querySelector('p');
       tag.textContent = 'DAY ' + (steps[best].getAttribute('data-day') || (best + 1));
@@ -642,6 +646,7 @@
     }
     window.__howLangRefresh = refresh;
     window.addEventListener('scroll', refresh, { passive: true });
+    window.addEventListener('resize', refresh);
     refresh();
   })();
 

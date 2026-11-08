@@ -532,7 +532,7 @@ body.has-sticky .to-top{bottom:4.9rem}
 
 /* how-it-works progress line (fills as you scroll) */
 .how-steps{position:relative}
-.how-progress{position:absolute;left:21px;top:0;bottom:0;width:3px;background:rgba(62,226,255,.12);border-radius:3px;overflow:hidden}
+.how-progress{position:absolute;left:21px;top:0;bottom:0;width:3px;background:rgba(62,226,255,.32);border-radius:3px;overflow:hidden;box-shadow:0 0 8px rgba(62,226,255,.18)}
 .how-progress i{display:block;width:100%;height:0;background:linear-gradient(180deg,#3ee2ff,#9beaff);border-radius:3px;transition:height .35s ease;box-shadow:0 0 12px rgba(62,226,255,.6)}
 .how-step{padding-left:4.2rem!important;position:relative}
 .how-step .step-n{position:absolute;left:0;top:2.2rem}
