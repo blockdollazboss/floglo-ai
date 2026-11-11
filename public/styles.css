@@ -70,8 +70,8 @@ h2{text-shadow:0 2px 26px rgba(0,0,0,.8)}
 /* hero — the 3D loop lives in .loop-space; headline floats below it */
 .hero{background:transparent;text-align:center;overflow:hidden;min-height:100vh}
 .hero-inner{position:relative;max-width:880px;margin:0 auto;padding:2rem 1.5rem 5.5rem}
-.loop-space{height:38vh;min-height:280px;display:flex;align-items:center;justify-content:center;pointer-events:none}
-#logoFallback{width:min(240px,52vw);height:auto}
+.loop-space{height:10vh;min-height:84px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+#logoFallback{width:min(150px,52vw);height:auto}
 .hero h1,.hero .sub{text-shadow:0 2px 34px rgba(0,0,0,.85),0 1px 6px rgba(0,0,0,.9)}
 .hero h1 .gold-grad{text-shadow:none}
 .badge{display:inline-flex;align-items:center;gap:.6rem;color:var(--gold);letter-spacing:.28em;font-size:.72rem;font-weight:700;border:1px solid rgba(62,226,255,.35);border-radius:999px;padding:.55rem 1.3rem;margin-bottom:1.6rem;background:rgba(62,226,255,.06)}
