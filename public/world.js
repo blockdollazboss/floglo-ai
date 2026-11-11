@@ -52,10 +52,10 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
   scene.add(new THREE.AmbientLight(0x1a2438, 0.7));
 
   /* ---------------- the logo as a true 3D object ----------------
-     The actual FloGlo logo artwork on 3D planes: the mark itself, slowly
-     spinning like the nav logo (~16s/rev), floating in 3D space with a soft
-     additive halo behind it. Unlit materials = always exactly as bright as
-     the logo file itself; it can never render dark. The halo breathes. */
+     The actual FloGlo logo artwork as ONE soft additive glow layer,
+     slowly spinning like the nav logo (~16s/rev), floating in 3D space.
+     (User, 2026-11-11: glow layer only — the sharp front plane that used
+     to sit over it was removed.) The glow breathes. */
   var logoTex = new THREE.TextureLoader().load('logo.png?v=4');
   logoTex.colorSpace = THREE.SRGBColorSpace;
   logoTex.anisotropy = 4;
@@ -65,12 +65,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
     new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })
   );
   logoGlow.position.z = -0.5;
-  var logoMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(7.0, 7.0),
-    new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
-  );
   logoGroup.add(logoGlow);
-  logoGroup.add(logoMesh);
   scene.add(logoGroup);
 
   function radialTexture(inner, outer) {
