@@ -437,9 +437,9 @@
         YT_ALLOW + '" allowfullscreen></iframe>');
     }
     function fallback() {
-      row.innerHTML = slot('youtube',
-        '<iframe src="https://www.youtube-nocookie.com/embed?listType=playlist&list=UUxjC3_a60-jjUlVuiI__v5g" title="' + t('misc.ytvideos') + '" loading="lazy" allow="' +
-        YT_ALLOW + '" allowfullscreen></iframe>');
+      // YouTube slot hidden while the channel is dark (see filter below) —
+      // on any failure show nothing rather than a dead playlist card.
+      row.innerHTML = '';
     }
     function processEmbeds() {
       if (!row.querySelector('.instagram-media')) return;
@@ -481,7 +481,15 @@
       .then(function (r) { if (!r.ok) throw new Error('bad status'); return r.json(); })
       .then(function (d) {
         if (!d.videos || !d.videos.length) throw new Error('empty');
-        row.innerHTML = d.videos.map(render).join('');
+        // Hide the YouTube slot while the channel is dark (Google account
+        // disabled 2026-11-11 — the RSS feed 404s and the API returns the
+        // 'youtube-playlist' fallback, which renders a dead card). Real
+        // 'youtube' entries still render, so the slot returns on its own
+        // when the account is restored. Remove this filter at that point.
+        var vids = d.videos.filter(function (v) { return v.platform !== 'youtube-playlist'; });
+        if (!vids.length) throw new Error('empty');
+        row.classList.toggle('two', vids.length === 2);
+        row.innerHTML = vids.map(render).join('');
         processEmbeds();
         initTikTokPlayer();
       })
